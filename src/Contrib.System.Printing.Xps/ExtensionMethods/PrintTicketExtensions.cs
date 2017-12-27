@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Printing;
 using System.Xml;
 using JetBrains.Annotations;
@@ -7,24 +8,28 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
   public static class PrintTicketExtensions
   {
+    /// <exception cref="Exception" />
     [NotNull]
     internal static PrintTicket With([NotNull] this PrintTicket printTicket,
                                      [NotNull] IXpsInputBinDefinition xpsInputBinDefinition)
     {
-      printTicket = printTicket.With(xpsInputBinDefinition.XpsPrinterDefinition.CustomNamespacePrefix,
-                                     xpsInputBinDefinition.XpsPrinterDefinition.CustomNamespaceUri,
+      var namespacePrefix = XpsPrinter.GetNamespacePrefix(xpsInputBinDefinition.Name);
+
+      printTicket = printTicket.With(xpsInputBinDefinition.Name,
                                      xpsInputBinDefinition.FeatureName,
-                                     xpsInputBinDefinition.Name);
+                                     namespacePrefix,
+                                     xpsInputBinDefinition.NamespaceUri);
 
       return printTicket;
     }
 
+    /// <exception cref="Exception" />
     [NotNull]
     internal static PrintTicket With([NotNull] this PrintTicket printTicket,
-                                     [NotNull] string customNamespacePrefix,
-                                     [NotNull] string customNamespaceUri,
+                                     [NotNull] string inputBinName,
                                      [NotNull] string featureName,
-                                     [NotNull] string inputBinName)
+                                     [CanBeNull] string namespacePrefix = null,
+                                     [CanBeNull] string namespaceUri = null)
     {
       var xmlDocument = new XmlDocument();
       using (var memoryStream = printTicket.GetXmlStream())
@@ -43,10 +48,10 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
                                                    xmlNamespaceManager);
         if (xmlNode != null)
         {
-          if (inputBinName.StartsWith($"{customNamespacePrefix}:"))
+          if (namespacePrefix != null)
           {
-            var xmlAttribute = xmlDocument.CreateAttribute($"xmlns:{customNamespacePrefix}");
-            xmlAttribute.Value = customNamespaceUri;
+            var xmlAttribute = xmlDocument.CreateAttribute($"xmlns:{namespacePrefix}");
+            xmlAttribute.Value = namespaceUri;
             documentXmlElement.Attributes.Append(xmlAttribute);
           }
 

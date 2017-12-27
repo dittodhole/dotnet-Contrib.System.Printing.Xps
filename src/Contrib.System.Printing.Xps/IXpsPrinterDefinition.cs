@@ -13,12 +13,6 @@ namespace Contrib.System.Printing.Xps
     [NotNull]
     string FullName { get; }
 
-    [NotNull]
-    string CustomNamespaceUri { get; }
-
-    [NotNull]
-    string CustomNamespacePrefix { get; }
-
     [CanBeNull]
     double? DefaultPageWidth { get; }
 
