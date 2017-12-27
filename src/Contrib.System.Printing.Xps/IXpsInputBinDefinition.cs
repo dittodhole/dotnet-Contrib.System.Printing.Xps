@@ -21,5 +21,8 @@ namespace Contrib.System.Printing.Xps
 
     [CanBeNull]
     double? PageHeight { get; }
+
+    [CanBeNull]
+    string NamespaceUri { get; }
   }
 }

@@ -47,12 +47,6 @@ namespace Contrib.System.Printing.Xps
       public string FullName { get; set; }
 
       /// <inheritdoc />
-      public string CustomNamespaceUri { get; set; }
-
-      /// <inheritdoc />
-      public string CustomNamespacePrefix { get; set; }
-
-      /// <inheritdoc />
       public double? DefaultPageWidth { get; set; }
 
       /// <inheritdoc />
@@ -137,6 +131,9 @@ namespace Contrib.System.Printing.Xps
 
       /// <inheritdoc />
       public double? PageHeight { get; set; }
+
+      /// <inheritdoc />
+      public string NamespaceUri { get; set; }
 
       /// <inheritdoc />
       public bool Equals(XpsInputBinDefinition other)
@@ -239,18 +236,6 @@ namespace Contrib.System.Printing.Xps
         IXpsPrinterDefinition xpsPrinterDefinition;
         using (printQueue)
         {
-          var customNamespacePrefix = "ns0000";
-
-          string customNamespaceUri;
-          using (var memoryStream = printQueue.GetPrintCapabilitiesAsXml())
-          {
-            var xmlDocument = new XmlDocument();
-            xmlDocument.Load(memoryStream);
-
-            customNamespaceUri = xmlDocument.ChildNodes[1]
-                                            .GetNamespaceOfPrefix(customNamespacePrefix);
-          }
-
           var printCapabilities = printQueue.GetPrintCapabilities();
 
           var defaultPageWidth = printCapabilities.OrientedPageMediaWidth;
@@ -261,8 +246,6 @@ namespace Contrib.System.Printing.Xps
                                    HostingMachineName = printQueue.HostingPrintServer.Name,
                                    Name = printQueue.Name,
                                    FullName = printQueue.FullName,
-                                   CustomNamespaceUri = customNamespaceUri,
-                                   CustomNamespacePrefix = customNamespacePrefix,
                                    DefaultPageWidth = defaultPageWidth,
                                    DefaultPageHeight = defaultPageHeight
                                  };
@@ -370,14 +353,27 @@ namespace Contrib.System.Printing.Xps
           }
 
           var name = nameXmlAttribute.Value;
+
+          var namespacePrefix = XpsPrinter.GetNamespacePrefix(name);
+          string namespaceUri;
+          if (namespacePrefix == null)
+          {
+            namespaceUri = null;
+          }
+          else
+          {
+            namespaceUri = xmlDocument.ChildNodes[1]
+                                      .GetNamespaceOfPrefix(namespacePrefix);
+          }
+
           var displayName = xmlNode.SelectSingleNode("psf:Property[@name='psk:DisplayName']/psf:Value",
                                                      xmlNamespaceManager)
                                    ?.InnerText;
 
-          var scopedPrintTicket = printTicket.With(xpsPrinterDefinition.CustomNamespacePrefix,
-                                                   xpsPrinterDefinition.CustomNamespaceUri,
+          var scopedPrintTicket = printTicket.With(name,
                                                    inputBinFeatureName,
-                                                   name);
+                                                   namespacePrefix,
+                                                   namespaceUri);
 
           var pageWidth = scopedPrintTicket.PageMediaSize.Width;
           var pageHeight = scopedPrintTicket.PageMediaSize.Height;
@@ -389,7 +385,8 @@ namespace Contrib.System.Printing.Xps
                                      DisplayName = displayName ?? "unkown",
                                      FeatureName = inputBinFeatureName,
                                      PageWidth = pageWidth,
-                                     PageHeight = pageHeight
+                                     PageHeight = pageHeight,
+                                     NamespaceUri = namespaceUri
                                    };
 
           yield return inputBinDefinition;
@@ -410,6 +407,23 @@ namespace Contrib.System.Printing.Xps
       yield return "psk:JobInputBin";
       yield return "psk:DocumentInputBin";
       yield return "psk:PageInputBin";
+    }
+
+    [CanBeNull]
+    internal static string GetNamespacePrefix([NotNull] string str)
+    {
+      string namespacePrefix;
+      if (str.Contains(':'))
+      {
+        namespacePrefix = str.Split(':')
+                             .ElementAt(0);
+      }
+      else
+      {
+        namespacePrefix = null;
+      }
+
+      return namespacePrefix;
     }
   }
 }
