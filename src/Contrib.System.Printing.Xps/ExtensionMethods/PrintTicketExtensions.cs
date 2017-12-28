@@ -64,6 +64,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         {
           if (namespacePrefix != null)
           {
+            // TODO: validate format of prefix
+
             var xmlAttribute = xmlDocument.CreateAttribute($"xmlns:{namespacePrefix}");
             xmlAttribute.Value = namespaceUri;
             documentXmlElement.Attributes.Append(xmlAttribute);
