@@ -353,8 +353,8 @@ namespace Contrib.System.Printing.Xps
           }
 
           var name = nameXmlAttribute.Value;
-
           var namespacePrefix = XpsPrinter.GetNamespacePrefix(name);
+
           string namespaceUri;
           if (namespacePrefix == null)
           {

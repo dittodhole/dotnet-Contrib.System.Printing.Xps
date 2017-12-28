@@ -51,35 +51,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
 
       var xpsPrinterDefinition = xpsInputBinDefinition.XpsPrinterDefinition;
 
-      using (var printServer = new PrintServer(xpsPrinterDefinition.HostingMachineName))
-      {
-        using (var printQueue = printServer.GetPrintQueue(xpsPrinterDefinition.Name))
-        {
-          var printTicket = printQueue.UserPrintTicket ?? printQueue.DefaultPrintTicket;
-
-          printTicket = printTicket.With(xpsInputBinDefinition);
-
-          var xpsDocumentWriter = PrintQueue.CreateXpsDocumentWriter(printQueue);
-
-          if (documentPaginatorSource is FixedDocumentSequence fixedDocumentSequence)
-          {
-            fixedDocumentSequence.PrintTicket = printTicket;
-            xpsDocumentWriter.Write(fixedDocumentSequence,
-                                    printTicket);
-          }
-          else if (documentPaginatorSource is FixedDocument fixedDocument)
-          {
-            fixedDocument.PrintTicket = printTicket;
-            xpsDocumentWriter.Write(fixedDocument,
-                                    printTicket);
-          }
-          else
-          {
-            xpsDocumentWriter.Write(documentPaginatorSource.DocumentPaginator,
-                                    printTicket);
-          }
-        }
-      }
+      xpsPrinterDefinition.Print(documentPaginatorSource,
+                                 printTicket => printTicket.With(xpsInputBinDefinition));
     }
   }
 }
