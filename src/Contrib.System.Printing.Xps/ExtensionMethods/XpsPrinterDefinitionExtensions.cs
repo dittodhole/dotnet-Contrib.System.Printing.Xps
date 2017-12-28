@@ -17,17 +17,27 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       {
         throw new ArgumentNullException(nameof(xpsPrinterDefinition));
       }
-
       if (documentPaginatorSource == null)
       {
         throw new ArgumentNullException(nameof(documentPaginatorSource));
       }
 
+      xpsPrinterDefinition.Print(documentPaginatorSource,
+                                 printTicket => printTicket);
+    }
+
+    /// <exception cref="Exception" />
+    internal static void Print([NotNull] this IXpsPrinterDefinition xpsPrinterDefinition,
+                               [NotNull] IDocumentPaginatorSource documentPaginatorSource,
+                               [NotNull] Func<PrintTicket, PrintTicket> adaptPrintTicketFn)
+    {
       using (var printServer = new PrintServer(xpsPrinterDefinition.HostingMachineName))
       {
         using (var printQueue = printServer.GetPrintQueue(xpsPrinterDefinition.Name))
         {
           var printTicket = printQueue.UserPrintTicket ?? printQueue.DefaultPrintTicket;
+
+          printTicket = adaptPrintTicketFn.Invoke(printTicket);
 
           var xpsDocumentWriter = PrintQueue.CreateXpsDocumentWriter(printQueue);
 
