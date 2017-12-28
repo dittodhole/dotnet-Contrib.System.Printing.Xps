@@ -11,8 +11,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <exception cref="InvalidOperationException">If <paramref name="xpsInputBinDefinition" /> holds a prefix in <see cref="IXpsInputBinDefinition.Name" />, but does not provide a <see cref="IXpsInputBinDefinition.NamespaceUri" />.</exception>
     /// <exception cref="Exception" />
     [NotNull]
-    internal static PrintTicket With([NotNull] this PrintTicket printTicket,
-                                     [NotNull] IXpsInputBinDefinition xpsInputBinDefinition)
+    public static PrintTicket With([NotNull] this PrintTicket printTicket,
+                                   [NotNull] IXpsInputBinDefinition xpsInputBinDefinition)
     {
       var inputBinName = xpsInputBinDefinition.Name;
       var featureName = xpsInputBinDefinition.FeatureName;
@@ -30,12 +30,12 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <exception cref="InvalidOperationException">If <paramref name="namespacePrefix" /> is not <see langword="null" />, and <paramref name="namespaceUri" /> is <see langword="null" />.</exception>
     /// <exception cref="Exception" />
     [NotNull]
-    internal static PrintTicket With([NotNull] this PrintTicket printTicket,
-                                     [NotNull] string inputBinName,
-                                     [NotNull] string featureName,
-                                     [CanBeNull] string namespacePrefix = null,
-                                     [CanBeNull] string namespaceUri = null)
     [ContractAnnotation("namespacePrefix: notnull, namespaceUri: null => halt")]
+    public static PrintTicket With([NotNull] this PrintTicket printTicket,
+                                   [NotNull] string inputBinName,
+                                   [NotNull] string featureName,
+                                   [CanBeNull] string namespacePrefix,
+                                   [CanBeNull] string namespaceUri)
     {
       if (namespacePrefix != null)
       {
