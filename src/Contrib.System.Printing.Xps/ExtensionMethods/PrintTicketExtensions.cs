@@ -10,6 +10,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   {
     /// <exception cref="InvalidOperationException">If <paramref name="xpsInputBinDefinition" /> holds a prefix in <see cref="IXpsInputBinDefinition.Name" />, but does not provide a <see cref="IXpsInputBinDefinition.NamespaceUri" />.</exception>
     /// <exception cref="Exception" />
+    [Pure]
     [NotNull]
     public static PrintTicket With([NotNull] this PrintTicket printTicket,
                                    [NotNull] IXpsInputBinDefinition xpsInputBinDefinition)
@@ -29,6 +30,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
 
     /// <exception cref="InvalidOperationException">If <paramref name="namespacePrefix" /> is not <see langword="null" />, and <paramref name="namespaceUri" /> is <see langword="null" />.</exception>
     /// <exception cref="Exception" />
+    [Pure]
     [NotNull]
     [ContractAnnotation("namespacePrefix: notnull, namespaceUri: null => halt")]
     public static PrintTicket With([NotNull] this PrintTicket printTicket,

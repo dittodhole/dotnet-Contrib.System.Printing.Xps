@@ -11,21 +11,25 @@ namespace Contrib.System.Printing.Xps
   public interface IXpsPrinter
   {
     /// <exception cref="Exception" />
+    [Pure]
     [CanBeNull]
     IXpsPrinterDefinition GetDefaultXpsPrinterDefinition();
 
     /// <exception cref="Exception" />
+    [Pure]
     [NotNull]
     [ItemNotNull]
     IXpsPrinterDefinition[] GetXpsPrinterDefinitions();
 
     /// <exception cref="Exception" />
+    [Pure]
     [NotNull]
     [ItemNotNull]
     IXpsInputBinDefinition[] GetXpsInputBinDefinitions();
 
     /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinition" /> is <see langword="null" />.</exception>
     /// <exception cref="Exception" />
+    [Pure]
     [NotNull]
     [ItemNotNull]
     IXpsInputBinDefinition[] GetXpsInputBinDefinitions([NotNull] IXpsPrinterDefinition xpsPrinterDefinition);
