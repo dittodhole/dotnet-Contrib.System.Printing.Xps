@@ -404,9 +404,9 @@ namespace Contrib.System.Printing.Xps
     [ItemNotNull]
     protected virtual IEnumerable<string> GetInputBinFeatureNamesInHierarchicalOrder()
     {
-      yield return "psk:JobInputBin";
-      yield return "psk:DocumentInputBin";
-      yield return "psk:PageInputBin";
+      yield return "psk:JobInputBin"; // PrintTicketScope.JobScope
+      yield return "psk:DocumentInputBin"; // PrintTicketScope.DocumentScope
+      yield return "psk:PageInputBin"; // PrintTicketScope.PageScope
     }
 
     [CanBeNull]
