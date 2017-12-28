@@ -307,6 +307,7 @@ namespace Contrib.System.Printing.Xps
     }
 
     /// <exception cref="Exception" />
+    [Pure]
     [NotNull]
     [ItemNotNull]
     protected virtual IEnumerable<IXpsInputBinDefinition> GetXpsInputBinDefinitionsImpl([NotNull] PrintServer printServer,
@@ -404,6 +405,7 @@ namespace Contrib.System.Printing.Xps
       }
     }
 
+    [Pure]
     [NotNull]
     [ItemNotNull]
     protected virtual IEnumerable<string> GetInputBinFeatureNamesInHierarchicalOrder()
@@ -413,6 +415,7 @@ namespace Contrib.System.Printing.Xps
       yield return "psk:PageInputBin"; // PrintTicketScope.PageScope
     }
 
+    [Pure]
     [CanBeNull]
     internal static string GetNamespacePrefix([NotNull] string str)
     {
