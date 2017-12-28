@@ -23,21 +23,35 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       }
 
       xpsPrinterDefinition.Print(documentPaginatorSource,
-                                 printTicket => printTicket);
+                                 printQueue => printQueue.UserPrintTicket ?? printQueue.DefaultPrintTicket);
     }
 
+    /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinition" /> is <see langword="null" />.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="documentPaginatorSource" /> is <see langword="null" />.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="printTicketFactory" /> is <see langword="null" />.</exception>
     /// <exception cref="Exception" />
-    internal static void Print([NotNull] this IXpsPrinterDefinition xpsPrinterDefinition,
-                               [NotNull] IDocumentPaginatorSource documentPaginatorSource,
-                               [NotNull] Func<PrintTicket, PrintTicket> adaptPrintTicketFn)
+    public static void Print([NotNull] this IXpsPrinterDefinition xpsPrinterDefinition,
+                             [NotNull] IDocumentPaginatorSource documentPaginatorSource,
+                             [NotNull] Func<PrintQueue, PrintTicket> printTicketFactory)
     {
+      if (xpsPrinterDefinition == null)
+      {
+        throw new ArgumentNullException(nameof(xpsPrinterDefinition));
+      }
+      if (documentPaginatorSource == null)
+      {
+        throw new ArgumentNullException(nameof(documentPaginatorSource));
+      }
+      if (printTicketFactory == null)
+      {
+        throw new ArgumentNullException(nameof(printTicketFactory));
+      }
+
       using (var printServer = new PrintServer(xpsPrinterDefinition.HostingMachineName))
       {
         using (var printQueue = printServer.GetPrintQueue(xpsPrinterDefinition.Name))
         {
-          var printTicket = printQueue.UserPrintTicket ?? printQueue.DefaultPrintTicket;
-
-          printTicket = adaptPrintTicketFn.Invoke(printTicket);
+          var printTicket = printTicketFactory.Invoke(printQueue);
 
           var xpsDocumentWriter = PrintQueue.CreateXpsDocumentWriter(printQueue);
 

@@ -8,6 +8,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   public static class XpsInputBinDefinitionExtensions
   {
     /// <exception cref="ArgumentNullException"><paramref name="xpsInputBinDefinition" /> is <see langword="null" />.</exception>
+    [Pure]
     public static InputBin GetInputBin([NotNull] this IXpsInputBinDefinition xpsInputBinDefinition)
     {
       if (xpsInputBinDefinition == null)
@@ -52,7 +53,14 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       var xpsPrinterDefinition = xpsInputBinDefinition.XpsPrinterDefinition;
 
       xpsPrinterDefinition.Print(documentPaginatorSource,
-                                 printTicket => printTicket.With(xpsInputBinDefinition));
+                                 printQueue =>
+                                 {
+                                   var printTicket = printQueue.UserPrintTicket ?? printQueue.DefaultPrintTicket;
+
+                                   printTicket = printTicket.With(xpsInputBinDefinition);
+
+                                   return printTicket;
+                                 });
     }
   }
 }

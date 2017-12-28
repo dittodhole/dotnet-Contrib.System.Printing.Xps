@@ -11,21 +11,25 @@ namespace Contrib.System.Printing.Xps
   public interface IXpsPrinter
   {
     /// <exception cref="Exception" />
+    [Pure]
     [CanBeNull]
     IXpsPrinterDefinition GetDefaultXpsPrinterDefinition();
 
     /// <exception cref="Exception" />
+    [Pure]
     [NotNull]
     [ItemNotNull]
     IXpsPrinterDefinition[] GetXpsPrinterDefinitions();
 
     /// <exception cref="Exception" />
+    [Pure]
     [NotNull]
     [ItemNotNull]
     IXpsInputBinDefinition[] GetXpsInputBinDefinitions();
 
     /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinition" /> is <see langword="null" />.</exception>
     /// <exception cref="Exception" />
+    [Pure]
     [NotNull]
     [ItemNotNull]
     IXpsInputBinDefinition[] GetXpsInputBinDefinitions([NotNull] IXpsPrinterDefinition xpsPrinterDefinition);
@@ -303,6 +307,7 @@ namespace Contrib.System.Printing.Xps
     }
 
     /// <exception cref="Exception" />
+    [Pure]
     [NotNull]
     [ItemNotNull]
     protected virtual IEnumerable<IXpsInputBinDefinition> GetXpsInputBinDefinitionsImpl([NotNull] PrintServer printServer,
@@ -400,17 +405,19 @@ namespace Contrib.System.Printing.Xps
       }
     }
 
+    [Pure]
     [NotNull]
     [ItemNotNull]
     protected virtual IEnumerable<string> GetInputBinFeatureNamesInHierarchicalOrder()
     {
-      yield return "psk:JobInputBin";
-      yield return "psk:DocumentInputBin";
-      yield return "psk:PageInputBin";
+      yield return "psk:JobInputBin"; // PrintTicketScope.JobScope
+      yield return "psk:DocumentInputBin"; // PrintTicketScope.DocumentScope
+      yield return "psk:PageInputBin"; // PrintTicketScope.PageScope
     }
 
+    [Pure]
     [CanBeNull]
-    internal static string GetNamespacePrefix([NotNull] string str)
+    public static string GetNamespacePrefix([NotNull] string str)
     {
       string namespacePrefix;
       if (str.Contains(':'))
