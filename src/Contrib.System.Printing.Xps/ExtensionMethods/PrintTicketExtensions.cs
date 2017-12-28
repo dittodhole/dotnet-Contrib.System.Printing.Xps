@@ -8,21 +8,26 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
   public static class PrintTicketExtensions
   {
+    /// <exception cref="InvalidOperationException">If <paramref name="xpsInputBinDefinition" /> holds a prefix in <see cref="IXpsInputBinDefinition.Name" />, but does not provide a <see cref="IXpsInputBinDefinition.NamespaceUri" />.</exception>
     /// <exception cref="Exception" />
     [NotNull]
     internal static PrintTicket With([NotNull] this PrintTicket printTicket,
                                      [NotNull] IXpsInputBinDefinition xpsInputBinDefinition)
     {
-      var namespacePrefix = XpsPrinter.GetNamespacePrefix(xpsInputBinDefinition.Name);
+      var inputBinName = xpsInputBinDefinition.Name;
+      var featureName = xpsInputBinDefinition.FeatureName;
+      var namespacePrefix = XpsPrinter.GetNamespacePrefix(inputBinName);
+      var namespaceUri = xpsInputBinDefinition.NamespaceUri;
 
-      printTicket = printTicket.With(xpsInputBinDefinition.Name,
-                                     xpsInputBinDefinition.FeatureName,
+      printTicket = printTicket.With(inputBinName,
+                                     featureName,
                                      namespacePrefix,
-                                     xpsInputBinDefinition.NamespaceUri);
+                                     namespaceUri);
 
       return printTicket;
     }
 
+    /// <exception cref="InvalidOperationException">If <paramref name="namespacePrefix" /> is not <see langword="null" />, and <paramref name="namespaceUri" /> is <see langword="null" />.</exception>
     /// <exception cref="Exception" />
     [NotNull]
     internal static PrintTicket With([NotNull] this PrintTicket printTicket,
@@ -30,7 +35,16 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
                                      [NotNull] string featureName,
                                      [CanBeNull] string namespacePrefix = null,
                                      [CanBeNull] string namespaceUri = null)
+    [ContractAnnotation("namespacePrefix: notnull, namespaceUri: null => halt")]
     {
+      if (namespacePrefix != null)
+      {
+        if (namespaceUri == null)
+        {
+          throw new InvalidOperationException($"Providing a {nameof(namespacePrefix)} ({namespacePrefix}) makes {namespaceUri} mandatory.");
+        }
+      }
+
       var xmlDocument = new XmlDocument();
       using (var memoryStream = printTicket.GetXmlStream())
       {
