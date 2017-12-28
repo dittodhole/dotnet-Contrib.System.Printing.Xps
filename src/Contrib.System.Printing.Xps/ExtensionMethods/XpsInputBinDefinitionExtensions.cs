@@ -52,7 +52,14 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       var xpsPrinterDefinition = xpsInputBinDefinition.XpsPrinterDefinition;
 
       xpsPrinterDefinition.Print(documentPaginatorSource,
-                                 printTicket => printTicket.With(xpsInputBinDefinition));
+                                 printQueue =>
+                                 {
+                                   var printTicket = printQueue.UserPrintTicket ?? printQueue.DefaultPrintTicket;
+
+                                   printTicket = printTicket.With(xpsInputBinDefinition);
+
+                                   return printTicket;
+                                 });
     }
   }
 }
