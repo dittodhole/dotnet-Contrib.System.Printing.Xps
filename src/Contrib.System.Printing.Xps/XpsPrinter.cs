@@ -417,7 +417,7 @@ namespace Contrib.System.Printing.Xps
 
     [Pure]
     [CanBeNull]
-    internal static string GetNamespacePrefix([NotNull] string str)
+    public static string GetNamespacePrefix([NotNull] string str)
     {
       string namespacePrefix;
       if (str.Contains(':'))
