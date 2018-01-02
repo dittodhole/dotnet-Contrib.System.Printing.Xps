@@ -43,7 +43,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       {
         if (namespaceUri == null)
         {
-          throw new InvalidOperationException($"Providing a {nameof(namespacePrefix)} ({namespacePrefix}) makes {namespaceUri} mandatory.");
+          throw new InvalidOperationException($"Providing a {nameof(namespacePrefix)} ({namespacePrefix}) makes {nameof(namespaceUri)} mandatory.");
         }
       }
 

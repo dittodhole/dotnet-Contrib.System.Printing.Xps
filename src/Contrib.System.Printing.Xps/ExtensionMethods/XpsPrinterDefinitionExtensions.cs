@@ -32,7 +32,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <exception cref="Exception" />
     public static void Print([NotNull] this IXpsPrinterDefinition xpsPrinterDefinition,
                              [NotNull] IDocumentPaginatorSource documentPaginatorSource,
-                             [NotNull] Func<PrintQueue, PrintTicket> printTicketFactory)
+                             [NotNull] PrintTicketFactory printTicketFactory)
     {
       if (xpsPrinterDefinition == null)
       {
@@ -48,30 +48,27 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       }
 
       using (var printServer = new PrintServer(xpsPrinterDefinition.HostingMachineName))
+      using (var printQueue = printServer.GetPrintQueue(xpsPrinterDefinition.Name))
       {
-        using (var printQueue = printServer.GetPrintQueue(xpsPrinterDefinition.Name))
+        var xpsDocumentWriter = PrintQueue.CreateXpsDocumentWriter(printQueue);
+        var printTicket = printTicketFactory.Invoke(printQueue);
+
+        if (documentPaginatorSource is FixedDocumentSequence fixedDocumentSequence)
         {
-          var printTicket = printTicketFactory.Invoke(printQueue);
-
-          var xpsDocumentWriter = PrintQueue.CreateXpsDocumentWriter(printQueue);
-
-          if (documentPaginatorSource is FixedDocumentSequence fixedDocumentSequence)
-          {
-            fixedDocumentSequence.PrintTicket = printTicket;
-            xpsDocumentWriter.Write(fixedDocumentSequence,
-                                    printTicket);
-          }
-          else if (documentPaginatorSource is FixedDocument fixedDocument)
-          {
-            fixedDocument.PrintTicket = printTicket;
-            xpsDocumentWriter.Write(fixedDocument,
-                                    printTicket);
-          }
-          else
-          {
-            xpsDocumentWriter.Write(documentPaginatorSource.DocumentPaginator,
-                                    printTicket);
-          }
+          fixedDocumentSequence.PrintTicket = printTicket;
+          xpsDocumentWriter.Write(fixedDocumentSequence,
+                                  printTicket);
+        }
+        else if (documentPaginatorSource is FixedDocument fixedDocument)
+        {
+          fixedDocument.PrintTicket = printTicket;
+          xpsDocumentWriter.Write(fixedDocument,
+                                  printTicket);
+        }
+        else
+        {
+          xpsDocumentWriter.Write(documentPaginatorSource.DocumentPaginator,
+                                  printTicket);
         }
       }
     }
