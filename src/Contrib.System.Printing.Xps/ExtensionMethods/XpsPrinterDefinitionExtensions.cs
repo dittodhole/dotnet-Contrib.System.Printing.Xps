@@ -32,7 +32,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <exception cref="Exception" />
     public static void Print([NotNull] this IXpsPrinterDefinition xpsPrinterDefinition,
                              [NotNull] IDocumentPaginatorSource documentPaginatorSource,
-                             [NotNull] Func<PrintQueue, PrintTicket> printTicketFactory)
+                             [NotNull] PrintTicketFactory printTicketFactory)
     {
       if (xpsPrinterDefinition == null)
       {
