@@ -358,7 +358,9 @@ namespace Contrib.System.Printing.Xps
           }
 
           var valueXElement = optionXElement.Elements(printerSchemaFrameworkXNamespace + "Property")
-                                            .Where(arg => arg.Attribute("name")?.Value == "psk:DisplayName")
+                                            .Where(arg => string.Equals(arg.Attribute("name")?.Value,
+                                                                        "psk:DisplayName",
+                                                                        StringComparison.Ordinal))
                                             .Select(arg => arg.Element(printerSchemaFrameworkXNamespace + "Value"))
                                             .FirstOrDefault();
 
