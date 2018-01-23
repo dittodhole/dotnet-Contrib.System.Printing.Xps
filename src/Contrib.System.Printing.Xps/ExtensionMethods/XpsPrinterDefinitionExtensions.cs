@@ -23,7 +23,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       }
 
       xpsPrinterDefinition.Print(documentPaginatorSource,
-                                 printQueue => printQueue.UserPrintTicket ?? printQueue.DefaultPrintTicket);
+                                 printQueue => null);
     }
 
     /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinition" /> is <see langword="null" />.</exception>
