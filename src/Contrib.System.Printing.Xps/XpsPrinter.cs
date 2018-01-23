@@ -326,7 +326,13 @@ namespace Contrib.System.Printing.Xps
 
         var printerSchemaFrameworkXNamespace = XpsPrinter.GetPrinterSchemaFrameworkXNamespace();
         var optionXElements = rootXElement.Elements(printerSchemaFrameworkXNamespace + "Feature")
-                                          .Where(arg => arg.Attribute("name")?.Value == "psk:PageInputBin")
+                                          .Where(arg => new[]
+                                                        {
+                                                          "psk:PageInputBin",
+                                                          "psk:DocumentInputBin",
+                                                          "psk:PageInputBin"
+                                                        }.Contains(arg.Attribute("name")?.Value,
+                                                        StringComparer.Ordinal))
                                           .SelectMany(arg => arg.Elements(printerSchemaFrameworkXNamespace + "Option"))
                                           .ToArray();
 
