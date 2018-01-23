@@ -1,100 +1,89 @@
 ﻿using System;
 using System.IO;
 using System.Printing;
-using System.Xml;
+using System.Xml.Linq;
 using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
   public static class PrintTicketExtensions
   {
-    /// <exception cref="InvalidOperationException">If <paramref name="xpsInputBinDefinition" /> holds a prefix in <see cref="IXpsInputBinDefinition.Name" />, but does not provide a <see cref="IXpsInputBinDefinition.NamespaceUri" />.</exception>
     /// <exception cref="Exception" />
     [Pure]
     [NotNull]
-    public static PrintTicket With([NotNull] this PrintTicket printTicket,
-                                   [NotNull] IXpsInputBinDefinition xpsInputBinDefinition)
+    public static PrintTicket CreatePrintTicket([NotNull] string inputBinName,
+                                                [NotNull] string namespacePrefix,
+                                                [NotNull] string namespaceUri)
     {
-      var inputBinName = xpsInputBinDefinition.Name;
-      var featureName = xpsInputBinDefinition.FeatureName;
-      var namespacePrefix = XpsPrinter.GetNamespacePrefix(inputBinName);
-      var namespaceUri = xpsInputBinDefinition.NamespaceUri;
+      // === SOURCE ===
+      // <?xml version="1.0" encoding="UTF-8"?>
+      // <psf:PrintTicket xmlns:psf="http://schemas.microsoft.com/windows/2003/08/printing/printschemaframework"
+      //                  xmlns:psk="http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords"
+      //                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      //                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      //                  version="1">
+      // </psf:PrintTicket>
+      // === === === ===
 
-      printTicket = printTicket.With(inputBinName,
-                                     featureName,
-                                     namespacePrefix,
-                                     namespaceUri);
+      XDocument xdocument;
 
-      return printTicket;
-    }
-
-    /// <exception cref="InvalidOperationException">If <paramref name="namespacePrefix" /> is not <see langword="null" />, and <paramref name="namespaceUri" /> is <see langword="null" />.</exception>
-    /// <exception cref="Exception" />
-    [Pure]
-    [NotNull]
-    [ContractAnnotation("namespacePrefix: notnull, namespaceUri: null => halt")]
-    public static PrintTicket With([NotNull] this PrintTicket printTicket,
-                                   [NotNull] string inputBinName,
-                                   [NotNull] string featureName,
-                                   [CanBeNull] string namespacePrefix,
-                                   [CanBeNull] string namespaceUri)
-    {
-      if (namespacePrefix != null)
       {
-        if (namespaceUri == null)
+        var printTicket = new PrintTicket();
+
+        using (var memoryStream = printTicket.GetXmlStream())
         {
-          throw new InvalidOperationException($"Providing a {nameof(namespacePrefix)} ({namespacePrefix}) makes {nameof(namespaceUri)} mandatory.");
+          xdocument = XDocument.Load(memoryStream);
         }
       }
 
-      var xmlDocument = new XmlDocument();
-      using (var memoryStream = printTicket.GetXmlStream())
+      var printTicketXElement = xdocument.Root;
+      if (printTicketXElement == null)
       {
-        xmlDocument.Load(memoryStream);
+        throw new Exception($"Could not get {nameof(XDocument.Root)}: {xdocument}");
       }
 
-      var documentXmlElement = xmlDocument.DocumentElement;
-      if (documentXmlElement != null)
+      // === DESTINATION ===
+      // <?xml version="1.0" encoding="UTF-8"?>
+      // <psf:PrintTicket xmlns:psf="http://schemas.microsoft.com/windows/2003/08/printing/printschemaframework"
+      //                  xmlns:psk="http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords"
+      //                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      //                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      //                  xmlns:{namespacePrefix}="{namespaceUri}"
+      //                  version="1">
+      //   <psf:Feature name="psk:JobInputBin">
+      //     <psf:Option name="{inputBinName}" />
+      //   </psf:Feature>
+      // </psf:PrintTicket>
+      // === === === === ===
+
+      var printerSchemaFrameworkXNamespace = XpsPrinter.GetPrinterSchemaFrameworkXNamespace();
+
+      var featureXElement = new XElement(printerSchemaFrameworkXNamespace + "Feature");
+      featureXElement.SetAttributeValue("name", "psk:JobInputBin");
+      printTicketXElement.Add(featureXElement);
+
+      var optionXElement = new XElement(printerSchemaFrameworkXNamespace + "Option");
+      optionXElement.SetAttributeValue("name", inputBinName);
+      featureXElement.Add(optionXElement);
+
+      var namespaceXName = XNamespace.Xmlns + namespacePrefix;
+
+      if (printTicketXElement.Attribute(namespaceXName) == null)
       {
-        var xmlNamespaceManager = new XmlNamespaceManager(xmlDocument.NameTable);
-        xmlNamespaceManager.AddNamespace(documentXmlElement.Prefix,
-                                         documentXmlElement.NamespaceURI);
-
-        var xmlNode = xmlDocument.SelectSingleNode($"//psf:Feature[@name='{featureName}']/psf:Option",
-                                                   xmlNamespaceManager);
-        if (xmlNode != null)
-        {
-          if (namespacePrefix != null)
-          {
-            // TODO: validate format of prefix
-
-            var xmlAttribute = xmlDocument.CreateAttribute($"xmlns:{namespacePrefix}");
-            xmlAttribute.Value = namespaceUri;
-            documentXmlElement.Attributes.Append(xmlAttribute);
-          }
-
-          var xmlAttributeCollection = xmlNode.Attributes;
-          if (xmlAttributeCollection != null)
-          {
-            var nameXmlAttribute = xmlAttributeCollection["name"];
-            if (nameXmlAttribute != null)
-            {
-              nameXmlAttribute.Value = inputBinName;
-            }
-          }
-        }
+        printTicketXElement.SetAttributeValue(namespaceXName,
+                                              namespaceUri);
       }
 
       using (var memoryStream = new MemoryStream())
       {
-        xmlDocument.Save(memoryStream);
+        xdocument.Save(memoryStream);
         memoryStream.Seek(0L,
                           SeekOrigin.Begin);
 
-        printTicket = new PrintTicket(memoryStream);
-      }
+        var printTicket = new PrintTicket(memoryStream);
 
-      return printTicket;
+        return printTicket;
+      }
     }
   }
 }

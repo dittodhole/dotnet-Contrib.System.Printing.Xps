@@ -13,16 +13,13 @@ namespace Contrib.System.Printing.Xps
     [NotNull]
     string DisplayName { get; }
 
-    [NotNull]
-    string FeatureName { get; }
-
     [CanBeNull]
     double? PageWidth { get; }
 
     [CanBeNull]
     double? PageHeight { get; }
 
-    [CanBeNull]
+    [NotNull]
     string NamespaceUri { get; }
   }
 }

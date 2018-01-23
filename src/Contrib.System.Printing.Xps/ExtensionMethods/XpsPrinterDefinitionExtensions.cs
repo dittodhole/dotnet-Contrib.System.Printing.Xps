@@ -23,7 +23,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       }
 
       xpsPrinterDefinition.Print(documentPaginatorSource,
-                                 printQueue => printQueue.UserPrintTicket ?? printQueue.DefaultPrintTicket);
+                                 printQueue => null);
     }
 
     /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinition" /> is <see langword="null" />.</exception>
@@ -55,20 +55,41 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
 
         if (documentPaginatorSource is FixedDocumentSequence fixedDocumentSequence)
         {
-          fixedDocumentSequence.PrintTicket = printTicket;
-          xpsDocumentWriter.Write(fixedDocumentSequence,
-                                  printTicket);
+          if (printTicket == null)
+          {
+            xpsDocumentWriter.Write(fixedDocumentSequence);
+          }
+          else
+          {
+            fixedDocumentSequence.PrintTicket = printTicket;
+            xpsDocumentWriter.Write(fixedDocumentSequence,
+                                    printTicket);
+          }
         }
         else if (documentPaginatorSource is FixedDocument fixedDocument)
         {
-          fixedDocument.PrintTicket = printTicket;
-          xpsDocumentWriter.Write(fixedDocument,
-                                  printTicket);
+          if (printTicket == null)
+          {
+            xpsDocumentWriter.Write(fixedDocument);
+          }
+          else
+          {
+            fixedDocument.PrintTicket = printTicket;
+            xpsDocumentWriter.Write(fixedDocument,
+                                    printTicket);
+          }
         }
         else
         {
-          xpsDocumentWriter.Write(documentPaginatorSource.DocumentPaginator,
-                                  printTicket);
+          if (printTicket == null)
+          {
+            xpsDocumentWriter.Write(documentPaginatorSource.DocumentPaginator);
+          }
+          else
+          {
+            xpsDocumentWriter.Write(documentPaginatorSource.DocumentPaginator,
+                                    printTicket);
+          }
         }
       }
     }

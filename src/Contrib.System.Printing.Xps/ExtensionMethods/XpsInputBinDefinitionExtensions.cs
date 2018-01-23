@@ -7,6 +7,23 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
   public static class XpsInputBinDefinitionExtensions
   {
+    /// <exception cref="InvalidOperationException">If <paramref name="xpsInputBinDefinition" /> holds a prefix in <see cref="IXpsInputBinDefinition.Name" />, but does not provide a <see cref="IXpsInputBinDefinition.NamespaceUri" />.</exception>
+    /// <exception cref="Exception" />
+    [Pure]
+    [NotNull]
+    public static PrintTicket CreatePrintTicket([NotNull] this IXpsInputBinDefinition xpsInputBinDefinition)
+    {
+      var inputBinName = xpsInputBinDefinition.Name;
+      var namespacePrefix = XpsPrinter.GetNamespacePrefix(inputBinName);
+      var namespaceUri = xpsInputBinDefinition.NamespaceUri;
+
+      var printTicket = PrintTicketExtensions.CreatePrintTicket(inputBinName,
+                                                                namespacePrefix,
+                                                                namespaceUri);
+
+      return printTicket;
+    }
+
     /// <exception cref="ArgumentNullException"><paramref name="xpsInputBinDefinition" /> is <see langword="null" />.</exception>
     [Pure]
     public static InputBin GetInputBin([NotNull] this IXpsInputBinDefinition xpsInputBinDefinition)
@@ -53,14 +70,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       var xpsPrinterDefinition = xpsInputBinDefinition.XpsPrinterDefinition;
 
       xpsPrinterDefinition.Print(documentPaginatorSource,
-                                 printQueue =>
-                                 {
-                                   var printTicket = printQueue.UserPrintTicket ?? printQueue.DefaultPrintTicket;
-
-                                   printTicket = printTicket.With(xpsInputBinDefinition);
-
-                                   return printTicket;
-                                 });
+                                 printQueue => xpsInputBinDefinition.CreatePrintTicket());
     }
   }
 }
