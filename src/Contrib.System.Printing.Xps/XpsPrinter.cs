@@ -118,8 +118,6 @@ namespace Contrib.System.Printing.Xps
     private sealed class XpsInputBinDefinition : IXpsInputBinDefinition,
                                                  IEquatable<XpsInputBinDefinition>
     {
-      public XpsInputBinDefinition() { }
-
       /// <inheritdoc />
       public IXpsPrinterDefinition XpsPrinterDefinition { get; set; }
 
