@@ -13,11 +13,13 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     [NotNull]
     public static PrintTicket CreatePrintTicket([NotNull] this IXpsInputBinDefinition xpsInputBinDefinition)
     {
+      var featureName = xpsInputBinDefinition.FeatureName;
       var inputBinName = xpsInputBinDefinition.Name;
-      var namespacePrefix = XpsPrinter.GetNamespacePrefix(inputBinName);
+      var namespacePrefix = xpsInputBinDefinition.NamespacePrefix;
       var namespaceUri = xpsInputBinDefinition.NamespaceUri;
 
-      var printTicket = PrintTicketExtensions.CreatePrintTicket(inputBinName,
+      var printTicket = PrintTicketExtensions.CreatePrintTicket(featureName,
+                                                                inputBinName,
                                                                 namespacePrefix,
                                                                 namespaceUri);
 

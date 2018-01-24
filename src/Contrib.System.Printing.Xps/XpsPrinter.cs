@@ -128,10 +128,16 @@ namespace Contrib.System.Printing.Xps
       public string DisplayName { get; set; }
 
       /// <inheritdoc />
+      public string FeatureName { get; set; }
+
+      /// <inheritdoc />
       public double? PageWidth { get; set; }
 
       /// <inheritdoc />
       public double? PageHeight { get; set; }
+
+      /// <inheritdoc />
+      public string NamespacePrefix { get; set; }
 
       /// <inheritdoc />
       public string NamespaceUri { get; set; }
@@ -200,7 +206,7 @@ namespace Contrib.System.Printing.Xps
     /// <inheritdoc />
     public virtual IXpsPrinterDefinition GetDefaultXpsPrinterDefinition()
     {
-      using (var printServer = new PrintServer())
+      using (var printServer = new PrintServer(PrintSystemDesiredAccess.EnumerateServer))
       {
         var printerDefinitions = this.GetXpsPrinterDefinitionsImpl(printServer);
         var printerDefinition = printerDefinitions.FirstOrDefault();
@@ -212,7 +218,7 @@ namespace Contrib.System.Printing.Xps
     /// <inheritdoc />
     public virtual IXpsPrinterDefinition[] GetXpsPrinterDefinitions()
     {
-      using (var printServer = new PrintServer())
+      using (var printServer = new PrintServer(PrintSystemDesiredAccess.EnumerateServer))
       {
         var printerDefinitions = this.GetXpsPrinterDefinitionsImpl(printServer);
         var result = printerDefinitions.ToArray();
@@ -273,7 +279,8 @@ namespace Contrib.System.Printing.Xps
       var xpsPrinterDefinitions = this.GetXpsPrinterDefinitions();
       foreach (var xpsPrinterDefinition in xpsPrinterDefinitions)
       {
-        using (var printServer = new PrintServer(xpsPrinterDefinition.HostingMachineName))
+        using (var printServer = new PrintServer(xpsPrinterDefinition.HostingMachineName,
+                                                 PrintSystemDesiredAccess.EnumerateServer))
         {
           var inputBinDefinitions = this.GetXpsInputBinDefinitionsImpl(printServer,
                                                                        xpsPrinterDefinition);
@@ -293,7 +300,8 @@ namespace Contrib.System.Printing.Xps
         throw new ArgumentNullException(nameof(xpsPrinterDefinition));
       }
 
-      using (var printServer = new PrintServer(xpsPrinterDefinition.HostingMachineName))
+      using (var printServer = new PrintServer(xpsPrinterDefinition.HostingMachineName,
+                                               PrintSystemDesiredAccess.EnumerateServer))
       {
         var inputBinDefinitions = this.GetXpsInputBinDefinitionsImpl(printServer,
                                                                      xpsPrinterDefinition);
@@ -325,65 +333,64 @@ namespace Contrib.System.Printing.Xps
         }
 
         var printerSchemaFrameworkXNamespace = XpsPrinter.GetPrinterSchemaFrameworkXNamespace();
-        var optionXElements = rootXElement.Elements(printerSchemaFrameworkXNamespace + "Feature")
-                                          .Where(arg => new[]
-                                                        {
-                                                          "psk:PageInputBin",
-                                                          "psk:DocumentInputBin",
-                                                          "psk:PageInputBin"
-                                                        }.Contains(arg.Attribute("name")?.Value,
-                                                        StringComparer.Ordinal))
-                                          .SelectMany(arg => arg.Elements(printerSchemaFrameworkXNamespace + "Option"))
-                                          .ToArray();
-
-        foreach (var optionXElement in optionXElements)
+        var inputBinFeatureXElements = rootXElement.Elements(printerSchemaFrameworkXNamespace + "Feature")
+                                                   .Where(arg => new[]
+                                                                 {
+                                                                   "psk:PageInputBin",
+                                                                   "psk:DocumentInputBin",
+                                                                   "psk:JobInputBin"
+                                                                 }.Contains(arg.Attribute("name")?.Value,
+                                                                            StringComparer.Ordinal));
+        foreach (var inputBinFeatureXElement in inputBinFeatureXElements)
         {
-          var nameXAttribute = optionXElement.Attribute("name");
-          if (nameXAttribute == null)
+          var inputBinFeatureNameXAttribute = inputBinFeatureXElement.Attribute("name");
+
+          var inputBinOptionXElements = inputBinFeatureXElement.Elements(printerSchemaFrameworkXNamespace + "Option");
+          foreach (var inputBinOptionXElement in inputBinOptionXElements)
           {
-            continue;
+            var inputBinNameXAttribute = inputBinOptionXElement.Attribute("name");
+            var inputBinName = inputBinNameXAttribute?.Value;
+            if (inputBinName == null)
+            {
+              continue;
+            }
+
+            var inputBinNamespacePrefix = XpsPrinter.GetNamespacePrefix(inputBinName);
+            if (inputBinNamespacePrefix == null)
+            {
+              throw new Exception($"'name'-{nameof(XAttribute)} for {nameof(IXpsInputBinDefinition.NamespacePrefix)} does not contain a valid name: {inputBinOptionXElement}");
+            }
+
+            var inputBinXNamespace = rootXElement.GetNamespaceOfPrefix(inputBinNamespacePrefix);
+            if (inputBinXNamespace == null)
+            {
+              throw new Exception($"Could not get {nameof(XNamespace)} for '{inputBinNamespacePrefix}': {xdocument}");
+            }
+
+            var inputBinDisplayNameXElement = inputBinOptionXElement.Elements(printerSchemaFrameworkXNamespace + "Property")
+                                                                    .Where(arg => string.Equals(arg.Attribute("name")?.Value,
+                                                                                                "psk:DisplayName",
+                                                                                                StringComparison.Ordinal))
+                                                                    .FirstOrDefault();
+            var inputBinDisplayNameValueXElement = inputBinDisplayNameXElement?.Element(printerSchemaFrameworkXNamespace + "Value");
+
+            var inputBinDefinition = new XpsInputBinDefinition
+                                     {
+                                       XpsPrinterDefinition = xpsPrinterDefinition,
+                                       Name = inputBinName,
+                                       DisplayName = inputBinDisplayNameValueXElement?.Value ?? "unkown",
+                                       NamespacePrefix = inputBinNamespacePrefix,
+                                       NamespaceUri = inputBinXNamespace.NamespaceName,
+                                       FeatureName = inputBinFeatureNameXAttribute?.Value ?? "psk:JobInputBin"
+                                     };
+            var printTicket = inputBinDefinition.CreatePrintTicket();
+
+            var printCapabilities = printQueue.GetPrintCapabilities(printTicket);
+            inputBinDefinition.PageWidth = printCapabilities.OrientedPageMediaWidth;
+            inputBinDefinition.PageHeight = printCapabilities.OrientedPageMediaHeight;
+
+            yield return inputBinDefinition;
           }
-
-          var name = nameXAttribute.Value;
-          var namespacePrefix = XpsPrinter.GetNamespacePrefix(name);
-          if (namespacePrefix == null)
-          {
-            throw new Exception($"{nameof(XAttribute)} 'name' of {nameof(XElement)} does not contain a valid name: {optionXElement}");
-          }
-
-          var xnamespace = rootXElement.GetNamespaceOfPrefix(namespacePrefix);
-          if (xnamespace == null)
-          {
-            throw new Exception($"Could not get {nameof(XNamespace)} for '{namespacePrefix}': {xdocument}");
-          }
-
-          var valueXElement = optionXElement.Elements(printerSchemaFrameworkXNamespace + "Property")
-                                            .Where(arg => string.Equals(arg.Attribute("name")?.Value,
-                                                                        "psk:DisplayName",
-                                                                        StringComparison.Ordinal))
-                                            .Select(arg => arg.Element(printerSchemaFrameworkXNamespace + "Value"))
-                                            .FirstOrDefault();
-
-          var printTicket = PrintTicketExtensions.CreatePrintTicket(name,
-                                                                    namespacePrefix,
-                                                                    xnamespace.NamespaceName);
-
-          var printCapabilities = printQueue.GetPrintCapabilities(printTicket);
-
-          var pageWidth = printCapabilities.OrientedPageMediaWidth;
-          var pageHeight = printCapabilities.OrientedPageMediaHeight;
-
-          var inputBinDefinition = new XpsInputBinDefinition
-                                   {
-                                     XpsPrinterDefinition = xpsPrinterDefinition,
-                                     Name = name,
-                                     DisplayName = valueXElement?.Value ?? "unkown",
-                                     PageWidth = pageWidth,
-                                     PageHeight = pageHeight,
-                                     NamespaceUri = xnamespace.NamespaceName
-                                   };
-
-          yield return inputBinDefinition;
         }
       }
     }
