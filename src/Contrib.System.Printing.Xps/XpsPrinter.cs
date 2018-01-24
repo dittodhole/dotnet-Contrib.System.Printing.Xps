@@ -332,7 +332,7 @@ namespace Contrib.System.Printing.Xps
                                                         {
                                                           "psk:PageInputBin",
                                                           "psk:DocumentInputBin",
-                                                          "psk:PageInputBin"
+                                                          "psk:JobInputBin"
                                                         }.Contains(arg.Attribute("name")?.Value,
                                                         StringComparer.Ordinal))
                                           .SelectMany(arg => arg.Elements(printerSchemaFrameworkXNamespace + "Option"))
