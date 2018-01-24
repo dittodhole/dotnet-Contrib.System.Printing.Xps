@@ -9,9 +9,18 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   public static class PrintTicketExtensions
   {
     /// <exception cref="Exception" />
+    /// <code>
+    ///   using Contrib.System.Printing.Xps.ExtensionMethods;
+    ///
+    ///   PrintTicketExtensions.CreatePrintTicket(<paramref name="featureName"/>: "psk:JobInputBin",
+    ///                                           <paramref name="inputBinName"/>: "psk:AutoSelect",
+    ///                                           <paramref name="namespacePrefix"/>: "psk",
+    ///                                           <paramref name="namespaceUri"/>: "http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords");
+    /// </code>
     [Pure]
     [NotNull]
-    public static PrintTicket CreatePrintTicket([NotNull] string inputBinName,
+    public static PrintTicket CreatePrintTicket([NotNull] string featureName,
+                                                [NotNull] string inputBinName,
                                                 [NotNull] string namespacePrefix,
                                                 [NotNull] string namespaceUri)
     {
@@ -50,7 +59,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       //                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
       //                  xmlns:{namespacePrefix}="{namespaceUri}"
       //                  version="1">
-      //   <psf:Feature name="psk:JobInputBin">
+      //   <psf:Feature name="{featureName}">
       //     <psf:Option name="{inputBinName}" />
       //   </psf:Feature>
       // </psf:PrintTicket>
@@ -59,7 +68,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       var printerSchemaFrameworkXNamespace = XpsPrinter.GetPrinterSchemaFrameworkXNamespace();
 
       var featureXElement = new XElement(printerSchemaFrameworkXNamespace + "Feature");
-      featureXElement.SetAttributeValue("name", "psk:JobInputBin");
+      featureXElement.SetAttributeValue("name", featureName);
       printTicketXElement.Add(featureXElement);
 
       var optionXElement = new XElement(printerSchemaFrameworkXNamespace + "Option");
