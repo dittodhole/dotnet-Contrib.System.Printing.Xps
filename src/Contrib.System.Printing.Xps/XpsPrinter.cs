@@ -326,21 +326,21 @@ namespace Contrib.System.Printing.Xps
           xdocument = XDocument.Load(memoryStream);
         }
 
-        var rootXElement = xdocument.Root;
-        if (rootXElement == null)
+        var printCapabilitiesXElement = xdocument.Root;
+        if (printCapabilitiesXElement == null)
         {
           throw new Exception($"Could not get {nameof(XDocument.Root)}: {xdocument}");
         }
 
         var printerSchemaFrameworkXNamespace = XpsPrinter.GetPrinterSchemaFrameworkXNamespace();
-        var inputBinFeatureXElements = rootXElement.Elements(printerSchemaFrameworkXNamespace + "Feature")
-                                                   .Where(arg => new[]
-                                                                 {
-                                                                   "psk:PageInputBin",
-                                                                   "psk:DocumentInputBin",
-                                                                   "psk:JobInputBin"
-                                                                 }.Contains(arg.Attribute("name")?.Value,
-                                                                            StringComparer.Ordinal));
+        var inputBinFeatureXElements = printCapabilitiesXElement.Elements(printerSchemaFrameworkXNamespace + "Feature")
+                                                                .Where(arg => new[]
+                                                                              {
+                                                                                "psk:PageInputBin",
+                                                                                "psk:DocumentInputBin",
+                                                                                "psk:JobInputBin"
+                                                                              }.Contains(arg.Attribute("name")?.Value,
+                                                                                         StringComparer.Ordinal));
         foreach (var inputBinFeatureXElement in inputBinFeatureXElements)
         {
           var inputBinFeatureNameXAttribute = inputBinFeatureXElement.Attribute("name");
@@ -361,7 +361,7 @@ namespace Contrib.System.Printing.Xps
               throw new Exception($"'name'-{nameof(XAttribute)} for {nameof(IXpsInputBinDefinition.NamespacePrefix)} does not contain a valid name: {inputBinOptionXElement}");
             }
 
-            var inputBinXNamespace = rootXElement.GetNamespaceOfPrefix(inputBinNamespacePrefix);
+            var inputBinXNamespace = printCapabilitiesXElement.GetNamespaceOfPrefix(inputBinNamespacePrefix);
             if (inputBinXNamespace == null)
             {
               throw new Exception($"Could not get {nameof(XNamespace)} for '{inputBinNamespacePrefix}': {xdocument}");
