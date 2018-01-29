@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Printing;
 using System.Xml.Linq;
+using Anotar.LibLog;
 using Contrib.System.Printing.Xps.ExtensionMethods;
 using JetBrains.Annotations;
 
@@ -243,10 +245,24 @@ namespace Contrib.System.Printing.Xps
         IXpsPrinterDefinition xpsPrinterDefinition;
         using (printQueue)
         {
-          var printCapabilities = printQueue.GetPrintCapabilities();
+          double? defaultPageWidth;
+          double? defaultPageHeight;
 
-          var defaultPageWidth = printCapabilities.OrientedPageMediaWidth;
-          var defaultPageHeight = printCapabilities.OrientedPageMediaHeight;
+          try
+          {
+            var printCapabilities = printQueue.GetPrintCapabilities();
+
+            defaultPageWidth = printCapabilities.OrientedPageMediaWidth;
+            defaultPageHeight = printCapabilities.OrientedPageMediaHeight;
+          }
+          catch (Exception exception)
+          {
+            defaultPageWidth = null;
+            defaultPageHeight = null;
+
+            LogTo.WarnException($"Could not query {nameof(PrintQueue)} '{printQueue.FullName}' for {nameof(PrintCapabilities)}.",
+                                exception);
+          }
 
           xpsPrinterDefinition = new XpsPrinterDefinition
                                  {
@@ -321,26 +337,35 @@ namespace Contrib.System.Printing.Xps
       using (var printQueue = printServer.GetPrintQueue(xpsPrinterDefinition.Name))
       {
         XDocument xdocument;
-        using (var memoryStream = printQueue.GetPrintCapabilitiesAsXml())
+        try
         {
-          xdocument = XDocument.Load(memoryStream);
+          using (var memoryStream = printQueue.GetPrintCapabilitiesAsXml())
+          {
+            xdocument = XDocument.Load(memoryStream);
+          }
+        }
+        catch (Exception exception)
+        {
+          LogTo.WarnException($"Could not query {nameof(PrintQueue)} '{printQueue.FullName}' for {nameof(PrintCapabilities)}.",
+                              exception);
+          yield break;
         }
 
-        var rootXElement = xdocument.Root;
-        if (rootXElement == null)
+        var printCapabilitiesXElement = xdocument.Root;
+        if (printCapabilitiesXElement == null)
         {
           throw new Exception($"Could not get {nameof(XDocument.Root)}: {xdocument}");
         }
 
         var printerSchemaFrameworkXNamespace = XpsPrinter.GetPrinterSchemaFrameworkXNamespace();
-        var inputBinFeatureXElements = rootXElement.Elements(printerSchemaFrameworkXNamespace + "Feature")
-                                                   .Where(arg => new[]
-                                                                 {
-                                                                   "psk:PageInputBin",
-                                                                   "psk:DocumentInputBin",
-                                                                   "psk:JobInputBin"
-                                                                 }.Contains(arg.Attribute("name")?.Value,
-                                                                            StringComparer.Ordinal));
+        var inputBinFeatureXElements = printCapabilitiesXElement.Elements(printerSchemaFrameworkXNamespace + "Feature")
+                                                                .Where(arg => new[]
+                                                                              {
+                                                                                "psk:PageInputBin",
+                                                                                "psk:DocumentInputBin",
+                                                                                "psk:JobInputBin"
+                                                                              }.Contains(arg.Attribute("name")?.Value,
+                                                                                         StringComparer.Ordinal));
         foreach (var inputBinFeatureXElement in inputBinFeatureXElements)
         {
           var inputBinFeatureNameXAttribute = inputBinFeatureXElement.Attribute("name");
@@ -361,7 +386,7 @@ namespace Contrib.System.Printing.Xps
               throw new Exception($"'name'-{nameof(XAttribute)} for {nameof(IXpsInputBinDefinition.NamespacePrefix)} does not contain a valid name: {inputBinOptionXElement}");
             }
 
-            var inputBinXNamespace = rootXElement.GetNamespaceOfPrefix(inputBinNamespacePrefix);
+            var inputBinXNamespace = printCapabilitiesXElement.GetNamespaceOfPrefix(inputBinNamespacePrefix);
             if (inputBinXNamespace == null)
             {
               throw new Exception($"Could not get {nameof(XNamespace)} for '{inputBinNamespacePrefix}': {xdocument}");
@@ -383,11 +408,19 @@ namespace Contrib.System.Printing.Xps
                                        NamespaceUri = inputBinXNamespace.NamespaceName,
                                        FeatureName = inputBinFeatureNameXAttribute?.Value ?? "psk:JobInputBin"
                                      };
-            var printTicket = inputBinDefinition.CreatePrintTicket();
 
-            var printCapabilities = printQueue.GetPrintCapabilities(printTicket);
-            inputBinDefinition.PageWidth = printCapabilities.OrientedPageMediaWidth;
-            inputBinDefinition.PageHeight = printCapabilities.OrientedPageMediaHeight;
+            try
+            {
+              var printTicket = inputBinDefinition.CreatePrintTicket();
+              var printCapabilities = printQueue.GetPrintCapabilities(printTicket);
+              inputBinDefinition.PageWidth = printCapabilities.OrientedPageMediaWidth;
+              inputBinDefinition.PageHeight = printCapabilities.OrientedPageMediaHeight;
+            }
+            catch (Exception exception)
+            {
+              LogTo.WarnException($"Could not query {nameof(PrintQueue)} '{printQueue.FullName}' for {nameof(PrintCapabilities)}.",
+                                  exception);
+            }
 
             yield return inputBinDefinition;
           }
