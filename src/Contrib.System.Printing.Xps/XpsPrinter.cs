@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Printing;
 using System.Xml.Linq;
+using Anotar.LibLog;
 using Contrib.System.Printing.Xps.ExtensionMethods;
 using JetBrains.Annotations;
 
@@ -243,10 +245,24 @@ namespace Contrib.System.Printing.Xps
         IXpsPrinterDefinition xpsPrinterDefinition;
         using (printQueue)
         {
-          var printCapabilities = printQueue.GetPrintCapabilities();
+          double? defaultPageWidth;
+          double? defaultPageHeight;
 
-          var defaultPageWidth = printCapabilities.OrientedPageMediaWidth;
-          var defaultPageHeight = printCapabilities.OrientedPageMediaHeight;
+          try
+          {
+            var printCapabilities = printQueue.GetPrintCapabilities();
+
+            defaultPageWidth = printCapabilities.OrientedPageMediaWidth;
+            defaultPageHeight = printCapabilities.OrientedPageMediaHeight;
+          }
+          catch (Exception exception)
+          {
+            defaultPageWidth = null;
+            defaultPageHeight = null;
+
+            LogTo.WarnException($"Could not query {nameof(PrintQueue)} '{printQueue.FullName}' for {nameof(PrintCapabilities)}.",
+                                exception);
+          }
 
           xpsPrinterDefinition = new XpsPrinterDefinition
                                  {
@@ -321,9 +337,18 @@ namespace Contrib.System.Printing.Xps
       using (var printQueue = printServer.GetPrintQueue(xpsPrinterDefinition.Name))
       {
         XDocument xdocument;
-        using (var memoryStream = printQueue.GetPrintCapabilitiesAsXml())
+        try
         {
-          xdocument = XDocument.Load(memoryStream);
+          using (var memoryStream = printQueue.GetPrintCapabilitiesAsXml())
+          {
+            xdocument = XDocument.Load(memoryStream);
+          }
+        }
+        catch (Exception exception)
+        {
+          LogTo.WarnException($"Could not query {nameof(PrintQueue)} '{printQueue.FullName}' for {nameof(PrintCapabilities)}.",
+                              exception);
+          yield break;
         }
 
         var printCapabilitiesXElement = xdocument.Root;
@@ -383,11 +408,19 @@ namespace Contrib.System.Printing.Xps
                                        NamespaceUri = inputBinXNamespace.NamespaceName,
                                        FeatureName = inputBinFeatureNameXAttribute?.Value ?? "psk:JobInputBin"
                                      };
-            var printTicket = inputBinDefinition.CreatePrintTicket();
 
-            var printCapabilities = printQueue.GetPrintCapabilities(printTicket);
-            inputBinDefinition.PageWidth = printCapabilities.OrientedPageMediaWidth;
-            inputBinDefinition.PageHeight = printCapabilities.OrientedPageMediaHeight;
+            try
+            {
+              var printTicket = inputBinDefinition.CreatePrintTicket();
+              var printCapabilities = printQueue.GetPrintCapabilities(printTicket);
+              inputBinDefinition.PageWidth = printCapabilities.OrientedPageMediaWidth;
+              inputBinDefinition.PageHeight = printCapabilities.OrientedPageMediaHeight;
+            }
+            catch (Exception exception)
+            {
+              LogTo.WarnException($"Could not query {nameof(PrintQueue)} '{printQueue.FullName}' for {nameof(PrintCapabilities)}.",
+                                  exception);
+            }
 
             yield return inputBinDefinition;
           }
