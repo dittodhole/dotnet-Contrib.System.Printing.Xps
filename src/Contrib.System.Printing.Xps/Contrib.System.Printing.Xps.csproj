@@ -62,7 +62,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Contrib.System.CheckSum.nuspec" />
+    <None Include="Contrib.System.Printing.Xps.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
