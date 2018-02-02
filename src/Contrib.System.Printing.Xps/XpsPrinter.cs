@@ -208,7 +208,7 @@ namespace Contrib.System.Printing.Xps
     /// <inheritdoc />
     public virtual IXpsPrinterDefinition GetDefaultXpsPrinterDefinition()
     {
-      using (var printServer = new PrintServer(PrintSystemDesiredAccess.EnumerateServer))
+      using (var printServer = new PrintServer())
       {
         var printerDefinitions = this.GetXpsPrinterDefinitionsImpl(printServer);
         var printerDefinition = printerDefinitions.FirstOrDefault();
@@ -220,7 +220,7 @@ namespace Contrib.System.Printing.Xps
     /// <inheritdoc />
     public virtual IXpsPrinterDefinition[] GetXpsPrinterDefinitions()
     {
-      using (var printServer = new PrintServer(PrintSystemDesiredAccess.EnumerateServer))
+      using (var printServer = new PrintServer())
       {
         var printerDefinitions = this.GetXpsPrinterDefinitionsImpl(printServer);
         var result = printerDefinitions.ToArray();
@@ -295,8 +295,7 @@ namespace Contrib.System.Printing.Xps
       var xpsPrinterDefinitions = this.GetXpsPrinterDefinitions();
       foreach (var xpsPrinterDefinition in xpsPrinterDefinitions)
       {
-        using (var printServer = new PrintServer(xpsPrinterDefinition.HostingMachineName,
-                                                 PrintSystemDesiredAccess.EnumerateServer))
+        using (var printServer = new PrintServer(xpsPrinterDefinition.HostingMachineName))
         {
           var inputBinDefinitions = this.GetXpsInputBinDefinitionsImpl(printServer,
                                                                        xpsPrinterDefinition);
@@ -316,8 +315,7 @@ namespace Contrib.System.Printing.Xps
         throw new ArgumentNullException(nameof(xpsPrinterDefinition));
       }
 
-      using (var printServer = new PrintServer(xpsPrinterDefinition.HostingMachineName,
-                                               PrintSystemDesiredAccess.EnumerateServer))
+      using (var printServer = new PrintServer(xpsPrinterDefinition.HostingMachineName))
       {
         var inputBinDefinitions = this.GetXpsInputBinDefinitionsImpl(printServer,
                                                                      xpsPrinterDefinition);
