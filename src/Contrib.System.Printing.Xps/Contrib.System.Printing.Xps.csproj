@@ -55,6 +55,7 @@
     <Compile Include="ExtensionMethods\PrintTicketExtensions.cs" />
     <Compile Include="ExtensionMethods\XpsInputBinDefinitionExtensions.cs" />
     <Compile Include="ExtensionMethods\XpsPrinterDefinitionExtensions.cs" />
+    <Compile Include="IComplexXpsPrinterDefinition.cs" />
     <Compile Include="IXpsInputBinDefinition.cs" />
     <Compile Include="PintTicketFactory.cs" />
     <Compile Include="XpsPrinter.cs" />
