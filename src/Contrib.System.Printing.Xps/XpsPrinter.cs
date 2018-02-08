@@ -226,16 +226,13 @@ namespace Contrib.System.Printing.Xps
     [ItemNotNull]
     protected virtual IEnumerable<IXpsPrinterDefinition> GetXpsPrinterDefinitionsImpl([NotNull] PrintServer printServer)
     {
-      var printQueues = printServer.GetPrintQueues(new[]
-                                                   {
-                                                     EnumeratedPrintQueueTypes.Connections,
-                                                     EnumeratedPrintQueueTypes.Local
-                                                   });
-
-      foreach (var printQueue in printQueues)
+      using (var printQueues = printServer.GetPrintQueues(new[]
+                                                          {
+                                                            EnumeratedPrintQueueTypes.Connections,
+                                                            EnumeratedPrintQueueTypes.Local
+                                                          }))
       {
-        IXpsPrinterDefinition xpsPrinterDefinition;
-        using (printQueue)
+        foreach (var printQueue in printQueues)
         {
           double? defaultPageWidth;
           double? defaultPageHeight;
@@ -256,17 +253,17 @@ namespace Contrib.System.Printing.Xps
                                 exception);
           }
 
-          xpsPrinterDefinition = new XpsPrinterDefinition
-                                 {
-                                   HostingMachineName = printQueue.HostingPrintServer.Name,
-                                   Name = printQueue.Name,
-                                   FullName = printQueue.FullName,
-                                   DefaultPageWidth = defaultPageWidth,
-                                   DefaultPageHeight = defaultPageHeight
-                                 };
-        }
+          var xpsPrinterDefinition = new XpsPrinterDefinition
+                                     {
+                                       HostingMachineName = printQueue.HostingPrintServer.Name,
+                                       Name = printQueue.Name,
+                                       FullName = printQueue.FullName,
+                                       DefaultPageWidth = defaultPageWidth,
+                                       DefaultPageHeight = defaultPageHeight
+                                     };
 
-        yield return xpsPrinterDefinition;
+          yield return xpsPrinterDefinition;
+        }
       }
     }
 
