@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Printing;
 using System.Xml.Linq;
 using Anotar.LibLog;
@@ -28,13 +27,6 @@ namespace Contrib.System.Printing.Xps
     [NotNull]
     [ItemNotNull]
     IXpsInputBinDefinition[] GetXpsInputBinDefinitions();
-
-    /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinition" /> is <see langword="null" />.</exception>
-    /// <exception cref="Exception" />
-    [Pure]
-    [NotNull]
-    [ItemNotNull]
-    IXpsInputBinDefinition[] GetXpsInputBinDefinitions([NotNull] IXpsPrinterDefinition xpsPrinterDefinition);
   }
 
   public class XpsPrinter : IXpsPrinter
@@ -281,47 +273,29 @@ namespace Contrib.System.Printing.Xps
     /// <inheritdoc />
     public virtual IXpsInputBinDefinition[] GetXpsInputBinDefinitions()
     {
-      var inputBinDefinitions = this.GetXpsInputBinDefinitionsImpl();
-      var result = inputBinDefinitions.ToArray();
+      using (var printServer = new PrintServer())
+      {
+        var inputBinDefinitions = this.GetXpsInputBinDefinitionsImpl(printServer);
+        var result = inputBinDefinitions.ToArray();
 
-      return result;
+        return result;
+      }
     }
 
     /// <exception cref="Exception" />
     [NotNull]
     [ItemNotNull]
-    protected virtual IEnumerable<IXpsInputBinDefinition> GetXpsInputBinDefinitionsImpl()
+    protected virtual IEnumerable<IXpsInputBinDefinition> GetXpsInputBinDefinitionsImpl([NotNull] PrintServer printServer)
     {
-      var xpsPrinterDefinitions = this.GetXpsPrinterDefinitions();
+      var xpsPrinterDefinitions = this.GetXpsPrinterDefinitionsImpl(printServer);
       foreach (var xpsPrinterDefinition in xpsPrinterDefinitions)
-      {
-        using (var printServer = new PrintServer(xpsPrinterDefinition.HostingMachineName))
-        {
-          var inputBinDefinitions = this.GetXpsInputBinDefinitionsImpl(printServer,
-                                                                       xpsPrinterDefinition);
-          foreach (var inputBinDefinition in inputBinDefinitions)
-          {
-            yield return inputBinDefinition;
-          }
-        }
-      }
-    }
-
-    /// <inheritdoc />
-    public virtual IXpsInputBinDefinition[] GetXpsInputBinDefinitions(IXpsPrinterDefinition xpsPrinterDefinition)
-    {
-      if (xpsPrinterDefinition == null)
-      {
-        throw new ArgumentNullException(nameof(xpsPrinterDefinition));
-      }
-
-      using (var printServer = new PrintServer(xpsPrinterDefinition.HostingMachineName))
       {
         var inputBinDefinitions = this.GetXpsInputBinDefinitionsImpl(printServer,
                                                                      xpsPrinterDefinition);
-        var result = inputBinDefinitions.ToArray();
-
-        return result;
+        foreach (var inputBinDefinition in inputBinDefinitions)
+        {
+          yield return inputBinDefinition;
+        }
       }
     }
 
