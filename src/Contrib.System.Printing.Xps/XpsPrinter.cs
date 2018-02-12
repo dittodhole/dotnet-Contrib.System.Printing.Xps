@@ -370,7 +370,7 @@ namespace Contrib.System.Printing.Xps
 
               try
               {
-                var printTicket = xpsInputBinDefinition.CreatePrintTicket();
+                var printTicket = xpsInputBinDefinition.GetPrintTicket();
                 var printCapabilities = printQueue.GetPrintCapabilities(printTicket);
                 xpsInputBinDefinition.PageWidth = printCapabilities.OrientedPageMediaWidth;
                 xpsInputBinDefinition.PageHeight = printCapabilities.OrientedPageMediaHeight;
