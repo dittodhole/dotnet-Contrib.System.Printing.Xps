@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Printing;
-using System.Windows.Documents;
 using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps.ExtensionMethods
@@ -18,12 +17,12 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       var namespacePrefix = xpsInputBinDefinition.NamespacePrefix;
       var namespaceUri = xpsInputBinDefinition.NamespaceUri;
 
-      var printTicket = PrintTicketExtensions.CreatePrintTicket(featureName,
-                                                                inputBinName,
-                                                                namespacePrefix,
-                                                                namespaceUri);
+      var result = PrintTicketExtensions.CreatePrintTicket(featureName,
+                                                           inputBinName,
+                                                           namespacePrefix,
+                                                           namespaceUri);
 
-      return printTicket;
+      return result;
     }
 
     /// <exception cref="ArgumentNullException"><paramref name="xpsInputBinDefinition" /> is <see langword="null" />.</exception>
@@ -44,35 +43,13 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         name = name.Substring(namespacePrefix.Length);
       }
 
-      InputBin inputBin;
       if (!Enum.TryParse(name,
-                         out inputBin))
+                         out InputBin result))
       {
-        inputBin = InputBin.Unknown;
+        result = InputBin.Unknown;
       }
 
-      return inputBin;
-    }
-
-    /// <exception cref="ArgumentNullException"><paramref name="xpsInputBinDefinition" /> is <see langword="null" />.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="documentPaginatorSource" /> is <see langword="null" />.</exception>
-    /// <exception cref="Exception" />
-    public static void Print([NotNull] this IXpsInputBinDefinition xpsInputBinDefinition,
-                             [NotNull] IDocumentPaginatorSource documentPaginatorSource)
-    {
-      if (xpsInputBinDefinition == null)
-      {
-        throw new ArgumentNullException(nameof(xpsInputBinDefinition));
-      }
-      if (documentPaginatorSource == null)
-      {
-        throw new ArgumentNullException(nameof(documentPaginatorSource));
-      }
-
-      var xpsPrinterDefinition = xpsInputBinDefinition.XpsPrinterDefinition;
-
-      xpsPrinterDefinition.Print(documentPaginatorSource,
-                                 printQueue => xpsInputBinDefinition.CreatePrintTicket());
+      return result;
     }
   }
 }
