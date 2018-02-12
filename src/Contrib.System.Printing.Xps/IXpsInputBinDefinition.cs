@@ -5,7 +5,7 @@ namespace Contrib.System.Printing.Xps
   public interface IXpsInputBinDefinition
   {
     [NotNull]
-    IXpsPrinterDefinition XpsPrinterDefinition { get; }
+    string FullName { get; }
 
     [NotNull]
     string Name { get; }

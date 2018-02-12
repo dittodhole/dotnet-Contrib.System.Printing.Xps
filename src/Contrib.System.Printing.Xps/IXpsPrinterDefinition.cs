@@ -5,9 +5,6 @@ namespace Contrib.System.Printing.Xps
   public interface IXpsPrinterDefinition
   {
     [NotNull]
-    string HostingMachineName { get; }
-
-    [NotNull]
     string Name { get; }
 
     [NotNull]

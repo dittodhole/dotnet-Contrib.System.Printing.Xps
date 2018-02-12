@@ -83,16 +83,17 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
                                               namespaceUri);
       }
 
+      PrintTicket result;
       using (var memoryStream = new MemoryStream())
       {
         xdocument.Save(memoryStream);
         memoryStream.Seek(0L,
                           SeekOrigin.Begin);
 
-        var printTicket = new PrintTicket(memoryStream);
-
-        return printTicket;
+        result = new PrintTicket(memoryStream);
       }
+
+      return result;
     }
   }
 }
