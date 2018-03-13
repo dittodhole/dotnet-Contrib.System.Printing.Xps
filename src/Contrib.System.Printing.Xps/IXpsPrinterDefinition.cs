@@ -15,5 +15,11 @@ namespace Contrib.System.Printing.Xps
 
     [CanBeNull]
     double? DefaultPageHeight { get; }
+
+    [CanBeNull]
+    string PortName { get; }
+
+    [CanBeNull]
+    string DriverName { get; }
   }
 }
