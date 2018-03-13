@@ -213,44 +213,46 @@ namespace Contrib.System.Printing.Xps
       using (var printServer = new PrintServer())
       using (var printQueues = XpsPrinter.GetPrintQueues(printServer))
       {
-        result = printQueues.Select(printQueue =>
-                                    {
-                                      double? defaultPageWidth;
-                                      double? defaultPageHeight;
-
-                                      try
-                                      {
-                                        var printCapabilities = printQueue.GetPrintCapabilities();
-
-                                        defaultPageWidth = printCapabilities.OrientedPageMediaWidth;
-                                        defaultPageHeight = printCapabilities.OrientedPageMediaHeight;
-                                      }
-                                      catch (Exception exception)
-                                      {
-                                        defaultPageWidth = null;
-                                        defaultPageHeight = null;
-
-                                        LogTo.WarnException($"Could not query {nameof(PrintQueue)} '{printQueue.FullName}' for {nameof(PrintCapabilities)}.",
-                                                            exception);
-                                      }
-
-                                      var xpsPrinterDefinition = new XpsPrinterDefinition
-                                                                 {
-                                                                   Name = printQueue.Name,
-                                                                   FullName = printQueue.FullName,
-                                                                   DefaultPageWidth = defaultPageWidth,
-                                                                   DefaultPageHeight = defaultPageHeight,
-                                                                   DriverName = printQueue.QueueDriver.Name,
-                                                                   PortName = printQueue.QueuePort.Name
-                                                                 };
-
-                                      return xpsPrinterDefinition;
-                                    })
-                            .Cast<IXpsPrinterDefinition>()
+        result = printQueues.Select(this.GetXpsPrinterDefinitionImpl)
                             .ToArray();
       }
 
       return result;
+    }
+
+    [NotNull]
+    protected virtual IXpsPrinterDefinition GetXpsPrinterDefinitionImpl([NotNull] PrintQueue printQueue)
+    {
+      double? defaultPageWidth;
+      double? defaultPageHeight;
+
+      try
+      {
+        var printCapabilities = printQueue.GetPrintCapabilities();
+
+        defaultPageWidth = printCapabilities.OrientedPageMediaWidth;
+        defaultPageHeight = printCapabilities.OrientedPageMediaHeight;
+      }
+      catch (Exception exception)
+      {
+        defaultPageWidth = null;
+        defaultPageHeight = null;
+
+        LogTo.WarnException($"Could not query {nameof(PrintQueue)} '{printQueue.FullName}' for {nameof(PrintCapabilities)}.",
+                            exception);
+      }
+
+      var xpsPrinterDefinition = new XpsPrinterDefinition
+                                 {
+                                   Name = printQueue.Name,
+                                   FullName = printQueue.FullName,
+                                   DefaultPageWidth = defaultPageWidth,
+                                   DefaultPageHeight = defaultPageHeight,
+                                   DriverName = printQueue.QueueDriver.Name,
+                                   PortName = printQueue.QueuePort.Name
+                                 };
+
+      return xpsPrinterDefinition;
     }
 
     /// <inheritdoc />
