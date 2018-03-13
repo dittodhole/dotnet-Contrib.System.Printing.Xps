@@ -220,6 +220,8 @@ namespace Contrib.System.Printing.Xps
       return result;
     }
 
+    /// <exception cref="Exception" />
+    [Pure]
     [NotNull]
     protected virtual IXpsPrinterDefinition GetXpsPrinterDefinitionImpl([NotNull] PrintQueue printQueue)
     {
