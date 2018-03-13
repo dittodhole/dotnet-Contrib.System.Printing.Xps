@@ -44,6 +44,12 @@ namespace Contrib.System.Printing.Xps
       public double? DefaultPageHeight { get; set; }
 
       /// <inheritdoc />
+      public string PortName { get; set; }
+
+      /// <inheritdoc />
+      public string DriverName { get; set; }
+
+      /// <inheritdoc />
       public bool Equals(XpsPrinterDefinition other)
       {
         if (object.ReferenceEquals(null,
@@ -233,7 +239,9 @@ namespace Contrib.System.Printing.Xps
                                                                    Name = printQueue.Name,
                                                                    FullName = printQueue.FullName,
                                                                    DefaultPageWidth = defaultPageWidth,
-                                                                   DefaultPageHeight = defaultPageHeight
+                                                                   DefaultPageHeight = defaultPageHeight,
+                                                                   DriverName = printQueue.QueueDriver.Name,
+                                                                   PortName = printQueue.QueuePort.Name
                                                                  };
 
                                       return xpsPrinterDefinition;
@@ -370,7 +378,7 @@ namespace Contrib.System.Printing.Xps
 
               try
               {
-                var printTicket = xpsInputBinDefinition.CreatePrintTicket();
+                var printTicket = xpsInputBinDefinition.GetPrintTicket();
                 var printCapabilities = printQueue.GetPrintCapabilities(printTicket);
                 xpsInputBinDefinition.PageWidth = printCapabilities.OrientedPageMediaWidth;
                 xpsInputBinDefinition.PageHeight = printCapabilities.OrientedPageMediaHeight;

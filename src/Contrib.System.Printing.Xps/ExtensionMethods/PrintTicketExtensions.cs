@@ -12,17 +12,17 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <code>
     ///   using Contrib.System.Printing.Xps.ExtensionMethods;
     ///
-    ///   PrintTicketExtensions.CreatePrintTicket(<paramref name="featureName"/>: "psk:JobInputBin",
-    ///                                           <paramref name="inputBinName"/>: "psk:AutoSelect",
-    ///                                           <paramref name="namespacePrefix"/>: "psk",
-    ///                                           <paramref name="namespaceUri"/>: "http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords");
+    ///   PrintTicketExtensions.GetPrintTicket(<paramref name="featureName"/>: "psk:JobInputBin",
+    ///                                        <paramref name="inputBinName"/>: "psk:AutoSelect",
+    ///                                        <paramref name="namespacePrefix"/>: "psk",
+    ///                                        <paramref name="namespaceUri"/>: "http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords");
     /// </code>
     [Pure]
     [NotNull]
-    public static PrintTicket CreatePrintTicket([NotNull] string featureName,
-                                                [NotNull] string inputBinName,
-                                                [NotNull] string namespacePrefix,
-                                                [NotNull] string namespaceUri)
+    public static PrintTicket GetPrintTicket([NotNull] string featureName,
+                                             [NotNull] string inputBinName,
+                                             [NotNull] string namespacePrefix,
+                                             [NotNull] string namespaceUri)
     {
       // === SOURCE ===
       // <?xml version="1.0" encoding="UTF-8"?>

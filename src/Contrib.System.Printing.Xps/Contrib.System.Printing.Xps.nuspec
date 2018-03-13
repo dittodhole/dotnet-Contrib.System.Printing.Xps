@@ -11,6 +11,7 @@
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System.Printing" />
       <frameworkAssembly assemblyName="PresentationCore" />
+      <frameworkAssembly assemblyName="ReachFramework" />
     </frameworkAssemblies>
   </metadata>
 </package>
