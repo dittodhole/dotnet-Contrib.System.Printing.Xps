@@ -2,19 +2,13 @@
 
 namespace Contrib.System.Printing.Xps
 {
-  public interface IXpsPrinterDefinition
+  public interface IXpsPrinterDefinition : IHasMedia
   {
     [NotNull]
     string Name { get; }
 
     [NotNull]
     string FullName { get; }
-
-    [CanBeNull]
-    double? DefaultPageWidth { get; }
-
-    [CanBeNull]
-    double? DefaultPageHeight { get; }
 
     [CanBeNull]
     string PortName { get; }

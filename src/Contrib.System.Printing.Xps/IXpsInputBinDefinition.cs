@@ -2,7 +2,7 @@
 
 namespace Contrib.System.Printing.Xps
 {
-  public interface IXpsInputBinDefinition
+  public interface IXpsInputBinDefinition : IHasMedia
   {
     [NotNull]
     string FullName { get; }
@@ -15,12 +15,6 @@ namespace Contrib.System.Printing.Xps
 
     [NotNull]
     string FeatureName { get; }
-
-    [CanBeNull]
-    double? PageWidth { get; }
-
-    [CanBeNull]
-    double? PageHeight { get; }
 
     [NotNull]
     string NamespacePrefix { get; }

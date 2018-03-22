@@ -38,10 +38,10 @@ namespace Contrib.System.Printing.Xps
       public string FullName { get; set; }
 
       /// <inheritdoc />
-      public double? DefaultPageWidth { get; set; }
+      public double? MediaWidth { get; set; }
 
       /// <inheritdoc />
-      public double? DefaultPageHeight { get; set; }
+      public double? MediaHeight { get; set; }
 
       /// <inheritdoc />
       public string PortName { get; set; }
@@ -130,10 +130,10 @@ namespace Contrib.System.Printing.Xps
       public string FeatureName { get; set; }
 
       /// <inheritdoc />
-      public double? PageWidth { get; set; }
+      public double? MediaWidth { get; set; }
 
       /// <inheritdoc />
-      public double? PageHeight { get; set; }
+      public double? MediaHeight { get; set; }
 
       /// <inheritdoc />
       public string NamespacePrefix { get; set; }
@@ -213,44 +213,52 @@ namespace Contrib.System.Printing.Xps
       using (var printServer = new PrintServer())
       using (var printQueues = XpsPrinter.GetPrintQueues(printServer))
       {
-        result = printQueues.Select(printQueue =>
-                                    {
-                                      double? defaultPageWidth;
-                                      double? defaultPageHeight;
-
-                                      try
-                                      {
-                                        var printCapabilities = printQueue.GetPrintCapabilities();
-
-                                        defaultPageWidth = printCapabilities.OrientedPageMediaWidth;
-                                        defaultPageHeight = printCapabilities.OrientedPageMediaHeight;
-                                      }
-                                      catch (Exception exception)
-                                      {
-                                        defaultPageWidth = null;
-                                        defaultPageHeight = null;
-
-                                        LogTo.WarnException($"Could not query {nameof(PrintQueue)} '{printQueue.FullName}' for {nameof(PrintCapabilities)}.",
-                                                            exception);
-                                      }
-
-                                      var xpsPrinterDefinition = new XpsPrinterDefinition
-                                                                 {
-                                                                   Name = printQueue.Name,
-                                                                   FullName = printQueue.FullName,
-                                                                   DefaultPageWidth = defaultPageWidth,
-                                                                   DefaultPageHeight = defaultPageHeight,
-                                                                   DriverName = printQueue.QueueDriver.Name,
-                                                                   PortName = printQueue.QueuePort.Name
-                                                                 };
-
-                                      return xpsPrinterDefinition;
-                                    })
-                            .Cast<IXpsPrinterDefinition>()
+        result = printQueues.Select(this.GetXpsPrinterDefinitionImpl)
                             .ToArray();
       }
 
       return result;
+    }
+
+    /// <exception cref="Exception" />
+    [Pure]
+    [NotNull]
+    protected virtual IXpsPrinterDefinition GetXpsPrinterDefinitionImpl([NotNull] PrintQueue printQueue)
+    {
+      double? mediaWidth;
+      double? mediaHeight;
+
+      try
+      {
+        var printCapabilities = printQueue.GetPrintCapabilities();
+
+        mediaWidth = XpsPrinter.GetDimension(printCapabilities.OrientedPageMediaWidth,
+                                             printCapabilities.OrientedPageMediaHeight,
+                                             false);
+        mediaHeight = XpsPrinter.GetDimension(printCapabilities.OrientedPageMediaWidth,
+                                              printCapabilities.OrientedPageMediaHeight,
+                                              true);
+      }
+      catch (Exception exception)
+      {
+        mediaWidth = null;
+        mediaHeight = null;
+
+        LogTo.WarnException($"Could not query {nameof(PrintQueue)} '{printQueue.FullName}' for {nameof(PrintCapabilities)}.",
+                            exception);
+      }
+
+      var xpsPrinterDefinition = new XpsPrinterDefinition
+                                 {
+                                   Name = printQueue.Name,
+                                   FullName = printQueue.FullName,
+                                   MediaWidth = mediaWidth,
+                                   MediaHeight = mediaHeight,
+                                   DriverName = printQueue.QueueDriver.Name,
+                                   PortName = printQueue.QueuePort.Name
+                                 };
+
+      return xpsPrinterDefinition;
     }
 
     /// <inheritdoc />
@@ -376,18 +384,31 @@ namespace Contrib.System.Printing.Xps
                                             FeatureName = inputBinFeatureNameXAttribute?.Value ?? "psk:JobInputBin"
                                           };
 
+              double? mediaWidth;
+              double? mediaHeight;
               try
               {
                 var printTicket = xpsInputBinDefinition.GetPrintTicket();
                 var printCapabilities = printQueue.GetPrintCapabilities(printTicket);
-                xpsInputBinDefinition.PageWidth = printCapabilities.OrientedPageMediaWidth;
-                xpsInputBinDefinition.PageHeight = printCapabilities.OrientedPageMediaHeight;
+
+                mediaWidth = XpsPrinter.GetDimension(printCapabilities.OrientedPageMediaWidth,
+                                                     printCapabilities.OrientedPageMediaHeight,
+                                                     false);
+                mediaHeight = XpsPrinter.GetDimension(printCapabilities.OrientedPageMediaWidth,
+                                                      printCapabilities.OrientedPageMediaHeight,
+                                                      true);
               }
               catch (Exception exception)
               {
+                mediaWidth = null;
+                mediaHeight = null;
+
                 LogTo.WarnException($"Could not query {nameof(PrintQueue)} '{printQueue.FullName}' for {nameof(PrintCapabilities)}.",
                                     exception);
               }
+
+              xpsInputBinDefinition.MediaWidth = mediaWidth;
+              xpsInputBinDefinition.MediaHeight = mediaHeight;
 
               xpsInputBinDefinitions.Add(xpsInputBinDefinition);
             }
@@ -447,6 +468,54 @@ namespace Contrib.System.Printing.Xps
                                               EnumeratedPrintQueueTypes.Connections,
                                               EnumeratedPrintQueueTypes.Local
                                             });
+      }
+
+      return result;
+    }
+
+    [Pure]
+    [CanBeNull]
+    public static double? GetDimension([CanBeNull] double? dimension0,
+                                       [CanBeNull] double? dimension1,
+                                       bool returnMax)
+    {
+      double? result;
+      if (dimension0.HasValue
+          && dimension1.HasValue)
+      {
+        var dimensions = new[]
+                         {
+                           dimension0.Value,
+                           dimension1.Value
+                         };
+        if (dimensions.Any(double.IsNaN))
+        {
+          result = null;
+        }
+        else if (dimensions.Any(double.IsInfinity))
+        {
+          result = null;
+        }
+        else
+        {
+          if (returnMax)
+          {
+            result = dimensions.Max();
+          }
+          else
+          {
+            result = dimensions.Min();
+          }
+
+          if (result < double.Epsilon)
+          {
+            result = null;
+          }
+        }
+      }
+      else
+      {
+        result = null;
       }
 
       return result;
