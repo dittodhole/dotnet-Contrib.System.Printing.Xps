@@ -58,7 +58,10 @@
     <Compile Include="ExtensionMethods\XpsPrinterDefinitionExtensions.cs" />
     <Compile Include="IHasMedia.cs" />
     <Compile Include="IXpsInputBinDefinition.cs" />
+    <Compile Include="IXpsGenericProperty.cs" />
+    <Compile Include="NumberHelper.cs" />
     <Compile Include="PintTicketFactory.cs" />
+    <Compile Include="XmlHelper.cs" />
     <Compile Include="XpsPrinter.cs" />
     <Compile Include="IXpsPrinterDefinition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

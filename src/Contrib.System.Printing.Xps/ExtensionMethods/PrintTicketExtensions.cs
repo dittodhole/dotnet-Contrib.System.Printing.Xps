@@ -65,7 +65,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       // </psf:PrintTicket>
       // === === === === ===
 
-      var printerSchemaFrameworkXNamespace = XpsPrinter.GetPrinterSchemaFrameworkXNamespace();
+      var printerSchemaFrameworkXNamespace = XmlHelper.PrinterSchemaFrameworkXNamespace;
 
       var featureXElement = new XElement(printerSchemaFrameworkXNamespace + "Feature");
       featureXElement.SetAttributeValue("name", featureName);

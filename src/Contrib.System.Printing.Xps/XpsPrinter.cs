@@ -27,8 +27,37 @@ namespace Contrib.System.Printing.Xps
 
   public class XpsPrinter : IXpsPrinter
   {
-    [Serializable]
-    private sealed class XpsPrinterDefinition : IXpsPrinterDefinition,
+    [NotNull]
+    private static XName DisplayNameXName { get; } = XmlHelper.PrinterSchemaKeywordsXNamespace + "DisplayName";
+
+    private sealed class XpsGenericProperty : IXpsGenericProperty
+    {
+      public XName Type { get; set; }
+      public XName Name { get; set; }
+      public string Value { get; set; }
+    }
+
+    private abstract class XpsObjectWithProperties
+    {
+      [NotNull]
+      private IDictionary<XName, IXpsGenericProperty> Properties { get; } = new Dictionary<XName, IXpsGenericProperty>();
+
+      public virtual void AddXpsGenericProperty([NotNull] IXpsGenericProperty xpsGenericProperty)
+      {
+        this.Properties[xpsGenericProperty.Name] = xpsGenericProperty;
+      }
+
+      [ContractAnnotation("=> true, xpsGenericProperty:notnull; => false, xpsGenericProperty:null")]
+      public bool TryGetXpsGenericProperty([NotNull] XName xname,
+                                           out IXpsGenericProperty xpsGenericProperty)
+      {
+        return this.Properties.TryGetValue(xname,
+                                           out xpsGenericProperty);
+      }
+    }
+
+    private sealed class XpsPrinterDefinition : XpsObjectWithProperties,
+                                                IXpsPrinterDefinition,
                                                 IEquatable<XpsPrinterDefinition>
     {
       /// <inheritdoc />
@@ -113,10 +142,11 @@ namespace Contrib.System.Printing.Xps
       }
     }
 
-    [Serializable]
-    private sealed class XpsInputBinDefinition : IXpsInputBinDefinition,
+    private sealed class XpsInputBinDefinition : XpsObjectWithProperties,
+                                                 IXpsInputBinDefinition,
                                                  IEquatable<XpsInputBinDefinition>
     {
+
       /// <inheritdoc />
       public string FullName { get; set; }
 
@@ -124,7 +154,24 @@ namespace Contrib.System.Printing.Xps
       public string Name { get; set; }
 
       /// <inheritdoc />
-      public string DisplayName { get; set; }
+      public string DisplayName
+      {
+        get
+        {
+          string displayName;
+          if (this.TryGetXpsGenericProperty(XpsPrinter.DisplayNameXName,
+                                             out var xpsGenericProperty))
+          {
+            displayName = xpsGenericProperty.Value;
+          }
+          else
+          {
+            displayName = "unknown";
+          }
+
+          return displayName;
+        }
+      }
 
       /// <inheritdoc />
       public string FeatureName { get; set; }
@@ -203,6 +250,7 @@ namespace Contrib.System.Printing.Xps
       {
         return this.FullName;
       }
+
     }
 
     /// <inheritdoc />
@@ -232,12 +280,12 @@ namespace Contrib.System.Printing.Xps
       {
         var printCapabilities = printQueue.GetPrintCapabilities();
 
-        mediaWidth = XpsPrinter.GetDimension(printCapabilities.OrientedPageMediaWidth,
-                                             printCapabilities.OrientedPageMediaHeight,
-                                             false);
-        mediaHeight = XpsPrinter.GetDimension(printCapabilities.OrientedPageMediaWidth,
-                                              printCapabilities.OrientedPageMediaHeight,
-                                              true);
+        mediaWidth = NumberHelper.GetDimension(printCapabilities.OrientedPageMediaWidth,
+                                               printCapabilities.OrientedPageMediaHeight,
+                                               false);
+        mediaHeight = NumberHelper.GetDimension(printCapabilities.OrientedPageMediaWidth,
+                                                printCapabilities.OrientedPageMediaHeight,
+                                                true);
       }
       catch (Exception exception)
       {
@@ -333,7 +381,7 @@ namespace Contrib.System.Printing.Xps
         {
           var xpsInputBinDefinitions = new List<IXpsInputBinDefinition>();
 
-          var printerSchemaFrameworkXNamespace = XpsPrinter.GetPrinterSchemaFrameworkXNamespace();
+          var printerSchemaFrameworkXNamespace = XmlHelper.PrinterSchemaFrameworkXNamespace;
           var inputBinFeatureXElements = printCapabilitiesXElement.Elements(printerSchemaFrameworkXNamespace + "Feature")
                                                                   .Where(arg => new[]
                                                                                 {
@@ -352,7 +400,7 @@ namespace Contrib.System.Printing.Xps
             {
               var inputBinNameXAttribute = inputBinOptionXElement.Attribute("name");
               var inputBinName = inputBinNameXAttribute?.Value;
-              var inputBinNamespacePrefix = XpsPrinter.GetNamespacePrefix(inputBinName);
+              var inputBinNamespacePrefix = XmlHelper.GetNamespacePrefix(inputBinName);
               if (inputBinNamespacePrefix == null)
               {
                 LogTo.Warn($"'name'-{nameof(XAttribute)} for {nameof(IXpsInputBinDefinition.NamespacePrefix)} does not contain a valid name: {inputBinOptionXElement}");
@@ -366,23 +414,46 @@ namespace Contrib.System.Printing.Xps
                 continue;
               }
 
-              var inputBinDisplayNameXElement = inputBinOptionXElement.Elements(printerSchemaFrameworkXNamespace + "Property")
-                                                                      .Where(arg => string.Equals(arg.Attribute("name")
-                                                                                                     ?.Value,
-                                                                                                  "psk:DisplayName",
-                                                                                                  StringComparison.Ordinal))
-                                                                      .FirstOrDefault();
-              var inputBinDisplayNameValueXElement = inputBinDisplayNameXElement?.Element(printerSchemaFrameworkXNamespace + "Value");
-
               var xpsInputBinDefinition = new XpsInputBinDefinition
                                           {
                                             FullName = $@"{printQueue.FullName}\{{{inputBinName}}}",
                                             Name = inputBinName,
-                                            DisplayName = inputBinDisplayNameValueXElement?.Value ?? "unkown",
                                             NamespacePrefix = inputBinNamespacePrefix,
                                             NamespaceUri = inputBinXNamespace.NamespaceName,
                                             FeatureName = inputBinFeatureNameXAttribute?.Value ?? "psk:JobInputBin"
                                           };
+
+              try
+              {
+                var xpsGenericProperties = XpsPrinter.ReadXpsGenericProperties(inputBinOptionXElement,
+                                                                               printerSchemaFrameworkXNamespace + "Property",
+                                                                               printerSchemaFrameworkXNamespace + "Value");
+                foreach (var xpsGenericProperty in xpsGenericProperties)
+                {
+                  xpsInputBinDefinition.AddXpsGenericProperty(xpsGenericProperty);
+                }
+              }
+              catch (Exception exception)
+              {
+                LogTo.WarnException($"Could not read properties from {nameof(inputBinOptionXElement)}: {inputBinOptionXElement}",
+                                    exception);
+              }
+
+              try
+              {
+                var xpsGenericProperties = XpsPrinter.ReadXpsGenericProperties(inputBinOptionXElement,
+                                                                               printerSchemaFrameworkXNamespace + "ScoredProperty",
+                                                                               printerSchemaFrameworkXNamespace + "Value");
+                foreach (var xpsGenericProperty in xpsGenericProperties)
+                {
+                  xpsInputBinDefinition.AddXpsGenericProperty(xpsGenericProperty);
+                }
+              }
+              catch (Exception exception)
+              {
+                LogTo.WarnException($"Could not read scored properties from {nameof(inputBinOptionXElement)}: {inputBinOptionXElement}",
+                                    exception);
+              }
 
               double? mediaWidth;
               double? mediaHeight;
@@ -391,12 +462,12 @@ namespace Contrib.System.Printing.Xps
                 var printTicket = xpsInputBinDefinition.GetPrintTicket();
                 var printCapabilities = printQueue.GetPrintCapabilities(printTicket);
 
-                mediaWidth = XpsPrinter.GetDimension(printCapabilities.OrientedPageMediaWidth,
-                                                     printCapabilities.OrientedPageMediaHeight,
-                                                     false);
-                mediaHeight = XpsPrinter.GetDimension(printCapabilities.OrientedPageMediaWidth,
-                                                      printCapabilities.OrientedPageMediaHeight,
-                                                      true);
+                mediaWidth = NumberHelper.GetDimension(printCapabilities.OrientedPageMediaWidth,
+                                                       printCapabilities.OrientedPageMediaHeight,
+                                                       false);
+                mediaHeight = NumberHelper.GetDimension(printCapabilities.OrientedPageMediaWidth,
+                                                        printCapabilities.OrientedPageMediaHeight,
+                                                        true);
               }
               catch (Exception exception)
               {
@@ -419,35 +490,6 @@ namespace Contrib.System.Printing.Xps
       }
 
       return result;
-    }
-
-    [Pure]
-    [CanBeNull]
-    public static string GetNamespacePrefix([CanBeNull] string str)
-    {
-      string namespacePrefix;
-      if (str == null)
-      {
-        namespacePrefix = null;
-      }
-      else if (str.Contains(':'))
-      {
-        namespacePrefix = str.Split(':')
-                             .ElementAt(0);
-      }
-      else
-      {
-        namespacePrefix = null;
-      }
-
-      return namespacePrefix;
-    }
-
-    [Pure]
-    [NotNull]
-    public static XNamespace GetPrinterSchemaFrameworkXNamespace()
-    {
-      return XNamespace.Get("http://schemas.microsoft.com/windows/2003/08/printing/printschemaframework");
     }
 
     /// <exception cref="Exception" />
@@ -473,52 +515,46 @@ namespace Contrib.System.Printing.Xps
       return result;
     }
 
-    [Pure]
-    [CanBeNull]
-    public static double? GetDimension([CanBeNull] double? dimension0,
-                                       [CanBeNull] double? dimension1,
-                                       bool returnMax)
+    [NotNull]
+    [ItemNotNull]
+    private static IEnumerable<IXpsGenericProperty> ReadXpsGenericProperties([NotNull] XElement xelement,
+                                                                             [NotNull] XName childElementName,
+                                                                             [NotNull] XName valueElementName)
     {
-      double? result;
-      if (dimension0.HasValue
-          && dimension1.HasValue)
+      var childXElements = xelement.Elements(childElementName);
+      foreach (var childXElement in childXElements)
       {
-        var dimensions = new[]
-                         {
-                           dimension0.Value,
-                           dimension1.Value
-                         };
-        if (dimensions.Any(double.IsNaN))
+        var nameXAttribute = childXElement.Attribute("name");
+        if (nameXAttribute == null)
         {
-          result = null;
+          LogTo.Warn($"Could not get {nameof(nameXAttribute)} from {nameof(childXElement)}: {childXElement}");
+          continue;
         }
-        else if (dimensions.Any(double.IsInfinity))
-        {
-          result = null;
-        }
-        else
-        {
-          if (returnMax)
-          {
-            result = dimensions.Max();
-          }
-          else
-          {
-            result = dimensions.Min();
-          }
 
-          if (result < double.Epsilon)
-          {
-            result = null;
-          }
+        var nameXName = XmlHelper.GetXName(nameXAttribute.Value,
+                                           childXElement.GetNamespaceOfPrefix);
+        if (nameXName == null)
+        {
+          LogTo.Warn($"Could not get {nameof(nameXName)} from {nameof(nameXAttribute)}: {nameXAttribute}");
+          continue;
         }
-      }
-      else
-      {
-        result = null;
-      }
 
-      return result;
+        var valueXElement = childXElement.Element(valueElementName);
+        if (valueXElement == null)
+        {
+          LogTo.Warn($"Could not get {nameof(valueXElement)} from {nameof(childXElement)}: {childXElement}");
+          continue;
+        }
+
+        var xpsGenericProperty = new XpsGenericProperty
+                                 {
+                                   Type = childElementName,
+                                   Name = nameXName,
+                                   Value = valueXElement.Value
+                                 };
+
+        yield return xpsGenericProperty;
+      }
     }
   }
 }

@@ -6,7 +6,6 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
   public static class XpsInputBinDefinitionExtensions
   {
-    /// <exception cref="InvalidOperationException">If <paramref name="xpsInputBinDefinition" /> holds a prefix in <see cref="IXpsInputBinDefinition.Name" />, but does not provide a <see cref="IXpsInputBinDefinition.NamespaceUri" />.</exception>
     /// <exception cref="Exception" />
     [Pure]
     [NotNull]
