@@ -8,7 +8,7 @@ namespace Contrib.System.Printing.Xps
   public interface IXpsPrinterDefinition
   {
     [NotNull]
-    string Name { get; }
+    string DisplayName { get; }
 
     [NotNull]
     string FullName { get; }
@@ -31,13 +31,13 @@ namespace Contrib.System.Printing.Xps
     internal sealed class XpsPrinterDefinition : IXpsPrinterDefinition,
                                                  IEquatable<XpsPrinterDefinition>
     {
-      private XpsPrinterDefinition([NotNull] string name,
+      private XpsPrinterDefinition([NotNull] string displayName,
                                    [NotNull] string fullName,
                                    [CanBeNull] string portName,
                                    [CanBeNull] string driverName,
                                    [NotNull] IXpsPrintCapabilities xpsPrintCapabilities)
       {
-        this.Name = name;
+        this.DisplayName = displayName;
         this.FullName = fullName;
         this.PortName = portName;
         this.DriverName = driverName;
@@ -45,7 +45,7 @@ namespace Contrib.System.Printing.Xps
       }
 
       /// <inheritdoc />
-      public string Name { get; }
+      public string DisplayName { get; }
 
       /// <inheritdoc />
       public string FullName { get; }
