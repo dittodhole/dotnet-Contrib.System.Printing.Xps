@@ -9,9 +9,10 @@
     <iconUrl>https://raw.githubusercontent.com/dittodhole/dotnet-Contrib.System.Printing.Xps/develop/assets/noun_1230289_cc.png</iconUrl>
     <description>$description$</description>
     <frameworkAssemblies>
-      <frameworkAssembly assemblyName="System.Printing" />
-      <frameworkAssembly assemblyName="PresentationCore" />
       <frameworkAssembly assemblyName="ReachFramework" />
+      <frameworkAssembly assemblyName="System.Printing" />
+      <frameworkAssembly assemblyName="System.Xml.Linq" />
+      <frameworkAssembly assemblyName="PresentationCore" />
     </frameworkAssemblies>
   </metadata>
 </package>
