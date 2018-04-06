@@ -53,18 +53,23 @@
     <Compile Include="App_Packages\LibLog.4.2\LibLog.cs" />
     <Compile Include="App_Packages\Source.JetBrains.Annotations_11.1.1\JetBrains.Annotations.cs" />
     <Compile Include="ExtensionMethods\PrintQueueCollectionExtensions.cs" />
-    <Compile Include="ExtensionMethods\PrintTicketExtensions.cs" />
+    <Compile Include="ExtensionMethods\PrintServerExtensions.cs" />
+    <Compile Include="ExtensionMethods\XElementExtensions.cs" />
     <Compile Include="ExtensionMethods\XpsInputBinDefinitionExtensions.cs" />
     <Compile Include="ExtensionMethods\XpsPrinterDefinitionExtensions.cs" />
-    <Compile Include="IHasMedia.cs" />
-    <Compile Include="IXpsInputBinDefinition.cs" />
-    <Compile Include="IXpsGenericProperty.cs" />
     <Compile Include="NumberHelper.cs" />
-    <Compile Include="PintTicketFactory.cs" />
-    <Compile Include="XmlHelper.cs" />
+    <Compile Include="PrintCapabilitiesReader.cs" />
+    <Compile Include="XpsFeature.cs" />
+    <Compile Include="XpsOption.cs" />
+    <Compile Include="XpsPrintCapabilities.cs" />
     <Compile Include="XpsPrinter.cs" />
-    <Compile Include="IXpsPrinterDefinition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XpsPrinter.NullXpsPrintCapabilities.cs" />
+    <Compile Include="XpsPrinter.NullXpsPrintTicket.cs" />
+    <Compile Include="XpsPrinter.XpsInputBinDefinition.cs" />
+    <Compile Include="XpsPrinter.XpsPrinterDefinition.cs" />
+    <Compile Include="XpsPrintTicket.cs" />
+    <Compile Include="XpsProperty.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Contrib.System.Printing.Xps.nuspec" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Printing;
 using System.Xml.Linq;
@@ -25,233 +26,21 @@ namespace Contrib.System.Printing.Xps
     IXpsInputBinDefinition[] GetXpsInputBinDefinitions([NotNull] IXpsPrinterDefinition xpsPrinterDefinition);
   }
 
-  public class XpsPrinter : IXpsPrinter
+  public partial class XpsPrinter : IXpsPrinter
   {
+    public XpsPrinter()
+    {
+      this.PrintCapabilitiesReader = new PrintCapabilitiesReader();
+    }
+
+    /// <exception cref="ArgumentNullException"><paramref name="printCapabilitiesReader" /> is <see langword="null" />.</exception>
+    public XpsPrinter([NotNull] IPrintCapabilitiesReader printCapabilitiesReader)
+    {
+      this.PrintCapabilitiesReader = printCapabilitiesReader ?? throw new ArgumentNullException(nameof(printCapabilitiesReader));
+    }
+
     [NotNull]
-    private static XName DisplayNameXName { get; } = XmlHelper.PrinterSchemaKeywordsXNamespace + "DisplayName";
-
-    private sealed class XpsGenericProperty : IXpsGenericProperty
-    {
-      public XName Type { get; set; }
-      public XName Name { get; set; }
-      public string Value { get; set; }
-    }
-
-    private abstract class XpsObjectWithProperties
-    {
-      [NotNull]
-      private IDictionary<XName, IXpsGenericProperty> Properties { get; } = new Dictionary<XName, IXpsGenericProperty>();
-
-      public virtual void AddXpsGenericProperty([NotNull] IXpsGenericProperty xpsGenericProperty)
-      {
-        this.Properties[xpsGenericProperty.Name] = xpsGenericProperty;
-      }
-
-      [ContractAnnotation("=> true, xpsGenericProperty:notnull; => false, xpsGenericProperty:null")]
-      public bool TryGetXpsGenericProperty([NotNull] XName xname,
-                                           out IXpsGenericProperty xpsGenericProperty)
-      {
-        return this.Properties.TryGetValue(xname,
-                                           out xpsGenericProperty);
-      }
-    }
-
-    private sealed class XpsPrinterDefinition : XpsObjectWithProperties,
-                                                IXpsPrinterDefinition,
-                                                IEquatable<XpsPrinterDefinition>
-    {
-      /// <inheritdoc />
-      public string Name { get; set; }
-
-      /// <inheritdoc />
-      public string FullName { get; set; }
-
-      /// <inheritdoc />
-      public double? MediaWidth { get; set; }
-
-      /// <inheritdoc />
-      public double? MediaHeight { get; set; }
-
-      /// <inheritdoc />
-      public string PortName { get; set; }
-
-      /// <inheritdoc />
-      public string DriverName { get; set; }
-
-      /// <inheritdoc />
-      public bool Equals(XpsPrinterDefinition other)
-      {
-        if (object.ReferenceEquals(null,
-                                   other))
-        {
-          return false;
-        }
-
-        if (object.ReferenceEquals(this,
-                                   other))
-        {
-          return true;
-        }
-
-        return string.Equals(this.FullName,
-                             other.FullName);
-      }
-
-      /// <inheritdoc />
-      public override bool Equals(object obj)
-      {
-        if (object.ReferenceEquals(null,
-                                   obj))
-        {
-          return false;
-        }
-
-        if (object.ReferenceEquals(this,
-                                   obj))
-        {
-          return true;
-        }
-
-        return obj is XpsPrinterDefinition && this.Equals((XpsPrinterDefinition) obj);
-      }
-
-      /// <inheritdoc />
-      public override int GetHashCode()
-      {
-        return this.FullName.GetHashCode();
-      }
-
-      public static bool operator ==(XpsPrinterDefinition left,
-                                     XpsPrinterDefinition right)
-      {
-        return object.Equals(left,
-                             right);
-      }
-
-      public static bool operator !=(XpsPrinterDefinition left,
-                                     XpsPrinterDefinition right)
-      {
-        return !object.Equals(left,
-                              right);
-      }
-
-      /// <inheritdoc />
-      public override string ToString()
-      {
-        return this.FullName;
-      }
-    }
-
-    private sealed class XpsInputBinDefinition : XpsObjectWithProperties,
-                                                 IXpsInputBinDefinition,
-                                                 IEquatable<XpsInputBinDefinition>
-    {
-
-      /// <inheritdoc />
-      public string FullName { get; set; }
-
-      /// <inheritdoc />
-      public string Name { get; set; }
-
-      /// <inheritdoc />
-      public string DisplayName
-      {
-        get
-        {
-          string displayName;
-          if (this.TryGetXpsGenericProperty(XpsPrinter.DisplayNameXName,
-                                             out var xpsGenericProperty))
-          {
-            displayName = xpsGenericProperty.Value;
-          }
-          else
-          {
-            displayName = "unknown";
-          }
-
-          return displayName;
-        }
-      }
-
-      /// <inheritdoc />
-      public string FeatureName { get; set; }
-
-      /// <inheritdoc />
-      public double? MediaWidth { get; set; }
-
-      /// <inheritdoc />
-      public double? MediaHeight { get; set; }
-
-      /// <inheritdoc />
-      public string NamespacePrefix { get; set; }
-
-      /// <inheritdoc />
-      public string NamespaceUri { get; set; }
-
-      /// <inheritdoc />
-      public bool Equals(XpsInputBinDefinition other)
-      {
-        if (object.ReferenceEquals(null,
-                                   other))
-        {
-          return false;
-        }
-
-        if (object.ReferenceEquals(this,
-                                   other))
-        {
-          return true;
-        }
-
-        return string.Equals(this.FullName,
-                             other.FullName);
-      }
-
-      /// <inheritdoc />
-      public override bool Equals(object obj)
-      {
-        if (object.ReferenceEquals(null,
-                                   obj))
-        {
-          return false;
-        }
-
-        if (object.ReferenceEquals(this,
-                                   obj))
-        {
-          return true;
-        }
-
-        return obj is XpsInputBinDefinition && this.Equals((XpsInputBinDefinition) obj);
-      }
-
-      /// <inheritdoc />
-      public override int GetHashCode()
-      {
-        return this.FullName.GetHashCode();
-      }
-
-      public static bool operator ==(XpsInputBinDefinition left,
-                                     XpsInputBinDefinition right)
-      {
-        return object.Equals(left,
-                             right);
-      }
-
-      public static bool operator !=(XpsInputBinDefinition left,
-                                     XpsInputBinDefinition right)
-      {
-        return !object.Equals(left,
-                              right);
-      }
-
-      /// <inheritdoc />
-      public override string ToString()
-      {
-        return this.FullName;
-      }
-
-    }
+    private IPrintCapabilitiesReader PrintCapabilitiesReader { get; }
 
     /// <inheritdoc />
     public virtual IXpsPrinterDefinition[] GetXpsPrinterDefinitions()
@@ -259,54 +48,21 @@ namespace Contrib.System.Printing.Xps
       IXpsPrinterDefinition[] result;
 
       using (var printServer = new PrintServer())
-      using (var printQueues = XpsPrinter.GetPrintQueues(printServer))
+      using (var printQueues = printServer.GetLocalAndRemotePrintQueues())
       {
-        result = printQueues.Select(this.GetXpsPrinterDefinitionImpl)
+        result = printQueues.Select(printQueue =>
+                                    {
+                                      var xpsPrintCapabilities = this.GetXpsPrintCapabilities(printQueue);
+                                      var xpsPrinterDefinition = XpsPrinterDefinition.Create(printQueue,
+                                                                                             xpsPrintCapabilities);
+
+                                      return xpsPrinterDefinition;
+                                    })
+                            .Cast<IXpsPrinterDefinition>()
                             .ToArray();
       }
 
       return result;
-    }
-
-    /// <exception cref="Exception" />
-    [Pure]
-    [NotNull]
-    protected virtual IXpsPrinterDefinition GetXpsPrinterDefinitionImpl([NotNull] PrintQueue printQueue)
-    {
-      double? mediaWidth;
-      double? mediaHeight;
-
-      try
-      {
-        var printCapabilities = printQueue.GetPrintCapabilities();
-
-        mediaWidth = NumberHelper.GetDimension(printCapabilities.OrientedPageMediaWidth,
-                                               printCapabilities.OrientedPageMediaHeight,
-                                               false);
-        mediaHeight = NumberHelper.GetDimension(printCapabilities.OrientedPageMediaWidth,
-                                                printCapabilities.OrientedPageMediaHeight,
-                                                true);
-      }
-      catch (Exception exception)
-      {
-        mediaWidth = null;
-        mediaHeight = null;
-
-        LogTo.WarnException($"Could not query {nameof(PrintQueue)} '{printQueue.FullName}' for {nameof(PrintCapabilities)}.",
-                            exception);
-      }
-
-      var xpsPrinterDefinition = new XpsPrinterDefinition
-                                 {
-                                   Name = printQueue.Name,
-                                   FullName = printQueue.FullName,
-                                   MediaWidth = mediaWidth,
-                                   MediaHeight = mediaHeight,
-                                   DriverName = printQueue.QueueDriver.Name,
-                                   PortName = printQueue.QueuePort.Name
-                                 };
-
-      return xpsPrinterDefinition;
     }
 
     /// <inheritdoc />
@@ -318,37 +74,85 @@ namespace Contrib.System.Printing.Xps
       }
 
       IXpsInputBinDefinition[] result;
-
       using (var printServer = new PrintServer())
-      using (var printQueues = XpsPrinter.GetPrintQueues(printServer))
+      using (var printQueues = printServer.GetLocalAndRemotePrintQueues())
       {
         var printQueue = printQueues.GetPrintQueue(xpsPrinterDefinition);
         if (printQueue == null)
         {
-          LogTo.Error($"Could not get {nameof(PrintQueue)} for {nameof(IXpsPrinterDefinition)}: {xpsPrinterDefinition}");
+          LogTo.Warn($"Could not find {nameof(PrintQueue)} '{xpsPrinterDefinition.FullName}'.");
           result = new IXpsInputBinDefinition[0];
         }
         else
         {
-          result = this.GetXpsInputBinDefinitionsImpl(printQueue);
+          result = this.GetXpsInputBinDefinitionsImpl(printQueue)
+                       .ToArray();
         }
       }
 
       return result;
     }
 
-    /// <exception cref="ArgumentNullException"><paramref name="printQueue" /> is <see langword="null" />.</exception>
     /// <exception cref="Exception" />
     [Pure]
     [NotNull]
     [ItemNotNull]
-    protected virtual IXpsInputBinDefinition[] GetXpsInputBinDefinitionsImpl([NotNull] PrintQueue printQueue)
+    protected virtual IEnumerable<IXpsInputBinDefinition> GetXpsInputBinDefinitionsImpl([NotNull] PrintQueue printQueue)
     {
-      if (printQueue == null)
+      var xpsPrintCapabilities = this.GetXpsPrintCapabilities(printQueue);
+
+      var pageInputBinXpsFeature = xpsPrintCapabilities.GetXpsFeature(Xps.PrintCapabilitiesReader.PageInputBinXName);
+      if (pageInputBinXpsFeature != null)
       {
-        throw new ArgumentNullException(nameof(printQueue));
+        foreach (var xpsOption in pageInputBinXpsFeature.GetXpsOptions())
+        {
+          var xpsPrintTicket = this.GetXpsPrintTicket(pageInputBinXpsFeature.Name,
+                                                      xpsOption,
+                                                      printQueue);
+          var xpsInputBinDefinition = XpsInputBinDefinition.Create(pageInputBinXpsFeature.Name,
+                                                                   xpsOption,
+                                                                   xpsPrintTicket);
+
+          yield return xpsInputBinDefinition;
+        }
       }
 
+      var documentInputBinXpsFeature = xpsPrintCapabilities.GetXpsFeature(Xps.PrintCapabilitiesReader.DocumentInputBinXName);
+      if (documentInputBinXpsFeature != null)
+      {
+        foreach (var xpsOption in documentInputBinXpsFeature.GetXpsOptions())
+        {
+          var xpsPrintTicket = this.GetXpsPrintTicket(documentInputBinXpsFeature.Name,
+                                                      xpsOption,
+                                                      printQueue);
+          var xpsInputBinDefinition = XpsInputBinDefinition.Create(documentInputBinXpsFeature.Name,
+                                                                   xpsOption,
+                                                                   xpsPrintTicket);
+
+          yield return xpsInputBinDefinition;
+        }
+      }
+
+      var jobInputBinXpsFeature = xpsPrintCapabilities.GetXpsFeature(Xps.PrintCapabilitiesReader.JobInputBinXName);
+      if (jobInputBinXpsFeature != null)
+      {
+        foreach (var xpsOption in jobInputBinXpsFeature.GetXpsOptions())
+        {
+          var xpsPrintTicket = this.GetXpsPrintTicket(jobInputBinXpsFeature.Name,
+                                                      xpsOption,
+                                                      printQueue);
+          var xpsInputBinDefinition = XpsInputBinDefinition.Create(jobInputBinXpsFeature.Name,
+                                                                   xpsOption,
+                                                                   xpsPrintTicket);
+
+          yield return xpsInputBinDefinition;
+        }
+      }
+    }
+
+    [NotNull]
+    protected virtual IXpsPrintCapabilities GetXpsPrintCapabilities([NotNull] PrintQueue printQueue)
+    {
       XDocument xdocument;
       try
       {
@@ -359,202 +163,150 @@ namespace Contrib.System.Printing.Xps
       }
       catch (Exception exception)
       {
-        LogTo.ErrorException($"Could not query {nameof(PrintQueue)} '{printQueue.FullName}' for {nameof(PrintCapabilities)}.",
-                             exception);
-        xdocument = null;
+        LogTo.WarnException($"Could not query {nameof(PrintQueue)} '{printQueue.FullName}' for {nameof(PrintCapabilities)}.",
+                            exception);
+        xdocument = new XDocument();
       }
 
-      IXpsInputBinDefinition[] result;
-      if (xdocument == null)
+      IXpsPrintCapabilities xpsPrintCapabilities;
+
+      var printCapabilitiesXElement = xdocument.Root;
+      if (printCapabilitiesXElement == null)
       {
-        result = new IXpsInputBinDefinition[0];
+        xpsPrintCapabilities = NullXpsPrintCapabilities.Instance;
       }
       else
       {
-        var printCapabilitiesXElement = xdocument.Root;
-        if (printCapabilitiesXElement == null)
-        {
-          LogTo.Error($"Could not get root {nameof(XElement)}: {xdocument}");
-          result = new IXpsInputBinDefinition[0];
-        }
-        else
-        {
-          var xpsInputBinDefinitions = new List<IXpsInputBinDefinition>();
+        xpsPrintCapabilities = this.PrintCapabilitiesReader.ReadXpsPrintCapabilities(printCapabilitiesXElement);
+      }
 
-          var printerSchemaFrameworkXNamespace = XmlHelper.PrinterSchemaFrameworkXNamespace;
-          var inputBinFeatureXElements = printCapabilitiesXElement.Elements(printerSchemaFrameworkXNamespace + "Feature")
-                                                                  .Where(arg => new[]
-                                                                                {
-                                                                                  "psk:PageInputBin",
-                                                                                  "psk:DocumentInputBin",
-                                                                                  "psk:JobInputBin"
-                                                                                }.Contains(arg.Attribute("name")
-                                                                                              ?.Value,
-                                                                                           StringComparer.Ordinal));
-          foreach (var inputBinFeatureXElement in inputBinFeatureXElements)
+      return xpsPrintCapabilities;
+    }
+
+    [NotNull]
+    protected virtual IXpsPrintTicket GetXpsPrintTicket([NotNull] XName featureXName,
+                                                        [NotNull] IXpsOption xpsOption,
+                                                        [NotNull] PrintQueue printQueue)
+    {
+      XDocument xdocument;
+
+      var inputBinXName = xpsOption.Name;
+      if (inputBinXName == null)
+      {
+        xdocument = new XDocument();
+      }
+      else
+      {
+        try
+        {
+          var printTicket = this.GetPrintTicket(featureXName,
+                                                inputBinXName);
+          using (var memoryStream = printQueue.GetPrintCapabilitiesAsXml(printTicket))
           {
-            var inputBinFeatureNameXAttribute = inputBinFeatureXElement.Attribute("name");
-
-            var inputBinOptionXElements = inputBinFeatureXElement.Elements(printerSchemaFrameworkXNamespace + "Option");
-            foreach (var inputBinOptionXElement in inputBinOptionXElements)
-            {
-              var inputBinNameXAttribute = inputBinOptionXElement.Attribute("name");
-              var inputBinName = inputBinNameXAttribute?.Value;
-              var inputBinNamespacePrefix = XmlHelper.GetNamespacePrefix(inputBinName);
-              if (inputBinNamespacePrefix == null)
-              {
-                LogTo.Warn($"'name'-{nameof(XAttribute)} for {nameof(IXpsInputBinDefinition.NamespacePrefix)} does not contain a valid name: {inputBinOptionXElement}");
-                continue;
-              }
-
-              var inputBinXNamespace = printCapabilitiesXElement.GetNamespaceOfPrefix(inputBinNamespacePrefix);
-              if (inputBinXNamespace == null)
-              {
-                LogTo.Warn($"Could not get {nameof(XNamespace)} for '{inputBinNamespacePrefix}': {xdocument}");
-                continue;
-              }
-
-              var xpsInputBinDefinition = new XpsInputBinDefinition
-                                          {
-                                            FullName = $@"{printQueue.FullName}\{{{inputBinName}}}",
-                                            Name = inputBinName,
-                                            NamespacePrefix = inputBinNamespacePrefix,
-                                            NamespaceUri = inputBinXNamespace.NamespaceName,
-                                            FeatureName = inputBinFeatureNameXAttribute?.Value ?? "psk:JobInputBin"
-                                          };
-
-              try
-              {
-                var xpsGenericProperties = XpsPrinter.ReadXpsGenericProperties(inputBinOptionXElement,
-                                                                               printerSchemaFrameworkXNamespace + "Property",
-                                                                               printerSchemaFrameworkXNamespace + "Value");
-                foreach (var xpsGenericProperty in xpsGenericProperties)
-                {
-                  xpsInputBinDefinition.AddXpsGenericProperty(xpsGenericProperty);
-                }
-              }
-              catch (Exception exception)
-              {
-                LogTo.WarnException($"Could not read properties from {nameof(inputBinOptionXElement)}: {inputBinOptionXElement}",
-                                    exception);
-              }
-
-              try
-              {
-                var xpsGenericProperties = XpsPrinter.ReadXpsGenericProperties(inputBinOptionXElement,
-                                                                               printerSchemaFrameworkXNamespace + "ScoredProperty",
-                                                                               printerSchemaFrameworkXNamespace + "Value");
-                foreach (var xpsGenericProperty in xpsGenericProperties)
-                {
-                  xpsInputBinDefinition.AddXpsGenericProperty(xpsGenericProperty);
-                }
-              }
-              catch (Exception exception)
-              {
-                LogTo.WarnException($"Could not read scored properties from {nameof(inputBinOptionXElement)}: {inputBinOptionXElement}",
-                                    exception);
-              }
-
-              double? mediaWidth;
-              double? mediaHeight;
-              try
-              {
-                var printTicket = xpsInputBinDefinition.GetPrintTicket();
-                var printCapabilities = printQueue.GetPrintCapabilities(printTicket);
-
-                mediaWidth = NumberHelper.GetDimension(printCapabilities.OrientedPageMediaWidth,
-                                                       printCapabilities.OrientedPageMediaHeight,
-                                                       false);
-                mediaHeight = NumberHelper.GetDimension(printCapabilities.OrientedPageMediaWidth,
-                                                        printCapabilities.OrientedPageMediaHeight,
-                                                        true);
-              }
-              catch (Exception exception)
-              {
-                mediaWidth = null;
-                mediaHeight = null;
-
-                LogTo.WarnException($"Could not query {nameof(PrintQueue)} '{printQueue.FullName}' for {nameof(PrintCapabilities)}.",
-                                    exception);
-              }
-
-              xpsInputBinDefinition.MediaWidth = mediaWidth;
-              xpsInputBinDefinition.MediaHeight = mediaHeight;
-
-              xpsInputBinDefinitions.Add(xpsInputBinDefinition);
-            }
+            xdocument = XDocument.Load(memoryStream);
           }
+        }
+        catch (Exception exception)
+        {
+          LogTo.WarnException($"Could not query {nameof(PrintQueue)} '{printQueue.FullName}' for {nameof(PrintCapabilities)} (input bin '{inputBinXName}').",
+                              exception);
 
-          result = xpsInputBinDefinitions.ToArray();
+          xdocument = new XDocument();
         }
       }
 
-      return result;
+      IXpsPrintTicket xpsPrintTicket;
+
+      var printTicketXElement = xdocument.Root;
+      if (printTicketXElement == null)
+      {
+        xpsPrintTicket = NullXpsPrintTicket.Instance;
+      }
+      else
+      {
+        xpsPrintTicket = this.PrintCapabilitiesReader.ReadXpsPrintTicket(printTicketXElement);
+      }
+
+      return xpsPrintTicket;
     }
 
     /// <exception cref="Exception" />
-    [Pure]
     [NotNull]
-    [ItemNotNull]
-    public static PrintQueueCollection GetPrintQueues([CanBeNull] PrintServer printServer)
+    protected virtual PrintTicket GetPrintTicket([NotNull] XName featureXName,
+                                                 [NotNull] XName inputBinXName)
     {
-      PrintQueueCollection result;
-      if (printServer == null)
+      // === SOURCE ===
+      // <?xml version="1.0" encoding="UTF-8"?>
+      // <psf:PrintTicket xmlns:psf="http://schemas.microsoft.com/windows/2003/08/printing/printschemaframework"
+      //                  xmlns:psk="http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords"
+      //                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      //                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      //                  version="1">
+      // </psf:PrintTicket>
+      // === === === ===
+
+      XDocument xdocument;
+
       {
-        result = new PrintQueueCollection();
+        var printTicket = new PrintTicket();
+
+        using (var memoryStream = printTicket.GetXmlStream())
+        {
+          xdocument = XDocument.Load(memoryStream);
+        }
       }
-      else
+
+      var printTicketXElement = xdocument.Root;
+      if (printTicketXElement == null)
       {
-        result = printServer.GetPrintQueues(new[]
-                                            {
-                                              EnumeratedPrintQueueTypes.Connections,
-                                              EnumeratedPrintQueueTypes.Local
-                                            });
+        throw new Exception($"Could not get {nameof(XDocument.Root)}: {xdocument}");
+      }
+
+      // === DESTINATION ===
+      // <?xml version="1.0" encoding="UTF-8"?>
+      // <psf:PrintTicket xmlns:psf="http://schemas.microsoft.com/windows/2003/08/printing/printschemaframework"
+      //                  xmlns:psk="http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords"
+      //                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      //                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      //                  xmlns:{prefix0}="{featureXName.NamespaceName}"
+      //                  xmlns:{prefix1}="{inputBinXName.NamespaceName}"
+      //                  version="1">
+      //   <psf:Feature name="{prefix0}:{featureXName.LocalName}">
+      //     <psf:Option name="{prefix1}:{inputBinXName.LocalName}" />
+      //   </psf:Feature>
+      // </psf:PrintTicket>
+      // === === === === ===
+
+      XElement featureXElement;
+      {
+        var prefix0 = printTicketXElement.EnsurePrefixRegistrationOfNamespace(featureXName);
+
+        featureXElement = new XElement(Xps.PrintCapabilitiesReader.FeatureElementXName);
+        featureXElement.SetAttributeValue(Xps.PrintCapabilitiesReader.NameAttributeXName,
+                                          $"{prefix0}:{featureXName.LocalName}");
+        printTicketXElement.Add(featureXElement);
+      }
+
+      {
+        var prefix1 = printTicketXElement.EnsurePrefixRegistrationOfNamespace(inputBinXName);
+
+        var optionXElement = new XElement(Xps.PrintCapabilitiesReader.OptionElementXName);
+        optionXElement.SetAttributeValue(Xps.PrintCapabilitiesReader.NameAttributeXName,
+                                         $"{prefix1}:{inputBinXName.LocalName}");
+        featureXElement.Add(optionXElement);
+      }
+
+      PrintTicket result;
+      using (var memoryStream = new MemoryStream())
+      {
+        xdocument.Save(memoryStream);
+        memoryStream.Seek(0L,
+                          SeekOrigin.Begin);
+
+        result = new PrintTicket(memoryStream);
       }
 
       return result;
-    }
-
-    [NotNull]
-    [ItemNotNull]
-    private static IEnumerable<IXpsGenericProperty> ReadXpsGenericProperties([NotNull] XElement xelement,
-                                                                             [NotNull] XName childElementName,
-                                                                             [NotNull] XName valueElementName)
-    {
-      var childXElements = xelement.Elements(childElementName);
-      foreach (var childXElement in childXElements)
-      {
-        var nameXAttribute = childXElement.Attribute("name");
-        if (nameXAttribute == null)
-        {
-          LogTo.Warn($"Could not get {nameof(nameXAttribute)} from {nameof(childXElement)}: {childXElement}");
-          continue;
-        }
-
-        var nameXName = XmlHelper.GetXName(nameXAttribute.Value,
-                                           childXElement.GetNamespaceOfPrefix);
-        if (nameXName == null)
-        {
-          LogTo.Warn($"Could not get {nameof(nameXName)} from {nameof(nameXAttribute)}: {nameXAttribute}");
-          continue;
-        }
-
-        var valueXElement = childXElement.Element(valueElementName);
-        if (valueXElement == null)
-        {
-          LogTo.Warn($"Could not get {nameof(valueXElement)} from {nameof(childXElement)}: {childXElement}");
-          continue;
-        }
-
-        var xpsGenericProperty = new XpsGenericProperty
-                                 {
-                                   Type = childElementName,
-                                   Name = nameXName,
-                                   Value = valueXElement.Value
-                                 };
-
-        yield return xpsGenericProperty;
-      }
     }
   }
 }

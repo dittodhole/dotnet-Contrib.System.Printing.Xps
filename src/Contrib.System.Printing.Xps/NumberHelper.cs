@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps
 {
-  internal static class NumberHelper
+  public static class NumberHelper
   {
     [Pure]
     [CanBeNull]
