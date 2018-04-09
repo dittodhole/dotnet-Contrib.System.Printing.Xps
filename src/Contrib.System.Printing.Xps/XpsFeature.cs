@@ -62,6 +62,9 @@ namespace Contrib.System.Printing.Xps
       [NotNull]
       private IDictionary<XName, IXpsOption> Options { get; } = new Dictionary<XName, IXpsOption>();
 
+      [NotNull]
+      private ICollection<IXpsOption> UnnamedOptions { get; } = new List<IXpsOption>();
+
       /// <inheritdoc />
       public IXpsProperty GetXpsProperty(XName name)
       {
@@ -89,7 +92,8 @@ namespace Contrib.System.Printing.Xps
       /// <inheritdoc />
       public IXpsOption[] GetXpsOptions()
       {
-        return this.Options.Values.ToArray();
+        return this.UnnamedOptions.Concat(this.Options.Values)
+                   .ToArray();
       }
 
       /// <inheritdoc />
@@ -109,10 +113,12 @@ namespace Contrib.System.Printing.Xps
           var key = xpsOption.Name;
           if (key == null)
           {
-            var name = Guid.NewGuid().ToString("N");
-            key = XName.Get(name);
+            this.UnnamedOptions.Add(xpsOption);
           }
-          this.Options[key] = xpsOption;
+          else
+          {
+            this.Options[key] = xpsOption;
+          }
         }
       }
     }
