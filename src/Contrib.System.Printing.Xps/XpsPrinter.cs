@@ -52,7 +52,7 @@ namespace Contrib.System.Printing.Xps
       {
         result = printQueues.Select(printQueue =>
                                     {
-                                      var xpsPrintCapabilities = this.GetXpsPrintCapabilities(printQueue);
+                                      var xpsPrintCapabilities = this.GetXpsPrintCapabilitiesImpl(printQueue);
                                       var xpsPrinterDefinition = XpsPrinterDefinition.Create(printQueue,
                                                                                              xpsPrintCapabilities);
 
@@ -99,16 +99,16 @@ namespace Contrib.System.Printing.Xps
     [ItemNotNull]
     protected virtual IEnumerable<IXpsInputBinDefinition> GetXpsInputBinDefinitionsImpl([NotNull] PrintQueue printQueue)
     {
-      var xpsPrintCapabilities = this.GetXpsPrintCapabilities(printQueue);
+      var xpsPrintCapabilities = this.GetXpsPrintCapabilitiesImpl(printQueue);
 
       var pageInputBinXpsFeature = xpsPrintCapabilities.GetXpsFeature(Xps.PrintCapabilitiesReader.PageInputBinXName);
       if (pageInputBinXpsFeature != null)
       {
         foreach (var xpsOption in pageInputBinXpsFeature.GetXpsOptions())
         {
-          var xpsPrintTicket = this.GetXpsPrintTicket(pageInputBinXpsFeature.Name,
-                                                      xpsOption,
-                                                      printQueue);
+          var xpsPrintTicket = this.GetXpsPrintTicketImpl(pageInputBinXpsFeature.Name,
+                                                          xpsOption,
+                                                          printQueue);
           var xpsInputBinDefinition = XpsInputBinDefinition.Create(pageInputBinXpsFeature.Name,
                                                                    xpsOption,
                                                                    xpsPrintTicket);
@@ -122,9 +122,9 @@ namespace Contrib.System.Printing.Xps
       {
         foreach (var xpsOption in documentInputBinXpsFeature.GetXpsOptions())
         {
-          var xpsPrintTicket = this.GetXpsPrintTicket(documentInputBinXpsFeature.Name,
-                                                      xpsOption,
-                                                      printQueue);
+          var xpsPrintTicket = this.GetXpsPrintTicketImpl(documentInputBinXpsFeature.Name,
+                                                          xpsOption,
+                                                          printQueue);
           var xpsInputBinDefinition = XpsInputBinDefinition.Create(documentInputBinXpsFeature.Name,
                                                                    xpsOption,
                                                                    xpsPrintTicket);
@@ -138,9 +138,9 @@ namespace Contrib.System.Printing.Xps
       {
         foreach (var xpsOption in jobInputBinXpsFeature.GetXpsOptions())
         {
-          var xpsPrintTicket = this.GetXpsPrintTicket(jobInputBinXpsFeature.Name,
-                                                      xpsOption,
-                                                      printQueue);
+          var xpsPrintTicket = this.GetXpsPrintTicketImpl(jobInputBinXpsFeature.Name,
+                                                          xpsOption,
+                                                          printQueue);
           var xpsInputBinDefinition = XpsInputBinDefinition.Create(jobInputBinXpsFeature.Name,
                                                                    xpsOption,
                                                                    xpsPrintTicket);
@@ -151,7 +151,7 @@ namespace Contrib.System.Printing.Xps
     }
 
     [NotNull]
-    protected virtual IXpsPrintCapabilities GetXpsPrintCapabilities([NotNull] PrintQueue printQueue)
+    protected virtual IXpsPrintCapabilities GetXpsPrintCapabilitiesImpl([NotNull] PrintQueue printQueue)
     {
       XDocument xdocument;
       try
@@ -184,9 +184,9 @@ namespace Contrib.System.Printing.Xps
     }
 
     [NotNull]
-    protected virtual IXpsPrintTicket GetXpsPrintTicket([NotNull] XName featureXName,
-                                                        [NotNull] IXpsOption xpsOption,
-                                                        [NotNull] PrintQueue printQueue)
+    protected virtual IXpsPrintTicket GetXpsPrintTicketImpl([NotNull] XName featureXName,
+                                                            [NotNull] IXpsOption xpsOption,
+                                                            [NotNull] PrintQueue printQueue)
     {
       XDocument xdocument;
 
@@ -199,8 +199,8 @@ namespace Contrib.System.Printing.Xps
       {
         try
         {
-          var printTicket = this.GetPrintTicket(featureXName,
-                                                inputBinXName);
+          var printTicket = this.GetPrintTicketImpl(featureXName,
+                                                    inputBinXName);
           using (var memoryStream = printQueue.GetPrintCapabilitiesAsXml(printTicket))
           {
             xdocument = XDocument.Load(memoryStream);
@@ -232,8 +232,8 @@ namespace Contrib.System.Printing.Xps
 
     /// <exception cref="Exception" />
     [NotNull]
-    protected virtual PrintTicket GetPrintTicket([NotNull] XName featureXName,
-                                                 [NotNull] XName inputBinXName)
+    protected virtual PrintTicket GetPrintTicketImpl([NotNull] XName featureXName,
+                                                     [NotNull] XName inputBinXName)
     {
       // === SOURCE ===
       // <?xml version="1.0" encoding="UTF-8"?>
