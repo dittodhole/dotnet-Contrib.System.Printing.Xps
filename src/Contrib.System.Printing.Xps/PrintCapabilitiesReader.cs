@@ -349,6 +349,12 @@ namespace Contrib.System.Printing.Xps
             var type = typeXAttribute.Value;
             var typeXName = PrintCapabilitiesReader.GetXName(type,
                                                              propertyXElement.GetNamespaceOfPrefix);
+            if (typeXName == null)
+            {
+              LogTo.Warn($"Could not get {nameof(typeXName)} from {nameof(typeXAttribute)}: {typeXAttribute}");
+              continue;
+            }
+
             if (typeXName == PrintCapabilitiesReader.StringTypeXName)
             {
               value = rawValue;
@@ -369,6 +375,12 @@ namespace Contrib.System.Printing.Xps
             {
               var xnameValue = PrintCapabilitiesReader.GetXName(rawValue,
                                                                 propertyXElement.GetNamespaceOfPrefix);
+              if (xnameValue == null)
+              {
+                LogTo.Warn($"Could not get {nameof(xnameValue)} from {nameof(valueXElement)}: {valueXElement}");
+                continue;
+              }
+
               value = xnameValue;
             }
             else
