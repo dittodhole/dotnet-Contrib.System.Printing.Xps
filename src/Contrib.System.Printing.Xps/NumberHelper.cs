@@ -7,11 +7,13 @@ namespace Contrib.System.Printing.Xps
   {
     [Pure]
     [CanBeNull]
-    public static double? GetDimension([CanBeNull] double? dimension0,
-                                       [CanBeNull] double? dimension1,
-                                       bool returnMax)
+    public static long? GetDimension([CanBeNull] long? dimension0,
+                                     [CanBeNull] long? dimension1,
+                                     bool returnMax)
     {
-      double? result;
+      // TODO remove LINQ stuff, opt here!
+
+      long? result;
       if (dimension0.HasValue
           && dimension1.HasValue)
       {
@@ -20,29 +22,13 @@ namespace Contrib.System.Printing.Xps
                            dimension0.Value,
                            dimension1.Value
                          };
-        if (dimensions.Any(double.IsNaN))
+        if (returnMax)
         {
-          result = null;
-        }
-        else if (dimensions.Any(double.IsInfinity))
-        {
-          result = null;
+          result = dimensions.Max();
         }
         else
         {
-          if (returnMax)
-          {
-            result = dimensions.Max();
-          }
-          else
-          {
-            result = dimensions.Min();
-          }
-
-          if (result < double.Epsilon)
-          {
-            result = null;
-          }
+          result = dimensions.Min();
         }
       }
       else
