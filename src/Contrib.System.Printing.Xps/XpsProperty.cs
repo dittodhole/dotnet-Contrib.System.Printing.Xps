@@ -20,10 +20,7 @@ namespace Contrib.System.Printing.Xps
     XName Type { get; }
 
     [CanBeNull]
-    string Value { get; }
-
-    [CanBeNull]
-    XName ValueXName { get; }
+    object Value { get; }
 
     /// <exception cref="ArgumentNullException"><paramref name="name" /> is <see langword="null" />.</exception>
     [CanBeNull]
@@ -38,8 +35,7 @@ namespace Contrib.System.Printing.Xps
     [NotNull]
     IXpsProperty Create([NotNull] XName name,
                         [NotNull] XName type,
-                        [CanBeNull] string value,
-                        [CanBeNull] XName valueXName);
+                        [NotNull] object value);
 
     [NotNull]
     IXpsProperty Create([NotNull] XName name,
@@ -52,13 +48,11 @@ namespace Contrib.System.Printing.Xps
     {
       public XpsProperty([NotNull] XName name,
                          [NotNull] XName type,
-                         [NotNull] string value,
-                         [CanBeNull] XName valueXName)
+                         [NotNull] object value)
       {
         this.Name = name;
         this.Type = type;
         this.Value = value;
-        this.ValueXName = valueXName;
       }
 
       public XpsProperty([NotNull] XName name,
@@ -75,10 +69,7 @@ namespace Contrib.System.Printing.Xps
       public XName Type { get; }
 
       /// <inheritdoc />
-      public string Value { get; }
-
-      /// <inheritdoc />
-      public XName ValueXName { get; }
+      public object Value { get; }
 
       [NotNull]
       private IDictionary<XName, IXpsProperty> Properties { get; } = new Dictionary<XName, IXpsProperty>();
@@ -105,13 +96,11 @@ namespace Contrib.System.Printing.Xps
     /// <inheritdoc />
     public IXpsProperty Create(XName name,
                                XName type,
-                               string value,
-                               XName valueXName)
+                               object value)
     {
       var xpsProperty = new XpsProperty(name,
                                         type,
-                                        value,
-                                        valueXName);
+                                        value);
 
       return xpsProperty;
     }

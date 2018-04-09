@@ -23,6 +23,14 @@ namespace Contrib.System.Printing.Xps
 
   public class PrintCapabilitiesReader : IPrintCapabilitiesReader
   {
+    /// <returns>xsi:</returns>
+    [NotNull]
+    public static XNamespace XmlSchemaInstanceXNamespace { get; } = XNamespace.Get("http://www.w3.org/2001/XMLSchema-instance");
+
+    /// <returns>xsd:</returns>
+    [NotNull]
+    public static XNamespace XmlSchemaXNamespace { get; } = XNamespace.Get("http://www.w3.org/2001/XMLSchema");
+
     /// <returns>psf:</returns>
     [NotNull]
     public static XNamespace PrinterSchemaFrameworkXNamespace { get; } = XNamespace.Get("http://schemas.microsoft.com/windows/2003/08/printing/printschemaframework");
@@ -98,6 +106,22 @@ namespace Contrib.System.Printing.Xps
     /// <returns>psk:FeedType</returns>
     [NotNull]
     public static XName FeedTypeXName { get; } = PrintCapabilitiesReader.PrinterSchemaKeywordsXNamespace + "FeedType";
+
+    /// <returns>xsi:type</returns>
+    [NotNull]
+    public static XName TypeXName { get; } = PrintCapabilitiesReader.XmlSchemaInstanceXNamespace + "type";
+
+    /// <returns>xsd:integer</returns>
+    [NotNull]
+    public static XName IntegerTypeXName { get; } = PrintCapabilitiesReader.XmlSchemaXNamespace + "integer";
+
+    /// <returns>xsd:string</returns>
+    [NotNull]
+    public static XName StringTypeXName { get; } = PrintCapabilitiesReader.XmlSchemaXNamespace + "string";
+
+    /// <returns>xsd:QName</returns>
+    [NotNull]
+    public static XName QNameTypeXName { get; } = PrintCapabilitiesReader.XmlSchemaXNamespace + "QName";
 
     public PrintCapabilitiesReader()
     {
@@ -302,23 +326,68 @@ namespace Contrib.System.Printing.Xps
           continue;
         }
 
-        IXpsProperty xpsProperty;
+        object value;
 
         var valueXElement = propertyXElement.Element(PrintCapabilitiesReader.ValueElementXName);
         if (valueXElement == null)
+        {
+          value = null;
+        }
+        else
+        {
+          // TODO there *MUST* be a better way for handling xsi:type
+
+          var rawValue = valueXElement.Value;
+          var typeXAttribute = valueXElement.Attribute(PrintCapabilitiesReader.TypeXName);
+          if (typeXAttribute == null)
+          {
+            value = rawValue;
+          }
+          else
+          {
+            var type = typeXAttribute.Value;
+            var typeXName = PrintCapabilitiesReader.GetXName(type,
+                                                             propertyXElement.GetNamespaceOfPrefix);
+            if (typeXName == PrintCapabilitiesReader.StringTypeXName)
+            {
+              value = rawValue;
+            }
+            else if (typeXName == PrintCapabilitiesReader.IntegerTypeXName)
+            {
+              if (long.TryParse(rawValue,
+                                out var longValue))
+              {
+                value = longValue;
+              }
+              else
+              {
+                value = null;
+              }
+            }
+            else if (typeXName == PrintCapabilitiesReader.QNameTypeXName)
+            {
+              var xnameValue = PrintCapabilitiesReader.GetXName(rawValue,
+                                                                propertyXElement.GetNamespaceOfPrefix);
+              value = xnameValue;
+            }
+            else
+            {
+              value = rawValue;
+            }
+          }
+        }
+
+        IXpsProperty xpsProperty;
+        if (value == null)
         {
           xpsProperty = this.XpsPropertyFactory.Create(nameXName,
                                                        propertyElementXName);
         }
         else
         {
-          var value = valueXElement.Value;
-          var valueXName = PrintCapabilitiesReader.GetXName(value,
-                                                            propertyXElement.GetNamespaceOfPrefix);
           xpsProperty = this.XpsPropertyFactory.Create(nameXName,
                                                        propertyElementXName,
-                                                       value,
-                                                       valueXName);
+                                                       value);
         }
 
         // TODO verify behaviour: is it either VALUE _or_ child PROPERTIES?
