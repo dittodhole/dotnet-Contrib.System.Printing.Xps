@@ -6,7 +6,7 @@ namespace Contrib.System.Printing.Xps
 {
   public partial class XpsPrinter
   {
-    private sealed class NullXpsPrintCapabilities : IXpsPrintCapabilities
+    protected sealed class NullXpsPrintCapabilities : IXpsPrintCapabilities
     {
       [NotNull]
       public static NullXpsPrintCapabilities Instance = new NullXpsPrintCapabilities();

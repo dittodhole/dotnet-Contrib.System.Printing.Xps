@@ -6,7 +6,7 @@ namespace Contrib.System.Printing.Xps
 {
   public partial class XpsPrinter
   {
-    private sealed class NullXpsPrintTicket : IXpsPrintTicket
+    protected sealed class NullXpsPrintTicket : IXpsPrintTicket
     {
       [NotNull]
       public static NullXpsPrintTicket Instance { get; } = new NullXpsPrintTicket();
