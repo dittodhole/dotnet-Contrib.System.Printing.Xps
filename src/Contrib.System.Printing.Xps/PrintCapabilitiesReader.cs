@@ -258,8 +258,7 @@ namespace Contrib.System.Printing.Xps
         return null;
       }
 
-      var xpsFeature = this.XpsFeatureFactory.Create(nameXName,
-                                                     name);
+      var xpsFeature = this.XpsFeatureFactory.Create(nameXName);
       {
         var xpsProperties = this.ReadXpsPropertiesImpl(featureXElement,
                                                        PrintCapabilitiesReader.PropertyElementXName);
@@ -310,8 +309,7 @@ namespace Contrib.System.Printing.Xps
           return null;
         }
 
-        xpsOption = this.XpsOptionFactory.Create(nameXName,
-                                                 name);
+        xpsOption = this.XpsOptionFactory.Create(nameXName);
       }
 
       {
@@ -434,13 +432,11 @@ namespace Contrib.System.Printing.Xps
       if (value == null)
       {
         xpsProperty = this.XpsPropertyFactory.Create(nameXName,
-                                                     name,
                                                      propertyElementXName);
       }
       else
       {
         xpsProperty = this.XpsPropertyFactory.Create(nameXName,
-                                                     name,
                                                      propertyElementXName,
                                                      value);
       }

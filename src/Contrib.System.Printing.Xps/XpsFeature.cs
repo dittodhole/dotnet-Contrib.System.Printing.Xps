@@ -15,9 +15,6 @@ namespace Contrib.System.Printing.Xps
     [NotNull]
     XName Name { get; }
 
-    [NotNull]
-    string RawName { get; }
-
     /// <exception cref="ArgumentNullException"><paramref name="name" /> is <see langword="null" />.</exception>
     [CanBeNull]
     IXpsProperty GetXpsProperty([NotNull] XName name);
@@ -44,26 +41,20 @@ namespace Contrib.System.Printing.Xps
   public interface IXpsFeatureFactory
   {
     [NotNull]
-    IXpsFeature Create([NotNull] XName name,
-                       [NotNull] string rawName);
+    IXpsFeature Create([NotNull] XName name);
   }
 
   public sealed class XpsFeatureFactory : IXpsFeatureFactory
   {
     private sealed class XpsFeature : IXpsFeature
     {
-      public XpsFeature([NotNull] XName name,
-                        [NotNull] string rawName)
+      public XpsFeature([NotNull] XName name)
       {
         this.Name = name;
-        this.RawName = rawName;
       }
 
       /// <inheritdoc />
       public XName Name { get; }
-
-      /// <inheritdoc />
-      public string RawName { get; }
 
       [NotNull]
       private IDictionary<XName, IXpsProperty> Properties { get; } = new Dictionary<XName, IXpsProperty>();
@@ -133,11 +124,9 @@ namespace Contrib.System.Printing.Xps
     }
 
     /// <inheritdoc />
-    public IXpsFeature Create(XName name,
-                              string rawName)
+    public IXpsFeature Create(XName name)
     {
-      var xpsFeature = new XpsFeature(name,
-                                      rawName);
+      var xpsFeature = new XpsFeature(name);
 
       return xpsFeature;
     }
