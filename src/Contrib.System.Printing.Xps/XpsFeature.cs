@@ -106,7 +106,13 @@ namespace Contrib.System.Printing.Xps
       {
         foreach (var xpsOption in xpsOptions)
         {
-          this.Options[xpsOption.Name] = xpsOption;
+          var key = xpsOption.Name;
+          if (key == null)
+          {
+            var name = Guid.NewGuid().ToString("N");
+            key = XName.Get(name);
+          }
+          this.Options[key] = xpsOption;
         }
       }
     }
