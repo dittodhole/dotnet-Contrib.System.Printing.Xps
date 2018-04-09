@@ -20,10 +20,10 @@ namespace Contrib.System.Printing.Xps
     string DriverName { get; }
 
     [CanBeNull]
-    double? ImageableSizeWidth { get; }
+    long? ImageableSizeWidth { get; }
 
     [CanBeNull]
-    double? ImageableSizeHeight { get; }
+    long? ImageableSizeHeight { get; }
   }
 
   public partial class XpsPrinter
@@ -51,7 +51,7 @@ namespace Contrib.System.Printing.Xps
       public string FullName { get; }
 
       /// <inheritdoc />
-      public double? ImageableSizeWidth
+      public long? ImageableSizeWidth
       {
         get
         {
@@ -67,7 +67,7 @@ namespace Contrib.System.Printing.Xps
       }
 
       /// <inheritdoc />
-      public double? ImageableSizeHeight
+      public long? ImageableSizeHeight
       {
         get
         {
@@ -92,27 +92,37 @@ namespace Contrib.System.Printing.Xps
       private IXpsPrintCapabilities XpsPrintCapabilities { get; }
 
       [CanBeNull]
-      private double? GetImageableSize([NotNull] XName imageableSizeXName)
+      private long? GetImageableSize([NotNull] XName imageableSizeXName)
       {
+        long? imageableSize;
+
         var xpsProperty = this.XpsPrintCapabilities.GetXpsProperty(Xps.PrintCapabilitiesReader.PageImageableSizeXName);
         if (xpsProperty == null)
         {
-          return null;
+          imageableSize = null;
         }
-
-        xpsProperty = xpsProperty.GetXpsProperty(imageableSizeXName);
-        if (xpsProperty == null)
+        else
         {
-          return null;
+          xpsProperty = xpsProperty.GetXpsProperty(imageableSizeXName);
+          if (xpsProperty == null)
+          {
+            imageableSize = null;
+          }
+          else
+          {
+            var value = xpsProperty.Value;
+            if (value is long longValue)
+            {
+              imageableSize = longValue;
+            }
+            else
+            {
+              imageableSize = null;
+            }
+          }
         }
 
-        if (double.TryParse(xpsProperty.Value,
-                            out var value))
-        {
-          return value;
-        }
-
-        return null;
+        return imageableSize;
       }
 
       /// <inheritdoc />
