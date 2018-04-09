@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml;
 using System.Xml.Linq;
 using Anotar.LibLog;
 using JetBrains.Annotations;
@@ -230,36 +229,48 @@ namespace Contrib.System.Printing.Xps
       var featureXElements = printCapabilitiesXElement.Elements(PrintCapabilitiesReader.FeatureElementXName);
       foreach (var featureXElement in featureXElements)
       {
-        var nameXAttribute = featureXElement.Attribute(PrintCapabilitiesReader.NameAttributeXName);
-        if (nameXAttribute == null)
+        var xpsFeature = this.ReadXpsFeatureImpl(featureXElement);
+        if (xpsFeature == null)
         {
-          LogTo.Warn($"Could not get {nameof(nameXAttribute)} from {nameof(featureXElement)}: {featureXElement}");
           continue;
-        }
-
-        var name = nameXAttribute.Value;
-        var nameXName = PrintCapabilitiesReader.GetXName(name,
-                                                         featureXElement.GetNamespaceOfPrefix);
-        if (nameXName == null)
-        {
-          LogTo.Warn($"Could not get {nameof(nameXName)} from {nameof(nameXAttribute)}: {nameXAttribute}");
-          continue;
-        }
-
-        var xpsFeature = this.XpsFeatureFactory.Create(nameXName,
-                                                       name);
-        {
-          var xpsProperties = this.ReadXpsPropertiesImpl(featureXElement,
-                                                         PrintCapabilitiesReader.PropertyElementXName);
-          xpsFeature.AddXpsProperties(xpsProperties);
-        }
-        {
-          var xpsOptions = this.ReadXpsOptionsImpl(featureXElement);
-          xpsFeature.AddXpsOptions(xpsOptions);
         }
 
         yield return xpsFeature;
       }
+    }
+
+    [CanBeNull]
+    protected virtual IXpsFeature ReadXpsFeatureImpl([NotNull] XElement featureXElement)
+    {
+      var nameXAttribute = featureXElement.Attribute(PrintCapabilitiesReader.NameAttributeXName);
+      if (nameXAttribute == null)
+      {
+        LogTo.Warn($"Could not get {nameof(nameXAttribute)} from {nameof(featureXElement)}: {featureXElement}");
+        return null;
+      }
+
+      var name = nameXAttribute.Value;
+      var nameXName = PrintCapabilitiesReader.GetXName(name,
+                                                       featureXElement.GetNamespaceOfPrefix);
+      if (nameXName == null)
+      {
+        LogTo.Warn($"Could not get {nameof(nameXName)} from {nameof(nameXAttribute)}: {nameXAttribute}");
+        return null;
+      }
+
+      var xpsFeature = this.XpsFeatureFactory.Create(nameXName,
+                                                     name);
+      {
+        var xpsProperties = this.ReadXpsPropertiesImpl(featureXElement,
+                                                       PrintCapabilitiesReader.PropertyElementXName);
+        xpsFeature.AddXpsProperties(xpsProperties);
+      }
+      {
+        var xpsOptions = this.ReadXpsOptionsImpl(featureXElement);
+        xpsFeature.AddXpsOptions(xpsOptions);
+      }
+
+      return xpsFeature;
     }
 
     [NotNull]
@@ -269,40 +280,52 @@ namespace Contrib.System.Printing.Xps
       var optionXElements = featureXElement.Elements(PrintCapabilitiesReader.OptionElementXName);
       foreach (var optionXElement in optionXElements)
       {
-        IXpsOption xpsOption;
-        var nameXAttribute = optionXElement.Attribute(PrintCapabilitiesReader.NameAttributeXName);
-        if (nameXAttribute == null)
+        var xpsOption = this.ReadXpsOptionImpl(optionXElement);
+        if (xpsOption == null)
         {
-          xpsOption = this.XpsOptionFactory.Create();
-        }
-        else
-        {
-          var name = nameXAttribute.Value;
-          var nameXName = PrintCapabilitiesReader.GetXName(name,
-                                                           optionXElement.GetNamespaceOfPrefix);
-          if (nameXName == null)
-          {
-            LogTo.Warn($"Could not get {nameof(nameXName)} from {nameof(nameXAttribute)}: {nameXAttribute}");
-            continue;
-          }
-
-          xpsOption = this.XpsOptionFactory.Create(nameXName,
-                                                   name);
-        }
-
-        {
-          var xpsProperties = this.ReadXpsPropertiesImpl(optionXElement,
-                                                         PrintCapabilitiesReader.PropertyElementXName);
-          xpsOption.AddXpsProperties(xpsProperties);
-        }
-        {
-          var xpsProperties = this.ReadXpsPropertiesImpl(optionXElement,
-                                                         PrintCapabilitiesReader.ScoredPropertyElementXName);
-          xpsOption.AddXpsProperties(xpsProperties);
+          continue;
         }
 
         yield return xpsOption;
       }
+    }
+
+    [CanBeNull]
+    protected virtual IXpsOption ReadXpsOptionImpl([NotNull] XElement optionXElement)
+    {
+      IXpsOption xpsOption;
+      var nameXAttribute = optionXElement.Attribute(PrintCapabilitiesReader.NameAttributeXName);
+      if (nameXAttribute == null)
+      {
+        xpsOption = this.XpsOptionFactory.Create();
+      }
+      else
+      {
+        var name = nameXAttribute.Value;
+        var nameXName = PrintCapabilitiesReader.GetXName(name,
+                                                         optionXElement.GetNamespaceOfPrefix);
+        if (nameXName == null)
+        {
+          LogTo.Warn($"Could not get {nameof(nameXName)} from {nameof(nameXAttribute)}: {nameXAttribute}");
+          return null;
+        }
+
+        xpsOption = this.XpsOptionFactory.Create(nameXName,
+                                                 name);
+      }
+
+      {
+        var xpsProperties = this.ReadXpsPropertiesImpl(optionXElement,
+                                                       PrintCapabilitiesReader.PropertyElementXName);
+        xpsOption.AddXpsProperties(xpsProperties);
+      }
+      {
+        var xpsProperties = this.ReadXpsPropertiesImpl(optionXElement,
+                                                       PrintCapabilitiesReader.ScoredPropertyElementXName);
+        xpsOption.AddXpsProperties(xpsProperties);
+      }
+
+      return xpsOption;
     }
 
     [NotNull]
@@ -313,110 +336,124 @@ namespace Contrib.System.Printing.Xps
       var propertyXElements = xelement.Elements(propertyElementXName);
       foreach (var propertyXElement in propertyXElements)
       {
-        var nameXAttribute = propertyXElement.Attribute(PrintCapabilitiesReader.NameAttributeXName);
-        if (nameXAttribute == null)
+        var xpsProperty = this.ReadXpsPropertyImpl(propertyElementXName,
+                                                   propertyXElement);
+        if (xpsProperty == null)
         {
-          LogTo.Warn($"Could not get {nameof(nameXAttribute)} from {nameof(propertyXElement)}: {propertyXElement}");
           continue;
-        }
-
-        var name = nameXAttribute.Value;
-        var nameXName = PrintCapabilitiesReader.GetXName(name,
-                                                         propertyXElement.GetNamespaceOfPrefix);
-        if (nameXName == null)
-        {
-          LogTo.Warn($"Could not get {nameof(nameXName)} from {nameof(nameXAttribute)}: {nameXAttribute}");
-          continue;
-        }
-
-        object value;
-
-        var valueXElement = propertyXElement.Element(PrintCapabilitiesReader.ValueElementXName);
-        if (valueXElement == null)
-        {
-          value = null;
-        }
-        else
-        {
-          // TODO there *MUST* be a better way for handling xsi:type
-
-          var rawValue = valueXElement.Value;
-          var typeXAttribute = valueXElement.Attribute(PrintCapabilitiesReader.TypeXName);
-          if (typeXAttribute == null)
-          {
-            value = rawValue;
-          }
-          else
-          {
-            var type = typeXAttribute.Value;
-            var typeXName = PrintCapabilitiesReader.GetXName(type,
-                                                             propertyXElement.GetNamespaceOfPrefix);
-            if (typeXName == null)
-            {
-              LogTo.Warn($"Could not get {nameof(typeXName)} from {nameof(typeXAttribute)}: {typeXAttribute}");
-              continue;
-            }
-
-            if (typeXName == PrintCapabilitiesReader.StringTypeXName)
-            {
-              value = rawValue;
-            }
-            else if (typeXName == PrintCapabilitiesReader.IntegerTypeXName)
-            {
-              if (long.TryParse(rawValue,
-                                out var longValue))
-              {
-                value = longValue;
-              }
-              else
-              {
-                value = null;
-              }
-            }
-            else if (typeXName == PrintCapabilitiesReader.QNameTypeXName)
-            {
-              var xnameValue = PrintCapabilitiesReader.GetXName(rawValue,
-                                                                propertyXElement.GetNamespaceOfPrefix);
-              if (xnameValue == null)
-              {
-                LogTo.Warn($"Could not get {nameof(xnameValue)} from {nameof(valueXElement)}: {valueXElement}");
-                continue;
-              }
-
-              value = xnameValue;
-            }
-            else
-            {
-              value = rawValue;
-            }
-          }
-        }
-
-        IXpsProperty xpsProperty;
-        if (value == null)
-        {
-          xpsProperty = this.XpsPropertyFactory.Create(nameXName,
-                                                       name,
-                                                       propertyElementXName);
-        }
-        else
-        {
-          xpsProperty = this.XpsPropertyFactory.Create(nameXName,
-                                                       name,
-                                                       propertyElementXName,
-                                                       value);
-        }
-
-        // TODO verify behaviour: is it either VALUE _or_ child PROPERTIES?
-
-        {
-          var xpsProperties = this.ReadXpsPropertiesImpl(propertyXElement,
-                                                         PrintCapabilitiesReader.PropertyElementXName);
-          xpsProperty.AddXpsProperties(xpsProperties);
         }
 
         yield return xpsProperty;
       }
+    }
+
+    [CanBeNull]
+    protected virtual IXpsProperty ReadXpsPropertyImpl([NotNull] XName propertyElementXName,
+                                                       [NotNull] XElement propertyXElement)
+    {
+      var nameXAttribute = propertyXElement.Attribute(PrintCapabilitiesReader.NameAttributeXName);
+      if (nameXAttribute == null)
+      {
+        LogTo.Warn($"Could not get {nameof(nameXAttribute)} from {nameof(propertyXElement)}: {propertyXElement}");
+        return null;
+      }
+
+      var name = nameXAttribute.Value;
+      var nameXName = PrintCapabilitiesReader.GetXName(name,
+                                                       propertyXElement.GetNamespaceOfPrefix);
+      if (nameXName == null)
+      {
+        LogTo.Warn($"Could not get {nameof(nameXName)} from {nameof(nameXAttribute)}: {nameXAttribute}");
+        return null;
+      }
+
+      object value;
+
+      var valueXElement = propertyXElement.Element(PrintCapabilitiesReader.ValueElementXName);
+      if (valueXElement == null)
+      {
+        value = null;
+      }
+      else
+      {
+        // TODO there *MUST* be a better way for handling xsi:type
+
+        var rawValue = valueXElement.Value;
+        var typeXAttribute = valueXElement.Attribute(PrintCapabilitiesReader.TypeXName);
+        if (typeXAttribute == null)
+        {
+          value = rawValue;
+        }
+        else
+        {
+          var type = typeXAttribute.Value;
+          var typeXName = PrintCapabilitiesReader.GetXName(type,
+                                                           propertyXElement.GetNamespaceOfPrefix);
+          if (typeXName == null)
+          {
+            LogTo.Warn($"Could not get {nameof(typeXName)} from {nameof(typeXAttribute)}: {typeXAttribute}");
+            return null;
+          }
+
+          if (typeXName == PrintCapabilitiesReader.StringTypeXName)
+          {
+            value = rawValue;
+          }
+          else if (typeXName == PrintCapabilitiesReader.IntegerTypeXName)
+          {
+            if (long.TryParse(rawValue,
+                              out var longValue))
+            {
+              value = longValue;
+            }
+            else
+            {
+              value = null;
+            }
+          }
+          else if (typeXName == PrintCapabilitiesReader.QNameTypeXName)
+          {
+            var xnameValue = PrintCapabilitiesReader.GetXName(rawValue,
+                                                              propertyXElement.GetNamespaceOfPrefix);
+            if (xnameValue == null)
+            {
+              LogTo.Warn($"Could not get {nameof(xnameValue)} from {nameof(valueXElement)}: {valueXElement}");
+              return null;
+            }
+
+            value = xnameValue;
+          }
+          else
+          {
+            value = rawValue;
+          }
+        }
+      }
+
+      IXpsProperty xpsProperty;
+      if (value == null)
+      {
+        xpsProperty = this.XpsPropertyFactory.Create(nameXName,
+                                                     name,
+                                                     propertyElementXName);
+      }
+      else
+      {
+        xpsProperty = this.XpsPropertyFactory.Create(nameXName,
+                                                     name,
+                                                     propertyElementXName,
+                                                     value);
+      }
+
+      // TODO verify behaviour: is it either VALUE _or_ child PROPERTIES?
+
+      {
+        var xpsProperties = this.ReadXpsPropertiesImpl(propertyXElement,
+                                                       PrintCapabilitiesReader.PropertyElementXName);
+        xpsProperty.AddXpsProperties(xpsProperties);
+      }
+
+      return xpsProperty;
     }
 
     /// <code>
