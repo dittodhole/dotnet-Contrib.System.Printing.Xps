@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Xml.Linq;
 using JetBrains.Annotations;
 
@@ -19,10 +20,10 @@ namespace Contrib.System.Printing.Xps
     string DisplayName { get; }
 
     [CanBeNull]
-    double? MediaSizeWidth { get; }
+    long? MediaSizeWidth { get; }
 
     [CanBeNull]
-    double? MediaSizeHeight { get; }
+    long? MediaSizeHeight { get; }
 
     /// <returns>{http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords}Manual</returns>
     [CanBeNull]
@@ -69,7 +70,15 @@ namespace Contrib.System.Printing.Xps
           }
           else
           {
-            displayName = xpsProperty.Value;
+            var value = xpsProperty.Value;
+            if (value == null)
+            {
+              displayName = null;
+            }
+            else
+            {
+              displayName = value as string;
+            }
           }
 
           return displayName;
@@ -77,7 +86,7 @@ namespace Contrib.System.Printing.Xps
       }
 
       /// <inheritdoc />
-      public double? MediaSizeWidth
+      public long? MediaSizeWidth
       {
         get
         {
@@ -93,7 +102,7 @@ namespace Contrib.System.Printing.Xps
       }
 
       /// <inheritdoc />
-      public double? MediaSizeHeight
+      public long? MediaSizeHeight
       {
         get
         {
@@ -113,42 +122,70 @@ namespace Contrib.System.Printing.Xps
       {
         get
         {
+          XName feedType;
           var xpsProperty = this.XpsOption.GetXpsProperty(Xps.PrintCapabilitiesReader.FeedTypeXName);
           if (xpsProperty == null)
           {
-            return null;
+            feedType = null;
+          }
+          else
+          {
+            var value = xpsProperty.Value;
+            if (value == null)
+            {
+              feedType = null;
+            }
+            else
+            {
+              feedType = xpsProperty.Value as XName;
+            }
           }
 
-          var result = xpsProperty.ValueXName;
-
-          return result;
+          return feedType;
         }
       }
 
       [CanBeNull]
-      private double? GetPageMediaSize([NotNull] XName mediaSizeXName)
+      private long? GetPageMediaSize([NotNull] XName mediaSizeXName)
       {
-        var xpsFeature = this.XpsPrintTicket.GetXpsFeature(Xps.PrintCapabilitiesReader.PageMediaSizeXName);
-        if (xpsFeature == null)
-        {
-          return null;
-        }
+        long? pageMediaSize;
 
-        var xpsOptions = xpsFeature.GetXpsOptions();
-        foreach (var xpsOption in xpsOptions)
+        var xpsFeature = this.XpsPrintTicket.GetXpsFeature(Xps.PrintCapabilitiesReader.PageMediaSizeXName);
+        if (xpsFeature != null)
         {
-          var xpsProperty = xpsOption.GetXpsProperty(mediaSizeXName);
-          if (xpsProperty != null)
+          var xpsOptions = xpsFeature.GetXpsOptions();
+          var xpsOption = xpsOptions.FirstOrDefault();
+          if (xpsOption == null)
           {
-            if (double.TryParse(xpsProperty.Value,
-                                out var value))
+            pageMediaSize = null;
+          }
+          else
+          {
+            var xpsProperty = xpsOption.GetXpsProperty(mediaSizeXName);
+            if (xpsProperty == null)
             {
-              return value;
+              pageMediaSize = null;
+            }
+            else
+            {
+              var value = xpsProperty.Value;
+              if (value is long longValue)
+              {
+                pageMediaSize = longValue;
+              }
+              else
+              {
+                pageMediaSize = null;
+              }
             }
           }
         }
+        else
+        {
+          pageMediaSize = null;
+        }
 
-        return null;
+        return pageMediaSize;
       }
 
       /// <inheritdoc />
