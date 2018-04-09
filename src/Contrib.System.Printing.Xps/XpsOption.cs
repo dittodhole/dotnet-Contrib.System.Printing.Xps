@@ -11,6 +11,9 @@ namespace Contrib.System.Printing.Xps
     [CanBeNull]
     XName Name { get; }
 
+    [CanBeNull]
+    string RawName { get; }
+
     [NotNull]
     [ItemNotNull]
     IXpsProperty[] GetXpsProperties();
@@ -29,7 +32,8 @@ namespace Contrib.System.Printing.Xps
     IXpsOption Create();
 
     [NotNull]
-    IXpsOption Create([NotNull] XName name);
+    IXpsOption Create([NotNull] XName name,
+                      [NotNull] string rawName);
   }
 
   public sealed class XpsOptionFactory : IXpsOptionFactory
@@ -38,13 +42,18 @@ namespace Contrib.System.Printing.Xps
     {
       public XpsOption() { }
 
-      public XpsOption([NotNull] XName name)
+      public XpsOption([NotNull] XName name,
+                       [NotNull] string rawName)
       {
         this.Name = name;
+        this.RawName = rawName;
       }
 
       /// <inheritdoc />
       public XName Name { get; }
+
+      /// <inheritdoc />
+      public string RawName { get; }
 
       [NotNull]
       private IDictionary<XName, IXpsProperty> Properties { get; } = new Dictionary<XName, IXpsProperty>();
@@ -83,9 +92,11 @@ namespace Contrib.System.Printing.Xps
     }
 
     /// <inheritdoc />
-    public IXpsOption Create(XName name)
+    public IXpsOption Create(XName name,
+                             string rawName)
     {
-      var xpsOption = new XpsOption(name);
+      var xpsOption = new XpsOption(name,
+                                    rawName);
 
       return xpsOption;
     }

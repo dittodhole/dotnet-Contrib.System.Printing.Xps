@@ -17,6 +17,9 @@ namespace Contrib.System.Printing.Xps
     XName Name { get; }
 
     [NotNull]
+    string RawName { get; }
+
+    [NotNull]
     XName Type { get; }
 
     [CanBeNull]
@@ -34,11 +37,13 @@ namespace Contrib.System.Printing.Xps
   {
     [NotNull]
     IXpsProperty Create([NotNull] XName name,
+                        [NotNull] string rawName,
                         [NotNull] XName type,
                         [NotNull] object value);
 
     [NotNull]
     IXpsProperty Create([NotNull] XName name,
+                        [NotNull] string rawName,
                         [NotNull] XName type);
   }
 
@@ -47,23 +52,30 @@ namespace Contrib.System.Printing.Xps
     private sealed class XpsProperty : IXpsProperty
     {
       public XpsProperty([NotNull] XName name,
+                         [NotNull] string rawName,
                          [NotNull] XName type,
                          [NotNull] object value)
       {
         this.Name = name;
+        this.RawName = rawName;
         this.Type = type;
         this.Value = value;
       }
 
       public XpsProperty([NotNull] XName name,
+                         [NotNull] string rawName,
                          [NotNull] XName type)
       {
         this.Name = name;
+        this.RawName = rawName;
         this.Type = type;
       }
 
       /// <inheritdoc />
       public XName Name { get; }
+
+      /// <inheritdoc />
+      public string RawName { get; }
 
       /// <inheritdoc />
       public XName Type { get; }
@@ -95,10 +107,12 @@ namespace Contrib.System.Printing.Xps
 
     /// <inheritdoc />
     public IXpsProperty Create(XName name,
+                               string rawName,
                                XName type,
                                object value)
     {
       var xpsProperty = new XpsProperty(name,
+                                        rawName,
                                         type,
                                         value);
 
@@ -107,9 +121,11 @@ namespace Contrib.System.Printing.Xps
 
     /// <inheritdoc />
     public IXpsProperty Create(XName name,
+                               string rawName,
                                XName type)
     {
       var xpsProperty = new XpsProperty(name,
+                                        rawName,
                                         type);
 
       return xpsProperty;
