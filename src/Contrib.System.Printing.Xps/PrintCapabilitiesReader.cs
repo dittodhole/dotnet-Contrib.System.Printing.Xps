@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml;
 using System.Xml.Linq;
 using Anotar.LibLog;
 using JetBrains.Annotations;
@@ -410,6 +411,7 @@ namespace Contrib.System.Printing.Xps
     ///   if (xname.NamespaceName == "http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords") ...
     ///   if (xname.LocalName == "JobInputBin") ...
     /// </code>
+    /// <exception cref="Exception" />
     [CanBeNull]
     public static XName GetXName([CanBeNull] string str,
                                  [NotNull] GetNamespaceOfPrefix getNamespaceOfPrefix)
@@ -437,11 +439,25 @@ namespace Contrib.System.Printing.Xps
 
         if (prefix == null)
         {
-          xname = XName.Get(str);
+          try
+          {
+            xname = XName.Get(str);
+          }
+          catch
+          {
+            xname = null;
+          }
         }
         else if (localName == null)
         {
-          xname = XName.Get(str);
+          try
+          {
+            xname = XName.Get(str);
+          }
+          catch
+          {
+            xname = null;
+          }
         }
         else
         {
@@ -452,7 +468,14 @@ namespace Contrib.System.Printing.Xps
           }
           else
           {
-            xname = xnamespace + localName;
+            try
+            {
+              xname = xnamespace.GetName(localName);
+            }
+            catch
+            {
+              xname = null;
+            }
           }
         }
       }
