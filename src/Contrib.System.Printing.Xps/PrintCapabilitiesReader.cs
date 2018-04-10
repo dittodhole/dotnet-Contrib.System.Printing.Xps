@@ -374,58 +374,7 @@ namespace Contrib.System.Printing.Xps
       }
       else
       {
-        // TODO there *MUST* be a better way for handling xsi:type
-
-        var rawValue = valueXElement.Value;
-        var typeXAttribute = valueXElement.Attribute(PrintCapabilitiesReader.TypeXName);
-        if (typeXAttribute == null)
-        {
-          value = rawValue;
-        }
-        else
-        {
-          var type = typeXAttribute.Value;
-          var typeXName = PrintCapabilitiesReader.GetXName(type,
-                                                           propertyXElement.GetNamespaceOfPrefix);
-          if (typeXName == null)
-          {
-            LogTo.Warn($"Could not get {nameof(typeXName)} from {nameof(typeXAttribute)}: {typeXAttribute}");
-            return null;
-          }
-
-          if (typeXName == PrintCapabilitiesReader.StringTypeXName)
-          {
-            value = rawValue;
-          }
-          else if (typeXName == PrintCapabilitiesReader.IntegerTypeXName)
-          {
-            if (long.TryParse(rawValue,
-                              out var longValue))
-            {
-              value = longValue;
-            }
-            else
-            {
-              value = null;
-            }
-          }
-          else if (typeXName == PrintCapabilitiesReader.QNameTypeXName)
-          {
-            var xnameValue = PrintCapabilitiesReader.GetXName(rawValue,
-                                                              propertyXElement.GetNamespaceOfPrefix);
-            if (xnameValue == null)
-            {
-              LogTo.Warn($"Could not get {nameof(xnameValue)} from {nameof(valueXElement)}: {valueXElement}");
-              return null;
-            }
-
-            value = xnameValue;
-          }
-          else
-          {
-            value = rawValue;
-          }
-        }
+        value = this.ReadValueImpl(valueXElement);
       }
 
       IXpsProperty xpsProperty;
@@ -450,6 +399,67 @@ namespace Contrib.System.Printing.Xps
       }
 
       return xpsProperty;
+    }
+
+    [CanBeNull]
+    protected virtual object ReadValueImpl([NotNull] XElement valueXElement)
+    {
+      object value;
+      // TODO there *MUST* be a better way for handling xsi:type
+
+      var rawValue = valueXElement.Value;
+
+      var typeXAttribute = valueXElement.Attribute(PrintCapabilitiesReader.TypeXName);
+      if (typeXAttribute == null)
+      {
+        value = rawValue;
+      }
+      else
+      {
+        var type = typeXAttribute.Value;
+        var typeXName = PrintCapabilitiesReader.GetXName(type,
+                                                         valueXElement.GetNamespaceOfPrefix);
+        if (typeXName == null)
+        {
+          LogTo.Warn($"Could not get {nameof(typeXName)} from {nameof(typeXAttribute)}: {typeXAttribute}");
+          value = null;
+        }
+        else if (typeXName == PrintCapabilitiesReader.StringTypeXName)
+        {
+          value = rawValue;
+        }
+        else if (typeXName == PrintCapabilitiesReader.IntegerTypeXName)
+        {
+          if (long.TryParse(rawValue,
+                            out var longValue))
+          {
+            value = longValue;
+          }
+          else
+          {
+            value = null;
+          }
+        }
+        else if (typeXName == PrintCapabilitiesReader.QNameTypeXName)
+        {
+          var xnameValue = PrintCapabilitiesReader.GetXName(rawValue,
+                                                            valueXElement.GetNamespaceOfPrefix);
+          if (xnameValue == null)
+          {
+            LogTo.Warn($"Could not get {nameof(xnameValue)} from {nameof(valueXElement)}: {valueXElement}");
+            return value;
+          }
+
+          value = xnameValue;
+        }
+        else
+        {
+          // TODO support more types :beers:
+          value = rawValue;
+        }
+      }
+
+      return value;
     }
 
     /// <code>
