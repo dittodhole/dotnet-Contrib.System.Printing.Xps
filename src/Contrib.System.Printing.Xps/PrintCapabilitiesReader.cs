@@ -124,13 +124,11 @@ namespace Contrib.System.Printing.Xps
     public static XName QNameTypeXName { get; } = PrintCapabilitiesReader.XmlSchemaXNamespace + "QName";
 
     public PrintCapabilitiesReader()
-    {
-      this.XpsFeatureFactory = new XpsFeatureFactory();
-      this.XpsOptionFactory = new XpsOptionFactory();
-      this.XpsPrintCapabilitiesFactory = new XpsPrintCapabilitiesFactory();
-      this.XpsPrintTicketFactory = new XpsPrintTicketFactory();
-      this.XpsPropertyFactory = new XpsPropertyFactory();
-    }
+      : this(new XpsPrintCapabilitiesFactory(),
+             new XpsPrintTicketFactory(),
+             new XpsFeatureFactory(),
+             new XpsOptionFactory(),
+             new XpsPropertyFactory()) { }
 
     /// <exception cref="ArgumentNullException"><paramref name="xpsFeatureFactory" /> is <see langword="null" />.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="xpsOptionFactory" /> is <see langword="null" />.</exception>
