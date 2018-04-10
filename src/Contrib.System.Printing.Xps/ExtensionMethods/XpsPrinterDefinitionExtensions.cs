@@ -8,6 +8,10 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
   public static class XpsPrinterDefinitionExtensions
   {
+    /// <exception cref="ArgumentNullException"><paramref name="printQueue" /> is <see langword="null" />.</exception>
+    [CanBeNull]
+    public delegate PrintTicket PrintTicketFactory([NotNull] PrintQueue printQueue);
+
     /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinition" /> is <see langword="null" />.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="documentPaginatorSource" /> is <see langword="null" />.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="printTicketFactory" /> is <see langword="null" />.</exception>
@@ -30,12 +34,12 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       }
 
       using (var printServer = new PrintServer())
-      using (var printQueues = XpsPrinter.GetPrintQueues(printServer))
+      using (var printQueues = printServer.GetLocalAndRemotePrintQueues())
       {
         var printQueue = printQueues.GetPrintQueue(xpsPrinterDefinition);
         if (printQueue == null)
         {
-          LogTo.Error($"Could not find {nameof(PrintQueue)} for {nameof(IXpsPrinterDefinition)}: {xpsPrinterDefinition}");
+          LogTo.Error($"Could not find {nameof(PrintQueue)} '{xpsPrinterDefinition.FullName}'.");
         }
         else
         {
