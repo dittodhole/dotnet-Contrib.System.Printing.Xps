@@ -463,14 +463,7 @@ namespace Contrib.System.Printing.Xps
       return value;
     }
 
-    /// <code>
-    ///   using Contrib.System.Printing.Xps;
-    ///
-    ///   var xname = XmlHelper.GetXName(<paramref name="str"/>: "psk:JobInputBin",
-    ///                                  <paramref name="getNamespaceOfPrefix"/>: xelement.GetNamespaceOfPrefix);
-    ///   if (xname.NamespaceName == "http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords") ...
-    ///   if (xname.LocalName == "JobInputBin") ...
-    /// </code>
+    [Pure]
     [CanBeNull]
     public static XName GetXName([CanBeNull] string str,
                                  [NotNull] GetNamespaceOfPrefix getNamespaceOfPrefix)
