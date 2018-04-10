@@ -81,7 +81,7 @@ namespace Contrib.System.Printing.Xps
         var printQueue = printQueues.GetPrintQueue(xpsPrinterDefinition);
         if (printQueue == null)
         {
-          LogTo.Warn($"Could not find {nameof(PrintQueue)} '{xpsPrinterDefinition.FullName}'.");
+          LogTo.Warn($"Could not get {nameof(PrintQueue)} '{xpsPrinterDefinition.FullName}'.");
           result = new IXpsInputBinDefinition[0];
         }
         else

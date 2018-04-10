@@ -141,10 +141,10 @@ namespace Contrib.System.Printing.Xps
                                    [NotNull] IXpsOptionFactory xpsOptionFactory,
                                    [NotNull] IXpsPropertyFactory xpsPropertyFactory)
     {
-      this.XpsFeatureFactory = xpsFeatureFactory ?? throw new ArgumentNullException(nameof(xpsFeatureFactory));
-      this.XpsOptionFactory = xpsOptionFactory ?? throw new ArgumentNullException(nameof(xpsOptionFactory));
       this.XpsPrintCapabilitiesFactory = xpsPrintCapabilitiesFactory ?? throw new ArgumentNullException(nameof(xpsPrintCapabilitiesFactory));
       this.XpsPrintTicketFactory = xpsPrintTicketFactory ?? throw new ArgumentNullException(nameof(xpsPrintTicketFactory));
+      this.XpsFeatureFactory = xpsFeatureFactory ?? throw new ArgumentNullException(nameof(xpsFeatureFactory));
+      this.XpsOptionFactory = xpsOptionFactory ?? throw new ArgumentNullException(nameof(xpsOptionFactory));
       this.XpsPropertyFactory = xpsPropertyFactory ?? throw new ArgumentNullException(nameof(xpsPropertyFactory));
     }
 
@@ -243,7 +243,7 @@ namespace Contrib.System.Printing.Xps
       var nameXAttribute = featureXElement.Attribute(PrintCapabilitiesReader.NameAttributeXName);
       if (nameXAttribute == null)
       {
-        LogTo.Warn($"Could not get {nameof(nameXAttribute)} from {nameof(featureXElement)}: {featureXElement}");
+        LogTo.Warn($"Could not get {nameof(XAttribute)} '{PrintCapabilitiesReader.NameAttributeXName}' from {nameof(XElement)}: {featureXElement}");
         return null;
       }
 
@@ -252,7 +252,7 @@ namespace Contrib.System.Printing.Xps
                                                        featureXElement.GetNamespaceOfPrefix);
       if (nameXName == null)
       {
-        LogTo.Warn($"Could not get {nameof(nameXName)} from {nameof(nameXAttribute)}: {nameXAttribute}");
+        LogTo.Warn($"Could not get {nameof(XName)} from {nameof(XAttribute)} '{PrintCapabilitiesReader.NameAttributeXName}': {featureXElement}");
         return null;
       }
 
@@ -303,7 +303,7 @@ namespace Contrib.System.Printing.Xps
                                                          optionXElement.GetNamespaceOfPrefix);
         if (nameXName == null)
         {
-          LogTo.Warn($"Could not get {nameof(nameXName)} from {nameof(nameXAttribute)}: {nameXAttribute}");
+          LogTo.Warn($"Could not get {nameof(XName)} from {nameof(XAttribute)} '{PrintCapabilitiesReader.NameAttributeXName}': {optionXElement}");
           return null;
         }
 
@@ -350,7 +350,7 @@ namespace Contrib.System.Printing.Xps
       var nameXAttribute = propertyXElement.Attribute(PrintCapabilitiesReader.NameAttributeXName);
       if (nameXAttribute == null)
       {
-        LogTo.Warn($"Could not get {nameof(nameXAttribute)} from {nameof(propertyXElement)}: {propertyXElement}");
+        LogTo.Warn($"Could not get {nameof(XAttribute)} '{PrintCapabilitiesReader.NameAttributeXName}' from {nameof(XElement)}: {propertyXElement}");
         return null;
       }
 
@@ -359,7 +359,7 @@ namespace Contrib.System.Printing.Xps
                                                        propertyXElement.GetNamespaceOfPrefix);
       if (nameXName == null)
       {
-        LogTo.Warn($"Could not get {nameof(nameXName)} from {nameof(nameXAttribute)}: {nameXAttribute}");
+        LogTo.Warn($"Could not get {nameof(XName)} from {nameof(XAttribute)} '{PrintCapabilitiesReader.NameAttributeXName}': {propertyXElement}");
         return null;
       }
 
@@ -420,7 +420,7 @@ namespace Contrib.System.Printing.Xps
                                                          valueXElement.GetNamespaceOfPrefix);
         if (typeXName == null)
         {
-          LogTo.Warn($"Could not get {nameof(typeXName)} from {nameof(typeXAttribute)}: {typeXAttribute}");
+          LogTo.Warn($"Could not get {nameof(XName)} from {nameof(XAttribute)} '{PrintCapabilitiesReader.TypeXName}': {valueXElement}");
           value = null;
         }
         else if (typeXName == PrintCapabilitiesReader.StringTypeXName)
@@ -445,7 +445,7 @@ namespace Contrib.System.Printing.Xps
                                                             valueXElement.GetNamespaceOfPrefix);
           if (xnameValue == null)
           {
-            LogTo.Warn($"Could not get {nameof(xnameValue)} from {nameof(valueXElement)}: {valueXElement}");
+            LogTo.Warn($"Could not get {nameof(XName)} from {nameof(XElement)}: {valueXElement}");
             value = null;
           }
           else
@@ -463,14 +463,7 @@ namespace Contrib.System.Printing.Xps
       return value;
     }
 
-    /// <code>
-    ///   using Contrib.System.Printing.Xps;
-    ///
-    ///   var xname = XmlHelper.GetXName(<paramref name="str"/>: "psk:JobInputBin",
-    ///                                  <paramref name="getNamespaceOfPrefix"/>: xelement.GetNamespaceOfPrefix);
-    ///   if (xname.NamespaceName == "http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords") ...
-    ///   if (xname.LocalName == "JobInputBin") ...
-    /// </code>
+    [Pure]
     [CanBeNull]
     public static XName GetXName([CanBeNull] string str,
                                  [NotNull] GetNamespaceOfPrefix getNamespaceOfPrefix)
@@ -502,8 +495,10 @@ namespace Contrib.System.Printing.Xps
           {
             xname = XName.Get(str);
           }
-          catch
+          catch (Exception exception)
           {
+            LogTo.WarnException($"Could not get {nameof(XName)} from '{str}'.",
+                                exception);
             xname = null;
           }
         }
@@ -513,8 +508,10 @@ namespace Contrib.System.Printing.Xps
           {
             xname = XName.Get(str);
           }
-          catch
+          catch (Exception exception)
           {
+            LogTo.WarnException($"Could not get {nameof(XName)} from '{str}'.",
+                                exception);
             xname = null;
           }
         }
@@ -523,6 +520,7 @@ namespace Contrib.System.Printing.Xps
           var xnamespace = getNamespaceOfPrefix.Invoke(prefix);
           if (xnamespace == null)
           {
+            LogTo.Warn($"Could not get {nameof(XNamespace)} for {nameof(prefix)} '{prefix}'.");
             xname = null;
           }
           else
@@ -531,8 +529,10 @@ namespace Contrib.System.Printing.Xps
             {
               xname = xnamespace.GetName(localName);
             }
-            catch
+            catch (Exception exception)
             {
+              LogTo.WarnException($"Could not get {nameof(XName)} from '{localName}'.",
+                                  exception);
               xname = null;
             }
           }

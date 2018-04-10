@@ -39,7 +39,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         var printQueue = printQueues.GetPrintQueue(xpsPrinterDefinition);
         if (printQueue == null)
         {
-          LogTo.Error($"Could not find {nameof(PrintQueue)} '{xpsPrinterDefinition.FullName}'.");
+          LogTo.Error($"Could not get {nameof(PrintQueue)} '{xpsPrinterDefinition.FullName}'.");
         }
         else
         {
