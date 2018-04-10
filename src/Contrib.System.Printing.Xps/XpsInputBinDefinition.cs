@@ -45,7 +45,7 @@ namespace Contrib.System.Printing.Xps
     [NotNull]
     IXpsInputBinDefinition Create([NotNull] IXpsFeature xpsFeature,
                                   [NotNull] IXpsOption xpsOption,
-                                  [NotNull] IXpsPrintTicket xpsPrintTicket);
+                                  [NotNull] IXpsPrintCapabilities xpsPrintCapabilities);
 
   }
 
@@ -56,11 +56,11 @@ namespace Contrib.System.Printing.Xps
     {
       public XpsInputBinDefinition([NotNull] IXpsFeature xpsFeature,
                                    [NotNull] IXpsOption xpsOption,
-                                   [NotNull] IXpsPrintTicket xpsPrintTicket)
+                                   [NotNull] IXpsPrintCapabilities xpsPrintCapabilities)
       {
         this.XpsFeature = xpsFeature;
         this.XpsOption = xpsOption;
-        this.XpsPrintTicket = xpsPrintTicket;
+        this.XpsPrintCapabilities = xpsPrintCapabilities;
       }
 
       [NotNull]
@@ -70,7 +70,7 @@ namespace Contrib.System.Printing.Xps
       private IXpsOption XpsOption { get; }
 
       [NotNull]
-      private IXpsPrintTicket XpsPrintTicket { get; }
+      private IXpsPrintCapabilities XpsPrintCapabilities { get; }
 
       /// <inheritdoc />
       public XName FeatureName => this.XpsFeature.Name;
@@ -172,7 +172,7 @@ namespace Contrib.System.Printing.Xps
       {
         long? pageMediaSize;
 
-        var xpsFeature = this.XpsPrintTicket.GetXpsFeature(Xps.PrintCapabilitiesReader.PageMediaSizeXName);
+        var xpsFeature = this.XpsPrintCapabilities.GetXpsFeature(Xps.PrintCapabilitiesReader.PageMediaSizeXName);
         if (xpsFeature != null)
         {
           var xpsOptions = xpsFeature.GetXpsOptions();
@@ -277,11 +277,11 @@ namespace Contrib.System.Printing.Xps
     /// <inheritdoc />
     public IXpsInputBinDefinition Create(IXpsFeature xpsFeature,
                                          IXpsOption xpsOption,
-                                         IXpsPrintTicket xpsPrintTicket)
+                                         IXpsPrintCapabilities xpsPrintCapabilities)
     {
       var xpsInputBinDefinition = new XpsInputBinDefinition(xpsFeature,
                                                             xpsOption,
-                                                            xpsPrintTicket);
+                                                            xpsPrintCapabilities);
 
       return xpsInputBinDefinition;
     }

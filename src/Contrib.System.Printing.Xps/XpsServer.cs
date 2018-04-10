@@ -109,7 +109,7 @@ namespace Contrib.System.Printing.Xps
             result = inputBinXpsFeature.GetXpsOptions()
                                        .Select(xpsOption =>
                                                {
-                                                 var xpsPrintTicket = this.GetXpsPrintTicketImpl(printQueue,
+                                                 var xpsPrintTicket = this.GetXpsPrintCapabilitiesImpl(printQueue,
                                                                                                  inputBinXpsFeature,
                                                                                                  xpsOption);
                                                  var xpsInputBinDefinition = this.XpsInputBinDefinitionFactory.Create(inputBinXpsFeature,
@@ -160,9 +160,9 @@ namespace Contrib.System.Printing.Xps
     }
 
     [NotNull]
-    protected virtual IXpsPrintTicket GetXpsPrintTicketImpl([NotNull] PrintQueue printQueue,
-                                                            [NotNull] IXpsFeature xpsFeature,
-                                                            [NotNull] IXpsOption xpsOption)
+    protected virtual IXpsPrintCapabilities GetXpsPrintCapabilitiesImpl([NotNull] PrintQueue printQueue,
+                                                                        [NotNull] IXpsFeature xpsFeature,
+                                                                        [NotNull] IXpsOption xpsOption)
     {
       XDocument xdocument;
 
@@ -192,19 +192,19 @@ namespace Contrib.System.Printing.Xps
         }
       }
 
-      IXpsPrintTicket xpsPrintTicket;
+      IXpsPrintCapabilities xpsPrintCapabilities;
 
-      var printTicketXElement = xdocument.Root;
-      if (printTicketXElement == null)
+      var printCapabilitiesXElement = xdocument.Root;
+      if (printCapabilitiesXElement == null)
       {
-        xpsPrintTicket = NullXpsPrintTicket.Instance;
+        xpsPrintCapabilities = NullXpsPrintCapabilities.Instance;
       }
       else
       {
-        xpsPrintTicket = this.PrintCapabilitiesReader.ReadXpsPrintTicket(printTicketXElement);
+        xpsPrintCapabilities = this.PrintCapabilitiesReader.ReadXpsPrintCapabilities(printCapabilitiesXElement);
       }
 
-      return xpsPrintTicket;
+      return xpsPrintCapabilities;
     }
 
     /// <exception cref="Exception" />

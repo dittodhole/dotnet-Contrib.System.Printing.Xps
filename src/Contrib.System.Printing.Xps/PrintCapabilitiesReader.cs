@@ -12,10 +12,6 @@ namespace Contrib.System.Printing.Xps
     /// <exception cref="ArgumentNullException"><paramref name="printCapabilitiesXElement" /> is <see langword="null" />.</exception>
     [NotNull]
     IXpsPrintCapabilities ReadXpsPrintCapabilities([NotNull] XElement printCapabilitiesXElement);
-
-    /// <exception cref="ArgumentNullException"><paramref name="printTicketXElement" /> is <see langword="null" />.</exception>
-    [NotNull]
-    IXpsPrintTicket ReadXpsPrintTicket([NotNull] XElement printTicketXElement);
   }
 
   [CanBeNull]
@@ -125,24 +121,20 @@ namespace Contrib.System.Printing.Xps
 
     public PrintCapabilitiesReader()
       : this(new XpsPrintCapabilitiesFactory(),
-             new XpsPrintTicketFactory(),
              new XpsFeatureFactory(),
              new XpsOptionFactory(),
              new XpsPropertyFactory()) { }
 
+    /// <exception cref="ArgumentNullException"><paramref name="xpsPrintCapabilitiesFactory" /> is <see langword="null" />.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="xpsFeatureFactory" /> is <see langword="null" />.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="xpsOptionFactory" /> is <see langword="null" />.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="xpsPrintCapabilitiesFactory" /> is <see langword="null" />.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="xpsPrintTicketFactory" /> is <see langword="null" />.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="xpsPropertyFactory" /> is <see langword="null" />.</exception>
     public PrintCapabilitiesReader([NotNull] IXpsPrintCapabilitiesFactory xpsPrintCapabilitiesFactory,
-                                   [NotNull] IXpsPrintTicketFactory xpsPrintTicketFactory,
                                    [NotNull] IXpsFeatureFactory xpsFeatureFactory,
                                    [NotNull] IXpsOptionFactory xpsOptionFactory,
                                    [NotNull] IXpsPropertyFactory xpsPropertyFactory)
     {
       this.XpsPrintCapabilitiesFactory = xpsPrintCapabilitiesFactory ?? throw new ArgumentNullException(nameof(xpsPrintCapabilitiesFactory));
-      this.XpsPrintTicketFactory = xpsPrintTicketFactory ?? throw new ArgumentNullException(nameof(xpsPrintTicketFactory));
       this.XpsFeatureFactory = xpsFeatureFactory ?? throw new ArgumentNullException(nameof(xpsFeatureFactory));
       this.XpsOptionFactory = xpsOptionFactory ?? throw new ArgumentNullException(nameof(xpsOptionFactory));
       this.XpsPropertyFactory = xpsPropertyFactory ?? throw new ArgumentNullException(nameof(xpsPropertyFactory));
@@ -156,9 +148,6 @@ namespace Contrib.System.Printing.Xps
 
     [NotNull]
     private IXpsPrintCapabilitiesFactory XpsPrintCapabilitiesFactory { get; }
-
-    [NotNull]
-    private IXpsPrintTicketFactory XpsPrintTicketFactory { get; }
 
     [NotNull]
     private IXpsPropertyFactory XpsPropertyFactory { get; }
@@ -192,32 +181,6 @@ namespace Contrib.System.Printing.Xps
       }
 
       return xpsPrintCapabilities;
-    }
-
-    /// <inheritdoc />
-    public virtual IXpsPrintTicket ReadXpsPrintTicket(XElement printTicketXElement)
-    {
-      if (printTicketXElement == null)
-      {
-        throw new ArgumentNullException(nameof(printTicketXElement));
-      }
-
-      var xpsPrintTicket = this.ReadXpsPrintTicketImpl(printTicketXElement);
-
-      return xpsPrintTicket;
-    }
-
-    [NotNull]
-    protected virtual IXpsPrintTicket ReadXpsPrintTicketImpl([NotNull] XElement printTicketXElement)
-    {
-      var xpsPrintTicket = this.XpsPrintTicketFactory.Create();
-
-      {
-        var xpsFeatures = this.ReadXpsFeaturesImpl(printTicketXElement);
-        xpsPrintTicket.AddXpsFeatures(xpsFeatures);
-      }
-
-      return xpsPrintTicket;
     }
 
     [NotNull]
