@@ -32,8 +32,8 @@ namespace Contrib.System.Printing.Xps
 
   public partial class XpsServer
   {
-    internal sealed class XpsInputBinDefinition : IXpsInputBinDefinition,
-                                                  IEquatable<XpsInputBinDefinition>
+    protected sealed class XpsInputBinDefinition : IXpsInputBinDefinition,
+                                                   IEquatable<XpsInputBinDefinition>
     {
       private XpsInputBinDefinition([NotNull] IXpsFeature xpsFeature,
                                     [NotNull] IXpsOption xpsOption,

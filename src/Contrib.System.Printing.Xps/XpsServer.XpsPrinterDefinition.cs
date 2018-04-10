@@ -28,8 +28,8 @@ namespace Contrib.System.Printing.Xps
 
   public partial class XpsServer
   {
-    internal sealed class XpsPrinterDefinition : IXpsPrinterDefinition,
-                                                 IEquatable<XpsPrinterDefinition>
+    protected sealed class XpsPrinterDefinition : IXpsPrinterDefinition,
+                                                  IEquatable<XpsPrinterDefinition>
     {
       private XpsPrinterDefinition([NotNull] string displayName,
                                    [NotNull] string fullName,
