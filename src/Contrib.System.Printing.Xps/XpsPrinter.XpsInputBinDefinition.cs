@@ -35,14 +35,17 @@ namespace Contrib.System.Printing.Xps
     internal sealed class XpsInputBinDefinition : IXpsInputBinDefinition,
                                                   IEquatable<XpsInputBinDefinition>
     {
-      private XpsInputBinDefinition([NotNull] XName featureName,
+      private XpsInputBinDefinition([NotNull] IXpsFeature xpsFeature,
                                     [NotNull] IXpsOption xpsOption,
                                     [NotNull] IXpsPrintTicket xpsPrintTicket)
       {
-        this.FeatureName = featureName;
+        this.XpsFeature = xpsFeature;
         this.XpsOption = xpsOption;
         this.XpsPrintTicket = xpsPrintTicket;
       }
+
+      [NotNull]
+      private IXpsFeature XpsFeature { get; }
 
       [NotNull]
       private IXpsOption XpsOption { get; }
@@ -51,7 +54,7 @@ namespace Contrib.System.Printing.Xps
       private IXpsPrintTicket XpsPrintTicket { get; }
 
       /// <inheritdoc />
-      public XName FeatureName { get; }
+      public XName FeatureName => this.XpsFeature.Name;
 
       /// <inheritdoc />
       public XName Name => this.XpsOption.Name;
@@ -252,11 +255,11 @@ namespace Contrib.System.Printing.Xps
       }
 
       [NotNull]
-      public static XpsInputBinDefinition Create([NotNull] XName xpsFeatureName,
+      public static XpsInputBinDefinition Create([NotNull] IXpsFeature xpsFeature,
                                                  [NotNull] IXpsOption xpsOption,
                                                  [NotNull] IXpsPrintTicket xpsPrintTicket)
       {
-        var xpsInputBinDefinition = new XpsInputBinDefinition(xpsFeatureName,
+        var xpsInputBinDefinition = new XpsInputBinDefinition(xpsFeature,
                                                               xpsOption,
                                                               xpsPrintTicket);
 

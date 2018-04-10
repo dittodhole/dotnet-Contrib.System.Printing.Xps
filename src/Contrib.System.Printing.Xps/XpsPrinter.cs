@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Printing;
@@ -46,7 +45,6 @@ namespace Contrib.System.Printing.Xps
     public virtual IXpsPrinterDefinition[] GetXpsPrinterDefinitions()
     {
       IXpsPrinterDefinition[] result;
-
       using (var printServer = new PrintServer())
       using (var printQueues = printServer.GetLocalAndRemotePrintQueues())
       {
@@ -85,69 +83,32 @@ namespace Contrib.System.Printing.Xps
         }
         else
         {
-          result = this.GetXpsInputBinDefinitionsImpl(printQueue)
-                       .ToArray();
+          var xpsPrintCapabilities = this.GetXpsPrintCapabilitiesImpl(printQueue);
+          var inputBinXpsFeature = xpsPrintCapabilities.GetInputBinXpsFeature();
+          if (inputBinXpsFeature == null)
+          {
+            result = new IXpsInputBinDefinition[0];
+          }
+          else
+          {
+            result = inputBinXpsFeature.GetXpsOptions()
+                                       .Select(xpsOption =>
+                                               {
+                                                 var xpsPrintTicket = this.GetXpsPrintTicketImpl(printQueue,
+                                                                                                 inputBinXpsFeature,
+                                                                                                 xpsOption);
+                                                 var xpsInputBinDefinition = XpsInputBinDefinition.Create(inputBinXpsFeature,
+                                                                                                          xpsOption,
+                                                                                                          xpsPrintTicket);
+                                                 return xpsInputBinDefinition;
+                                               })
+                                       .Cast<IXpsInputBinDefinition>()
+                                       .ToArray();
+          }
         }
       }
 
       return result;
-    }
-
-    /// <exception cref="Exception" />
-    [Pure]
-    [NotNull]
-    [ItemNotNull]
-    protected virtual IEnumerable<IXpsInputBinDefinition> GetXpsInputBinDefinitionsImpl([NotNull] PrintQueue printQueue)
-    {
-      var xpsPrintCapabilities = this.GetXpsPrintCapabilitiesImpl(printQueue);
-
-      var pageInputBinXpsFeature = xpsPrintCapabilities.GetXpsFeature(Xps.PrintCapabilitiesReader.PageInputBinXName);
-      if (pageInputBinXpsFeature != null)
-      {
-        foreach (var xpsOption in pageInputBinXpsFeature.GetXpsOptions())
-        {
-          var xpsPrintTicket = this.GetXpsPrintTicketImpl(pageInputBinXpsFeature.Name,
-                                                          xpsOption,
-                                                          printQueue);
-          var xpsInputBinDefinition = XpsInputBinDefinition.Create(pageInputBinXpsFeature.Name,
-                                                                   xpsOption,
-                                                                   xpsPrintTicket);
-
-          yield return xpsInputBinDefinition;
-        }
-      }
-
-      var documentInputBinXpsFeature = xpsPrintCapabilities.GetXpsFeature(Xps.PrintCapabilitiesReader.DocumentInputBinXName);
-      if (documentInputBinXpsFeature != null)
-      {
-        foreach (var xpsOption in documentInputBinXpsFeature.GetXpsOptions())
-        {
-          var xpsPrintTicket = this.GetXpsPrintTicketImpl(documentInputBinXpsFeature.Name,
-                                                          xpsOption,
-                                                          printQueue);
-          var xpsInputBinDefinition = XpsInputBinDefinition.Create(documentInputBinXpsFeature.Name,
-                                                                   xpsOption,
-                                                                   xpsPrintTicket);
-
-          yield return xpsInputBinDefinition;
-        }
-      }
-
-      var jobInputBinXpsFeature = xpsPrintCapabilities.GetXpsFeature(Xps.PrintCapabilitiesReader.JobInputBinXName);
-      if (jobInputBinXpsFeature != null)
-      {
-        foreach (var xpsOption in jobInputBinXpsFeature.GetXpsOptions())
-        {
-          var xpsPrintTicket = this.GetXpsPrintTicketImpl(jobInputBinXpsFeature.Name,
-                                                          xpsOption,
-                                                          printQueue);
-          var xpsInputBinDefinition = XpsInputBinDefinition.Create(jobInputBinXpsFeature.Name,
-                                                                   xpsOption,
-                                                                   xpsPrintTicket);
-
-          yield return xpsInputBinDefinition;
-        }
-      }
     }
 
     [NotNull]
@@ -184,12 +145,13 @@ namespace Contrib.System.Printing.Xps
     }
 
     [NotNull]
-    protected virtual IXpsPrintTicket GetXpsPrintTicketImpl([NotNull] XName featureXName,
-                                                            [NotNull] IXpsOption xpsOption,
-                                                            [NotNull] PrintQueue printQueue)
+    protected virtual IXpsPrintTicket GetXpsPrintTicketImpl([NotNull] PrintQueue printQueue,
+                                                            [NotNull] IXpsFeature xpsFeature,
+                                                            [NotNull] IXpsOption xpsOption)
     {
       XDocument xdocument;
 
+      var featureXName = xpsFeature.Name;
       var inputBinXName = xpsOption.Name;
       if (inputBinXName == null)
       {
