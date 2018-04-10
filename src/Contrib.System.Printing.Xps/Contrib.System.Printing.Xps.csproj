@@ -21,6 +21,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,6 +31,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Anotar.LibLog, Version=3.3.1.0, Culture=neutral, PublicKeyToken=9d5b24f0733c26f7, processorArchitecture=MSIL">
@@ -56,18 +58,19 @@
     <Compile Include="ExtensionMethods\PrintServerExtensions.cs" />
     <Compile Include="ExtensionMethods\XElementExtensions.cs" />
     <Compile Include="ExtensionMethods\XpsInputBinDefinitionExtensions.cs" />
+    <Compile Include="ExtensionMethods\XpsPrintCapabilitiesExtensions.cs" />
     <Compile Include="ExtensionMethods\XpsPrinterDefinitionExtensions.cs" />
     <Compile Include="NumberHelper.cs" />
     <Compile Include="PrintCapabilitiesReader.cs" />
     <Compile Include="XpsFeature.cs" />
     <Compile Include="XpsOption.cs" />
     <Compile Include="XpsPrintCapabilities.cs" />
-    <Compile Include="XpsPrinter.cs" />
+    <Compile Include="XpsServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XpsPrinter.NullXpsPrintCapabilities.cs" />
-    <Compile Include="XpsPrinter.NullXpsPrintTicket.cs" />
-    <Compile Include="XpsPrinter.XpsInputBinDefinition.cs" />
-    <Compile Include="XpsPrinter.XpsPrinterDefinition.cs" />
+    <Compile Include="XpsServer.NullXpsPrintCapabilities.cs" />
+    <Compile Include="XpsServer.NullXpsPrintTicket.cs" />
+    <Compile Include="XpsServer.XpsInputBinDefinition.cs" />
+    <Compile Include="XpsServer.XpsPrinterDefinition.cs" />
     <Compile Include="XpsPrintTicket.cs" />
     <Compile Include="XpsProperty.cs" />
   </ItemGroup>

@@ -7,15 +7,43 @@ namespace Contrib.System.Printing.Xps
 {
   public interface IXpsProperty
   {
-    /// <seealso cref="PrintCapabilitiesReader.DisplayNameXName"/>
-    /// <seealso cref="PrintCapabilitiesReader.MediaSizeWidthXName"/>
-    /// <seealso cref="PrintCapabilitiesReader.MediaSizeHeightXName"/>
-    /// <seealso cref="PrintCapabilitiesReader.ImageableSizeWidthXName"/>
-    /// <seealso cref="PrintCapabilitiesReader.ImageableSizeHeightXName"/>
-    /// <seealso cref="PrintCapabilitiesReader.PageImageableSizeXName"/>
+    /// <remarks>
+    ///   The value is one of the following (but not limited to):
+    ///   <list type="bullet">
+    ///     <item>
+    ///       <description><see cref="PrintCapabilitiesReader.DisplayNameXName"/></description>
+    ///     </item>
+    ///     <item>
+    ///       <description><see cref="PrintCapabilitiesReader.MediaSizeWidthXName"/></description>
+    ///     </item>
+    ///     <item>
+    ///       <description><see cref="PrintCapabilitiesReader.MediaSizeHeightXName"/></description>
+    ///     </item>
+    ///     <item>
+    ///       <description><see cref="PrintCapabilitiesReader.ImageableSizeWidthXName"/></description>
+    ///     </item>
+    ///     <item>
+    ///       <description><see cref="PrintCapabilitiesReader.ImageableSizeHeightXName"/></description>
+    ///     </item>
+    ///     <item>
+    ///       <description><see cref="PrintCapabilitiesReader.PageImageableSizeXName"/></description>
+    ///     </item>
+    ///   </list>
+    /// </remarks>
     [NotNull]
     XName Name { get; }
 
+    /// <remarks>
+    ///   The value is one of the following:
+    ///   <list type="bullet">
+    ///     <item>
+    ///       <description><see cref="PrintCapabilitiesReader.PropertyElementXName"/></description>
+    ///     </item>
+    ///     <item>
+    ///       <description><see cref="PrintCapabilitiesReader.ScoredPropertyElementXName"/></description>
+    ///     </item>
+    ///   </list>
+    /// </remarks>
     [NotNull]
     XName Type { get; }
 

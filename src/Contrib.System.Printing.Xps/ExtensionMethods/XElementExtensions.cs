@@ -6,6 +6,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
   public static class XElementExtensions
   {
+    /// <returns>The prefix of the namespace registration is returned.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/></exception>
     /// <exception cref="ArgumentNullException"><paramref name="xname"/> is <see langword="null"/></exception>
     /// <exception cref="Exception" />
@@ -36,7 +37,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       return prefix;
     }
 
-    /// <returns>ns0000</returns>
+    /// <remarks>The prefix is constructed via following pattern: "ns{0000}"</remarks>
     /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/></exception>
     [Pure]
     [NotNull]

@@ -7,9 +7,20 @@ namespace Contrib.System.Printing.Xps
 {
   public interface IXpsInputBinDefinition
   {
-    /// <seealso cref="PrintCapabilitiesReader.JobInputBinXName"/>
-    /// <seealso cref="PrintCapabilitiesReader.PageInputBinXName"/>
-    /// <seealso cref="PrintCapabilitiesReader.DocumentInputBinXName"/>
+    /// <remarks>
+    ///   The value is one of the following:
+    ///   <list type="bullet">
+    ///     <item>
+    ///       <description><see cref="PrintCapabilitiesReader.PageInputBinXName"/></description>
+    ///     </item>
+    ///     <item>
+    ///       <description><see cref="PrintCapabilitiesReader.DocumentInputBinXName"/></description>
+    ///     </item>
+    ///     <item>
+    ///       <description><see cref="PrintCapabilitiesReader.JobInputBinXName"/></description>
+    ///     </item>
+    ///   </list>
+    /// </remarks>
     [NotNull]
     XName FeatureName { get; }
 
@@ -25,24 +36,26 @@ namespace Contrib.System.Printing.Xps
     [CanBeNull]
     long? MediaSizeHeight { get; }
 
-    /// <returns>{http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords}Manual</returns>
     [CanBeNull]
     XName FeedType { get; }
   }
 
-  public partial class XpsPrinter
+  public partial class XpsServer
   {
-    internal sealed class XpsInputBinDefinition : IXpsInputBinDefinition,
-                                                  IEquatable<XpsInputBinDefinition>
+    protected sealed class XpsInputBinDefinition : IXpsInputBinDefinition,
+                                                   IEquatable<XpsInputBinDefinition>
     {
-      private XpsInputBinDefinition([NotNull] XName featureName,
+      private XpsInputBinDefinition([NotNull] IXpsFeature xpsFeature,
                                     [NotNull] IXpsOption xpsOption,
                                     [NotNull] IXpsPrintTicket xpsPrintTicket)
       {
-        this.FeatureName = featureName;
+        this.XpsFeature = xpsFeature;
         this.XpsOption = xpsOption;
         this.XpsPrintTicket = xpsPrintTicket;
       }
+
+      [NotNull]
+      private IXpsFeature XpsFeature { get; }
 
       [NotNull]
       private IXpsOption XpsOption { get; }
@@ -51,7 +64,7 @@ namespace Contrib.System.Printing.Xps
       private IXpsPrintTicket XpsPrintTicket { get; }
 
       /// <inheritdoc />
-      public XName FeatureName { get; }
+      public XName FeatureName => this.XpsFeature.Name;
 
       /// <inheritdoc />
       public XName Name => this.XpsOption.Name;
@@ -252,11 +265,11 @@ namespace Contrib.System.Printing.Xps
       }
 
       [NotNull]
-      public static XpsInputBinDefinition Create([NotNull] XName xpsFeatureName,
+      public static XpsInputBinDefinition Create([NotNull] IXpsFeature xpsFeature,
                                                  [NotNull] IXpsOption xpsOption,
                                                  [NotNull] IXpsPrintTicket xpsPrintTicket)
       {
-        var xpsInputBinDefinition = new XpsInputBinDefinition(xpsFeatureName,
+        var xpsInputBinDefinition = new XpsInputBinDefinition(xpsFeature,
                                                               xpsOption,
                                                               xpsPrintTicket);
 

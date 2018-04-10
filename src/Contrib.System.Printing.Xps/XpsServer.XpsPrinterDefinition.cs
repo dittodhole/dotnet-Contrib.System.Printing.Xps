@@ -26,10 +26,10 @@ namespace Contrib.System.Printing.Xps
     long? ImageableSizeHeight { get; }
   }
 
-  public partial class XpsPrinter
+  public partial class XpsServer
   {
-    internal sealed class XpsPrinterDefinition : IXpsPrinterDefinition,
-                                                 IEquatable<XpsPrinterDefinition>
+    protected sealed class XpsPrinterDefinition : IXpsPrinterDefinition,
+                                                  IEquatable<XpsPrinterDefinition>
     {
       private XpsPrinterDefinition([NotNull] string displayName,
                                    [NotNull] string fullName,
@@ -189,13 +189,16 @@ namespace Contrib.System.Printing.Xps
       }
 
       [NotNull]
-      public static XpsPrinterDefinition Create([NotNull] PrintQueue printQueue,
+      public static XpsPrinterDefinition Create([NotNull] string displayName,
+                                                [NotNull] string fullName,
+                                                [CanBeNull] string portName,
+                                                [CanBeNull] string driverName,
                                                 [NotNull] IXpsPrintCapabilities xpsPrintCapabilities)
       {
-        var xpsPrinterDefinition = new XpsPrinterDefinition(printQueue.Name,
-                                                            printQueue.FullName,
-                                                            printQueue.QueuePort?.Name,
-                                                            printQueue.QueueDriver?.Name,
+        var xpsPrinterDefinition = new XpsPrinterDefinition(displayName,
+                                                            fullName,
+                                                            portName,
+                                                            driverName,
                                                             xpsPrintCapabilities);
 
         return xpsPrinterDefinition;

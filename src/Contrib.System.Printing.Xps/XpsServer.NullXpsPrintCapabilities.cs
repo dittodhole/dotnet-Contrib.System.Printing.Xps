@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps
 {
-  public partial class XpsPrinter
+  public partial class XpsServer
   {
     protected sealed class NullXpsPrintCapabilities : IXpsPrintCapabilities
     {
