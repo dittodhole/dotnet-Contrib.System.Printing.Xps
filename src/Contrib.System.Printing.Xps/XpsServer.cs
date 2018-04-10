@@ -110,8 +110,8 @@ namespace Contrib.System.Printing.Xps
                                        .Select(xpsOption =>
                                                {
                                                  var xpsPrintTicket = this.GetXpsPrintCapabilitiesImpl(printQueue,
-                                                                                                 inputBinXpsFeature,
-                                                                                                 xpsOption);
+                                                                                                       inputBinXpsFeature,
+                                                                                                       xpsOption);
                                                  var xpsInputBinDefinition = this.XpsInputBinDefinitionFactory.Create(inputBinXpsFeature,
                                                                                                                       xpsOption,
                                                                                                                       xpsPrintTicket);
