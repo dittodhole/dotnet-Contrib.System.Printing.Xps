@@ -447,10 +447,12 @@ namespace Contrib.System.Printing.Xps
           if (xnameValue == null)
           {
             LogTo.Warn($"Could not get {nameof(xnameValue)} from {nameof(valueXElement)}: {valueXElement}");
-            return value;
+            value = null;
           }
-
-          value = xnameValue;
+          else
+          {
+            value = xnameValue;
+          }
         }
         else
         {
