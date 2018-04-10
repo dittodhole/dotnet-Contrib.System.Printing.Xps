@@ -8,10 +8,20 @@ namespace Contrib.System.Printing.Xps
 {
   public interface IXpsFeature
   {
-    /// <seealso cref="PrintCapabilitiesReader.JobInputBinXName"/>
-    /// <seealso cref="PrintCapabilitiesReader.PageInputBinXName"/>
-    /// <seealso cref="PrintCapabilitiesReader.DocumentInputBinXName"/>
-    /// <seealso cref="PrintCapabilitiesReader.PageMediaSizeXName"/>
+    /// <remarks>
+    ///   The value is one of the following (but not limited to):
+    ///   <list type="bullet">
+    ///     <item>
+    ///       <description><see cref="PrintCapabilitiesReader.PageInputBinXName"/></description>
+    ///     </item>
+    ///     <item>
+    ///       <description><see cref="PrintCapabilitiesReader.DocumentInputBinXName"/></description>
+    ///     </item>
+    ///     <item>
+    ///       <description><see cref="PrintCapabilitiesReader.JobInputBinXName"/></description>
+    ///     </item>
+    ///   </list>
+    /// </remarks>
     [NotNull]
     XName Name { get; }
 

@@ -7,9 +7,20 @@ namespace Contrib.System.Printing.Xps
 {
   public interface IXpsInputBinDefinition
   {
-    /// <seealso cref="PrintCapabilitiesReader.JobInputBinXName"/>
-    /// <seealso cref="PrintCapabilitiesReader.PageInputBinXName"/>
-    /// <seealso cref="PrintCapabilitiesReader.DocumentInputBinXName"/>
+    /// <remarks>
+    ///   The value is one of the following:
+    ///   <list type="bullet">
+    ///     <item>
+    ///       <description><see cref="PrintCapabilitiesReader.PageInputBinXName"/></description>
+    ///     </item>
+    ///     <item>
+    ///       <description><see cref="PrintCapabilitiesReader.DocumentInputBinXName"/></description>
+    ///     </item>
+    ///     <item>
+    ///       <description><see cref="PrintCapabilitiesReader.JobInputBinXName"/></description>
+    ///     </item>
+    ///   </list>
+    /// </remarks>
     [NotNull]
     XName FeatureName { get; }
 
@@ -25,7 +36,6 @@ namespace Contrib.System.Printing.Xps
     [CanBeNull]
     long? MediaSizeHeight { get; }
 
-    /// <returns>{http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords}Manual</returns>
     [CanBeNull]
     XName FeedType { get; }
   }
