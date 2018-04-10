@@ -30,7 +30,7 @@ namespace Contrib.System.Printing.Xps
     XName FeedType { get; }
   }
 
-  public partial class XpsPrinter
+  public partial class XpsServer
   {
     internal sealed class XpsInputBinDefinition : IXpsInputBinDefinition,
                                                   IEquatable<XpsInputBinDefinition>

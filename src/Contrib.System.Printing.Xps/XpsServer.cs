@@ -9,7 +9,7 @@ using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps
 {
-  public interface IXpsPrinter
+  public interface IXpsServer
   {
     /// <exception cref="Exception" />
     [Pure]
@@ -25,15 +25,15 @@ namespace Contrib.System.Printing.Xps
     IXpsInputBinDefinition[] GetXpsInputBinDefinitions([NotNull] IXpsPrinterDefinition xpsPrinterDefinition);
   }
 
-  public partial class XpsPrinter : IXpsPrinter
+  public partial class XpsServer : IXpsServer
   {
-    public XpsPrinter()
+    public XpsServer()
     {
       this.PrintCapabilitiesReader = new PrintCapabilitiesReader();
     }
 
     /// <exception cref="ArgumentNullException"><paramref name="printCapabilitiesReader" /> is <see langword="null" />.</exception>
-    public XpsPrinter([NotNull] IPrintCapabilitiesReader printCapabilitiesReader)
+    public XpsServer([NotNull] IPrintCapabilitiesReader printCapabilitiesReader)
     {
       this.PrintCapabilitiesReader = printCapabilitiesReader ?? throw new ArgumentNullException(nameof(printCapabilitiesReader));
     }

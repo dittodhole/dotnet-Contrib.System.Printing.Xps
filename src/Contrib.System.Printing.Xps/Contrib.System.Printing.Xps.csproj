@@ -65,12 +65,12 @@
     <Compile Include="XpsFeature.cs" />
     <Compile Include="XpsOption.cs" />
     <Compile Include="XpsPrintCapabilities.cs" />
-    <Compile Include="XpsPrinter.cs" />
+    <Compile Include="XpsServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XpsPrinter.NullXpsPrintCapabilities.cs" />
-    <Compile Include="XpsPrinter.NullXpsPrintTicket.cs" />
-    <Compile Include="XpsPrinter.XpsInputBinDefinition.cs" />
-    <Compile Include="XpsPrinter.XpsPrinterDefinition.cs" />
+    <Compile Include="XpsServer.NullXpsPrintCapabilities.cs" />
+    <Compile Include="XpsServer.NullXpsPrintTicket.cs" />
+    <Compile Include="XpsServer.XpsInputBinDefinition.cs" />
+    <Compile Include="XpsServer.XpsPrinterDefinition.cs" />
     <Compile Include="XpsPrintTicket.cs" />
     <Compile Include="XpsProperty.cs" />
   </ItemGroup>

@@ -26,7 +26,7 @@ namespace Contrib.System.Printing.Xps
     long? ImageableSizeHeight { get; }
   }
 
-  public partial class XpsPrinter
+  public partial class XpsServer
   {
     internal sealed class XpsPrinterDefinition : IXpsPrinterDefinition,
                                                  IEquatable<XpsPrinterDefinition>
