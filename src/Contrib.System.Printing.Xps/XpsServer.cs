@@ -28,18 +28,30 @@ namespace Contrib.System.Printing.Xps
   public partial class XpsServer : IXpsServer
   {
     public XpsServer()
-    {
-      this.PrintCapabilitiesReader = new PrintCapabilitiesReader();
-    }
+      : this(new PrintCapabilitiesReader(),
+             new XpsPrinterDefinitionFactory(),
+             new XpsInputBinDefinitionFactory()) { }
 
     /// <exception cref="ArgumentNullException"><paramref name="printCapabilitiesReader" /> is <see langword="null" />.</exception>
-    public XpsServer([NotNull] IPrintCapabilitiesReader printCapabilitiesReader)
+    /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinitionFactory" /> is <see langword="null" />.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="xpsInputBinDefinitionFactory" /> is <see langword="null" />.</exception>
+    public XpsServer([NotNull] IPrintCapabilitiesReader printCapabilitiesReader,
+                     [NotNull] IXpsPrinterDefinitionFactory xpsPrinterDefinitionFactory,
+                     [NotNull] IXpsInputBinDefinitionFactory xpsInputBinDefinitionFactory)
     {
       this.PrintCapabilitiesReader = printCapabilitiesReader ?? throw new ArgumentNullException(nameof(printCapabilitiesReader));
+      this.XpsPrinterDefinitionFactory = xpsPrinterDefinitionFactory;
+      this.XpsInputBinDefinitionFactory = xpsInputBinDefinitionFactory;
     }
 
     [NotNull]
     private IPrintCapabilitiesReader PrintCapabilitiesReader { get; }
+
+    [NotNull]
+    private IXpsPrinterDefinitionFactory XpsPrinterDefinitionFactory { get; }
+
+    [NotNull]
+    private IXpsInputBinDefinitionFactory XpsInputBinDefinitionFactory { get; }
 
     /// <inheritdoc />
     public virtual IXpsPrinterDefinition[] GetXpsPrinterDefinitions()
@@ -51,11 +63,11 @@ namespace Contrib.System.Printing.Xps
         result = printQueues.Select(printQueue =>
                                     {
                                       var xpsPrintCapabilities = this.GetXpsPrintCapabilitiesImpl(printQueue);
-                                      var xpsPrinterDefinition = XpsPrinterDefinition.Create(printQueue.Name,
-                                                                                             printQueue.FullName,
-                                                                                             printQueue.QueuePort?.Name,
-                                                                                             printQueue.QueueDriver?.Name,
-                                                                                             xpsPrintCapabilities);
+                                      var xpsPrinterDefinition = this.XpsPrinterDefinitionFactory.Create(printQueue.Name,
+                                                                                                         printQueue.FullName,
+                                                                                                         printQueue.QueuePort?.Name,
+                                                                                                         printQueue.QueueDriver?.Name,
+                                                                                                         xpsPrintCapabilities);
 
                                       return xpsPrinterDefinition;
                                     })
@@ -86,8 +98,8 @@ namespace Contrib.System.Printing.Xps
         }
         else
         {
-          var xpsPrintCapabilities = this.GetXpsPrintCapabilitiesImpl(printQueue);
-          var inputBinXpsFeature = xpsPrintCapabilities.GetInputBinXpsFeature();
+          var inputBinXpsFeature = this.GetXpsPrintCapabilitiesImpl(printQueue)
+                                       .GetInputBinXpsFeature();
           if (inputBinXpsFeature == null)
           {
             result = new IXpsInputBinDefinition[0];
@@ -97,15 +109,14 @@ namespace Contrib.System.Printing.Xps
             result = inputBinXpsFeature.GetXpsOptions()
                                        .Select(xpsOption =>
                                                {
-                                                 var xpsPrintTicket = this.GetXpsPrintTicketImpl(printQueue,
-                                                                                                 inputBinXpsFeature,
-                                                                                                 xpsOption);
-                                                 var xpsInputBinDefinition = XpsInputBinDefinition.Create(inputBinXpsFeature,
-                                                                                                          xpsOption,
-                                                                                                          xpsPrintTicket);
+                                                 var xpsPrintCapabilities = this.GetXpsPrintCapabilitiesImpl(printQueue,
+                                                                                                             inputBinXpsFeature,
+                                                                                                             xpsOption);
+                                                 var xpsInputBinDefinition = this.XpsInputBinDefinitionFactory.Create(inputBinXpsFeature,
+                                                                                                                      xpsOption,
+                                                                                                                      xpsPrintCapabilities);
                                                  return xpsInputBinDefinition;
                                                })
-                                       .Cast<IXpsInputBinDefinition>()
                                        .ToArray();
           }
         }
@@ -132,25 +143,15 @@ namespace Contrib.System.Printing.Xps
         xdocument = new XDocument();
       }
 
-      IXpsPrintCapabilities xpsPrintCapabilities;
-
-      var printCapabilitiesXElement = xdocument.Root;
-      if (printCapabilitiesXElement == null)
-      {
-        xpsPrintCapabilities = NullXpsPrintCapabilities.Instance;
-      }
-      else
-      {
-        xpsPrintCapabilities = this.PrintCapabilitiesReader.ReadXpsPrintCapabilities(printCapabilitiesXElement);
-      }
+      var xpsPrintCapabilities = this.GetXpsPrintCapabilitiesImpl(xdocument);
 
       return xpsPrintCapabilities;
     }
 
     [NotNull]
-    protected virtual IXpsPrintTicket GetXpsPrintTicketImpl([NotNull] PrintQueue printQueue,
-                                                            [NotNull] IXpsFeature xpsFeature,
-                                                            [NotNull] IXpsOption xpsOption)
+    protected virtual IXpsPrintCapabilities GetXpsPrintCapabilitiesImpl([NotNull] PrintQueue printQueue,
+                                                                        [NotNull] IXpsFeature xpsFeature,
+                                                                        [NotNull] IXpsOption xpsOption)
     {
       XDocument xdocument;
 
@@ -180,19 +181,27 @@ namespace Contrib.System.Printing.Xps
         }
       }
 
-      IXpsPrintTicket xpsPrintTicket;
+      var xpsPrintCapabilities = this.GetXpsPrintCapabilitiesImpl(xdocument);
 
-      var printTicketXElement = xdocument.Root;
-      if (printTicketXElement == null)
+      return xpsPrintCapabilities;
+    }
+
+    [NotNull]
+    protected virtual IXpsPrintCapabilities GetXpsPrintCapabilitiesImpl([NotNull] XDocument xdocument)
+    {
+      IXpsPrintCapabilities xpsPrintCapabilities;
+
+      var printCapabilitiesXElement = xdocument.Root;
+      if (printCapabilitiesXElement == null)
       {
-        xpsPrintTicket = NullXpsPrintTicket.Instance;
+        xpsPrintCapabilities = NullXpsPrintCapabilities.Instance;
       }
       else
       {
-        xpsPrintTicket = this.PrintCapabilitiesReader.ReadXpsPrintTicket(printTicketXElement);
+        xpsPrintCapabilities = this.PrintCapabilitiesReader.ReadXpsPrintCapabilities(printCapabilitiesXElement);
       }
 
-      return xpsPrintTicket;
+      return xpsPrintCapabilities;
     }
 
     /// <exception cref="Exception" />

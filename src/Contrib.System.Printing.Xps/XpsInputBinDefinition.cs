@@ -40,18 +40,27 @@ namespace Contrib.System.Printing.Xps
     XName FeedType { get; }
   }
 
-  public partial class XpsServer
+  public interface IXpsInputBinDefinitionFactory
   {
-    protected sealed class XpsInputBinDefinition : IXpsInputBinDefinition,
-                                                   IEquatable<XpsInputBinDefinition>
+    [NotNull]
+    IXpsInputBinDefinition Create([NotNull] IXpsFeature xpsFeature,
+                                  [NotNull] IXpsOption xpsOption,
+                                  [NotNull] IXpsPrintCapabilities xpsPrintCapabilities);
+
+  }
+
+  public sealed class XpsInputBinDefinitionFactory : IXpsInputBinDefinitionFactory
+  {
+    private sealed class XpsInputBinDefinition : IXpsInputBinDefinition,
+                                                 IEquatable<XpsInputBinDefinition>
     {
-      private XpsInputBinDefinition([NotNull] IXpsFeature xpsFeature,
-                                    [NotNull] IXpsOption xpsOption,
-                                    [NotNull] IXpsPrintTicket xpsPrintTicket)
+      public XpsInputBinDefinition([NotNull] IXpsFeature xpsFeature,
+                                   [NotNull] IXpsOption xpsOption,
+                                   [NotNull] IXpsPrintCapabilities xpsPrintCapabilities)
       {
         this.XpsFeature = xpsFeature;
         this.XpsOption = xpsOption;
-        this.XpsPrintTicket = xpsPrintTicket;
+        this.XpsPrintCapabilities = xpsPrintCapabilities;
       }
 
       [NotNull]
@@ -61,7 +70,7 @@ namespace Contrib.System.Printing.Xps
       private IXpsOption XpsOption { get; }
 
       [NotNull]
-      private IXpsPrintTicket XpsPrintTicket { get; }
+      private IXpsPrintCapabilities XpsPrintCapabilities { get; }
 
       /// <inheritdoc />
       public XName FeatureName => this.XpsFeature.Name;
@@ -163,7 +172,7 @@ namespace Contrib.System.Printing.Xps
       {
         long? pageMediaSize;
 
-        var xpsFeature = this.XpsPrintTicket.GetXpsFeature(Xps.PrintCapabilitiesReader.PageMediaSizeXName);
+        var xpsFeature = this.XpsPrintCapabilities.GetXpsFeature(Xps.PrintCapabilitiesReader.PageMediaSizeXName);
         if (xpsFeature != null)
         {
           var xpsOptions = xpsFeature.GetXpsOptions();
@@ -263,18 +272,18 @@ namespace Contrib.System.Printing.Xps
       {
         return this.Name.ToString();
       }
+    }
 
-      [NotNull]
-      public static XpsInputBinDefinition Create([NotNull] IXpsFeature xpsFeature,
-                                                 [NotNull] IXpsOption xpsOption,
-                                                 [NotNull] IXpsPrintTicket xpsPrintTicket)
-      {
-        var xpsInputBinDefinition = new XpsInputBinDefinition(xpsFeature,
-                                                              xpsOption,
-                                                              xpsPrintTicket);
+    /// <inheritdoc />
+    public IXpsInputBinDefinition Create(IXpsFeature xpsFeature,
+                                         IXpsOption xpsOption,
+                                         IXpsPrintCapabilities xpsPrintCapabilities)
+    {
+      var xpsInputBinDefinition = new XpsInputBinDefinition(xpsFeature,
+                                                            xpsOption,
+                                                            xpsPrintCapabilities);
 
-        return xpsInputBinDefinition;
-      }
+      return xpsInputBinDefinition;
     }
   }
 }

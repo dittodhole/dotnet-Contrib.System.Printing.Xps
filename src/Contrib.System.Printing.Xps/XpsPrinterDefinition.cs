@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Printing;
 using System.Xml.Linq;
 using JetBrains.Annotations;
 
@@ -26,16 +25,26 @@ namespace Contrib.System.Printing.Xps
     long? ImageableSizeHeight { get; }
   }
 
-  public partial class XpsServer
+  public interface IXpsPrinterDefinitionFactory
   {
-    protected sealed class XpsPrinterDefinition : IXpsPrinterDefinition,
-                                                  IEquatable<XpsPrinterDefinition>
+    [NotNull]
+    IXpsPrinterDefinition Create([NotNull] string displayName,
+                                 [NotNull] string fullName,
+                                 [CanBeNull] string portName,
+                                 [CanBeNull] string driverName,
+                                 [NotNull] IXpsPrintCapabilities xpsPrintCapabilities);
+  }
+
+  public sealed class XpsPrinterDefinitionFactory : IXpsPrinterDefinitionFactory
+  {
+    private sealed class XpsPrinterDefinition : IXpsPrinterDefinition,
+                                                IEquatable<XpsPrinterDefinition>
     {
-      private XpsPrinterDefinition([NotNull] string displayName,
-                                   [NotNull] string fullName,
-                                   [CanBeNull] string portName,
-                                   [CanBeNull] string driverName,
-                                   [NotNull] IXpsPrintCapabilities xpsPrintCapabilities)
+      public XpsPrinterDefinition([NotNull] string displayName,
+                                  [NotNull] string fullName,
+                                  [CanBeNull] string portName,
+                                  [CanBeNull] string driverName,
+                                  [NotNull] IXpsPrintCapabilities xpsPrintCapabilities)
       {
         this.DisplayName = displayName;
         this.FullName = fullName;
@@ -187,22 +196,22 @@ namespace Contrib.System.Printing.Xps
       {
         return this.FullName;
       }
+    }
 
-      [NotNull]
-      public static XpsPrinterDefinition Create([NotNull] string displayName,
-                                                [NotNull] string fullName,
-                                                [CanBeNull] string portName,
-                                                [CanBeNull] string driverName,
-                                                [NotNull] IXpsPrintCapabilities xpsPrintCapabilities)
-      {
-        var xpsPrinterDefinition = new XpsPrinterDefinition(displayName,
-                                                            fullName,
-                                                            portName,
-                                                            driverName,
-                                                            xpsPrintCapabilities);
+    /// <inheritdoc />
+    public IXpsPrinterDefinition Create(string displayName,
+                                        string fullName,
+                                        string portName,
+                                        string driverName,
+                                        IXpsPrintCapabilities xpsPrintCapabilities)
+    {
+      var xpsPrinterDefinition = new XpsPrinterDefinition(displayName,
+                                                          fullName,
+                                                          portName,
+                                                          driverName,
+                                                          xpsPrintCapabilities);
 
-        return xpsPrinterDefinition;
-      }
+      return xpsPrinterDefinition;
     }
   }
 }
