@@ -15,31 +15,11 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         throw new ArgumentNullException(nameof(xpsPrintCapabilities));
       }
 
-      {
-        var pageInputBinXpsFeature = xpsPrintCapabilities.GetXpsFeature(PrintCapabilitiesReader.PageInputBinXName);
-        if (pageInputBinXpsFeature != null)
-        {
-          return pageInputBinXpsFeature;
-        }
-      }
+      var result = xpsPrintCapabilities.GetXpsFeature(PrintCapabilitiesReader.PageInputBinXName)
+                   ?? xpsPrintCapabilities.GetXpsFeature(PrintCapabilitiesReader.DocumentInputBinXName)
+                   ?? xpsPrintCapabilities.GetXpsFeature(PrintCapabilitiesReader.JobInputBinXName);
 
-      {
-        var documentInputBinXpsFeature = xpsPrintCapabilities.GetXpsFeature(PrintCapabilitiesReader.DocumentInputBinXName);
-        if (documentInputBinXpsFeature != null)
-        {
-          return documentInputBinXpsFeature;
-        }
-      }
-
-      {
-        var jobInputBinXpsFeature = xpsPrintCapabilities.GetXpsFeature(PrintCapabilitiesReader.JobInputBinXName);
-        if (jobInputBinXpsFeature != null)
-        {
-          return jobInputBinXpsFeature;
-        }
-      }
-
-      return null;
+      return result;
     }
   }
 }
