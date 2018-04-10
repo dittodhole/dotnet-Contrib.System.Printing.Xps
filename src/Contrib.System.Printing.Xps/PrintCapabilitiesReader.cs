@@ -141,10 +141,10 @@ namespace Contrib.System.Printing.Xps
                                    [NotNull] IXpsOptionFactory xpsOptionFactory,
                                    [NotNull] IXpsPropertyFactory xpsPropertyFactory)
     {
-      this.XpsFeatureFactory = xpsFeatureFactory ?? throw new ArgumentNullException(nameof(xpsFeatureFactory));
-      this.XpsOptionFactory = xpsOptionFactory ?? throw new ArgumentNullException(nameof(xpsOptionFactory));
       this.XpsPrintCapabilitiesFactory = xpsPrintCapabilitiesFactory ?? throw new ArgumentNullException(nameof(xpsPrintCapabilitiesFactory));
       this.XpsPrintTicketFactory = xpsPrintTicketFactory ?? throw new ArgumentNullException(nameof(xpsPrintTicketFactory));
+      this.XpsFeatureFactory = xpsFeatureFactory ?? throw new ArgumentNullException(nameof(xpsFeatureFactory));
+      this.XpsOptionFactory = xpsOptionFactory ?? throw new ArgumentNullException(nameof(xpsOptionFactory));
       this.XpsPropertyFactory = xpsPropertyFactory ?? throw new ArgumentNullException(nameof(xpsPropertyFactory));
     }
 
