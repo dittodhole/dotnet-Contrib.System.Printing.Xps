@@ -366,15 +366,16 @@ namespace Contrib.System.Printing.Xps
       }
 
       object value;
-
-      var valueXElement = propertyXElement.Element(PrintCapabilitiesReader.ValueElementXName);
-      if (valueXElement == null)
       {
-        value = null;
-      }
-      else
-      {
-        value = this.ReadValueImpl(valueXElement);
+        var valueXElement = propertyXElement.Element(PrintCapabilitiesReader.ValueElementXName);
+        if (valueXElement == null)
+        {
+          value = null;
+        }
+        else
+        {
+          value = this.ReadValueImpl(valueXElement);
+        }
       }
 
       IXpsProperty xpsProperty;
