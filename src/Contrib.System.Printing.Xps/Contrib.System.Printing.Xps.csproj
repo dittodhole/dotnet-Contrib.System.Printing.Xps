@@ -58,6 +58,7 @@
     <Compile Include="ExtensionMethods\PrintServerExtensions.cs" />
     <Compile Include="ExtensionMethods\XElementExtensions.cs" />
     <Compile Include="ExtensionMethods\XpsInputBinDefinitionExtensions.cs" />
+    <Compile Include="ExtensionMethods\XpsPrintCapabilitiesExtensions.cs" />
     <Compile Include="ExtensionMethods\XpsPrinterDefinitionExtensions.cs" />
     <Compile Include="NumberHelper.cs" />
     <Compile Include="PrintCapabilitiesReader.cs" />
