@@ -40,14 +40,23 @@ namespace Contrib.System.Printing.Xps
     XName FeedType { get; }
   }
 
-  public partial class XpsServer
+  public interface IXpsInputBinDefinitionFactory
   {
-    protected sealed class XpsInputBinDefinition : IXpsInputBinDefinition,
-                                                   IEquatable<XpsInputBinDefinition>
+    [NotNull]
+    IXpsInputBinDefinition Create([NotNull] IXpsFeature xpsFeature,
+                                  [NotNull] IXpsOption xpsOption,
+                                  [NotNull] IXpsPrintTicket xpsPrintTicket);
+
+  }
+
+  public sealed class XpsInputBinDefinitionFactory : IXpsInputBinDefinitionFactory
+  {
+    private sealed class XpsInputBinDefinition : IXpsInputBinDefinition,
+                                                 IEquatable<XpsInputBinDefinition>
     {
-      private XpsInputBinDefinition([NotNull] IXpsFeature xpsFeature,
-                                    [NotNull] IXpsOption xpsOption,
-                                    [NotNull] IXpsPrintTicket xpsPrintTicket)
+      public XpsInputBinDefinition([NotNull] IXpsFeature xpsFeature,
+                                   [NotNull] IXpsOption xpsOption,
+                                   [NotNull] IXpsPrintTicket xpsPrintTicket)
       {
         this.XpsFeature = xpsFeature;
         this.XpsOption = xpsOption;
@@ -263,18 +272,18 @@ namespace Contrib.System.Printing.Xps
       {
         return this.Name.ToString();
       }
+    }
 
-      [NotNull]
-      public static XpsInputBinDefinition Create([NotNull] IXpsFeature xpsFeature,
-                                                 [NotNull] IXpsOption xpsOption,
-                                                 [NotNull] IXpsPrintTicket xpsPrintTicket)
-      {
-        var xpsInputBinDefinition = new XpsInputBinDefinition(xpsFeature,
-                                                              xpsOption,
-                                                              xpsPrintTicket);
+    /// <inheritdoc />
+    public IXpsInputBinDefinition Create(IXpsFeature xpsFeature,
+                                         IXpsOption xpsOption,
+                                         IXpsPrintTicket xpsPrintTicket)
+    {
+      var xpsInputBinDefinition = new XpsInputBinDefinition(xpsFeature,
+                                                            xpsOption,
+                                                            xpsPrintTicket);
 
-        return xpsInputBinDefinition;
-      }
+      return xpsInputBinDefinition;
     }
   }
 }

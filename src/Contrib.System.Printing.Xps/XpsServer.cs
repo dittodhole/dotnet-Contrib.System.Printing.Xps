@@ -28,18 +28,30 @@ namespace Contrib.System.Printing.Xps
   public partial class XpsServer : IXpsServer
   {
     public XpsServer()
-    {
-      this.PrintCapabilitiesReader = new PrintCapabilitiesReader();
-    }
+      : this(new PrintCapabilitiesReader(),
+             new XpsPrinterDefinitionFactory(),
+             new XpsInputBinDefinitionFactory()) { }
 
     /// <exception cref="ArgumentNullException"><paramref name="printCapabilitiesReader" /> is <see langword="null" />.</exception>
-    public XpsServer([NotNull] IPrintCapabilitiesReader printCapabilitiesReader)
+    /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinitionFactory" /> is <see langword="null" />.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="xpsInputBinDefinitionFactory" /> is <see langword="null" />.</exception>
+    public XpsServer([NotNull] IPrintCapabilitiesReader printCapabilitiesReader,
+                     [NotNull] IXpsPrinterDefinitionFactory xpsPrinterDefinitionFactory,
+                     [NotNull] IXpsInputBinDefinitionFactory xpsInputBinDefinitionFactory)
     {
       this.PrintCapabilitiesReader = printCapabilitiesReader ?? throw new ArgumentNullException(nameof(printCapabilitiesReader));
+      this.XpsPrinterDefinitionFactory = xpsPrinterDefinitionFactory;
+      this.XpsInputBinDefinitionFactory = xpsInputBinDefinitionFactory;
     }
 
     [NotNull]
     private IPrintCapabilitiesReader PrintCapabilitiesReader { get; }
+
+    [NotNull]
+    private IXpsPrinterDefinitionFactory XpsPrinterDefinitionFactory { get; }
+
+    [NotNull]
+    private IXpsInputBinDefinitionFactory XpsInputBinDefinitionFactory { get; }
 
     /// <inheritdoc />
     public virtual IXpsPrinterDefinition[] GetXpsPrinterDefinitions()
@@ -51,11 +63,11 @@ namespace Contrib.System.Printing.Xps
         result = printQueues.Select(printQueue =>
                                     {
                                       var xpsPrintCapabilities = this.GetXpsPrintCapabilitiesImpl(printQueue);
-                                      var xpsPrinterDefinition = XpsPrinterDefinition.Create(printQueue.Name,
-                                                                                             printQueue.FullName,
-                                                                                             printQueue.QueuePort?.Name,
-                                                                                             printQueue.QueueDriver?.Name,
-                                                                                             xpsPrintCapabilities);
+                                      var xpsPrinterDefinition = this.XpsPrinterDefinitionFactory.Create(printQueue.Name,
+                                                                                                         printQueue.FullName,
+                                                                                                         printQueue.QueuePort?.Name,
+                                                                                                         printQueue.QueueDriver?.Name,
+                                                                                                         xpsPrintCapabilities);
 
                                       return xpsPrinterDefinition;
                                     })
@@ -100,9 +112,9 @@ namespace Contrib.System.Printing.Xps
                                                  var xpsPrintTicket = this.GetXpsPrintTicketImpl(printQueue,
                                                                                                  inputBinXpsFeature,
                                                                                                  xpsOption);
-                                                 var xpsInputBinDefinition = XpsInputBinDefinition.Create(inputBinXpsFeature,
-                                                                                                          xpsOption,
-                                                                                                          xpsPrintTicket);
+                                                 var xpsInputBinDefinition = this.XpsInputBinDefinitionFactory.Create(inputBinXpsFeature,
+                                                                                                                      xpsOption,
+                                                                                                                      xpsPrintTicket);
                                                  return xpsInputBinDefinition;
                                                })
                                        .Cast<IXpsInputBinDefinition>()
