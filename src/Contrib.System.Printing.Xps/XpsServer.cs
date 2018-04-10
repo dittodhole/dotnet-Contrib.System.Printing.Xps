@@ -51,7 +51,10 @@ namespace Contrib.System.Printing.Xps
         result = printQueues.Select(printQueue =>
                                     {
                                       var xpsPrintCapabilities = this.GetXpsPrintCapabilitiesImpl(printQueue);
-                                      var xpsPrinterDefinition = XpsPrinterDefinition.Create(printQueue,
+                                      var xpsPrinterDefinition = XpsPrinterDefinition.Create(printQueue.Name,
+                                                                                             printQueue.FullName,
+                                                                                             printQueue.QueuePort?.Name,
+                                                                                             printQueue.QueueDriver?.Name,
                                                                                              xpsPrintCapabilities);
 
                                       return xpsPrinterDefinition;
