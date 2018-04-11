@@ -56,9 +56,6 @@ namespace Contrib.System.Printing.Xps
         this.Name = name;
       }
 
-      /// <inheritdoc />
-      public XName Name { get; }
-
       [NotNull]
       private IDictionary<XName, IXpsProperty> Properties { get; } = new Dictionary<XName, IXpsProperty>();
 
@@ -67,6 +64,9 @@ namespace Contrib.System.Printing.Xps
 
       [NotNull]
       private ICollection<IXpsOption> UnnamedOptions { get; } = new List<IXpsOption>();
+
+      /// <inheritdoc />
+      public XName Name { get; }
 
       /// <inheritdoc />
       public IXpsProperty GetXpsProperty(XName name)
