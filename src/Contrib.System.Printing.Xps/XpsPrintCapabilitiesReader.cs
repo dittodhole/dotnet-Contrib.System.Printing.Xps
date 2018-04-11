@@ -431,10 +431,10 @@ namespace Contrib.System.Printing.Xps
     public static XName GetXName([CanBeNull] string str,
                                  [NotNull] GetNamespaceOfPrefix getNamespaceOfPrefix)
     {
-      XName xname;
+      XName result;
       if (str == null)
       {
-        xname = null;
+        result = null;
       }
       else
       {
@@ -456,26 +456,26 @@ namespace Contrib.System.Printing.Xps
         {
           try
           {
-            xname = XName.Get(str);
+            result = XName.Get(str);
           }
           catch (Exception exception)
           {
             LogTo.WarnException($"Could not get {nameof(XName)} from '{str}'.",
                                 exception);
-            xname = null;
+            result = null;
           }
         }
         else if (localName == null)
         {
           try
           {
-            xname = XName.Get(str);
+            result = XName.Get(str);
           }
           catch (Exception exception)
           {
             LogTo.WarnException($"Could not get {nameof(XName)} from '{str}'.",
                                 exception);
-            xname = null;
+            result = null;
           }
         }
         else
@@ -484,25 +484,25 @@ namespace Contrib.System.Printing.Xps
           if (xnamespace == null)
           {
             LogTo.Warn($"Could not get {nameof(XNamespace)} for {nameof(prefix)} '{prefix}'.");
-            xname = null;
+            result = null;
           }
           else
           {
             try
             {
-              xname = xnamespace.GetName(localName);
+              result = xnamespace.GetName(localName);
             }
             catch (Exception exception)
             {
               LogTo.WarnException($"Could not get {nameof(XName)} from '{localName}'.",
                                   exception);
-              xname = null;
+              result = null;
             }
           }
         }
       }
 
-      return xname;
+      return result;
     }
   }
 }
