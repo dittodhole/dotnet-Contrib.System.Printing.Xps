@@ -83,6 +83,9 @@ namespace Contrib.System.Printing.Xps
         this.Type = type;
       }
 
+      [NotNull]
+      private IDictionary<XName, IXpsProperty> Properties { get; } = new Dictionary<XName, IXpsProperty>();
+
       /// <inheritdoc />
       public XName Name { get; }
 
@@ -91,9 +94,6 @@ namespace Contrib.System.Printing.Xps
 
       /// <inheritdoc />
       public object Value { get; }
-
-      [NotNull]
-      private IDictionary<XName, IXpsProperty> Properties { get; } = new Dictionary<XName, IXpsProperty>();
 
       /// <inheritdoc />
       public IXpsProperty GetXpsProperty(XName name)
