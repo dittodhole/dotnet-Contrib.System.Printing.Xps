@@ -28,9 +28,6 @@ namespace Contrib.System.Printing.Xps
     XName Name { get; }
 
     [CanBeNull]
-    string DisplayName { get; }
-
-    [CanBeNull]
     object GetValue([NotNull] XName name);
   }
 
@@ -70,17 +67,6 @@ namespace Contrib.System.Printing.Xps
 
       /// <inheritdoc />
       public XName Name => this.XpsOption.Name;
-
-      /// <inheritdoc />
-      public string DisplayName
-      {
-        get
-        {
-          var displayName = this.GetValue(XpsPrintCapabilitiesReader.DisplayNameXName) as string;
-
-          return displayName;
-        }
-      }
 
       /// <inheritdoc />
       public object GetValue(XName name)
