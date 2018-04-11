@@ -92,8 +92,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       }
 
       {
-        var feedType = xpsInputBinDefinition.GetValue(XpsPrintCapabilitiesReader.FeedTypeXName);
-        if (feedType is XName feedTypeXName)
+        if (xpsInputBinDefinition.TryGetValue<XName>(XpsPrintCapabilitiesReader.FeedTypeXName,
+                                                     out var feedTypeXName))
         {
           var prefix2 = printTicketXElement.EnsurePrefixRegistrationOfNamespace(XpsPrintCapabilitiesReader.FeedTypeXName);
 
