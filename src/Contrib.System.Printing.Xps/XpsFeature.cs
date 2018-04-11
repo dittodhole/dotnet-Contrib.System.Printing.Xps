@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Xml.Linq;
 using JetBrains.Annotations;
@@ -49,6 +50,7 @@ namespace Contrib.System.Printing.Xps
 
   public sealed class XpsFeatureFactory : IXpsFeatureFactory
   {
+    [DebuggerDisplay("{Name,nq}")]
     private sealed class XpsFeature : IXpsFeature
     {
       public XpsFeature([NotNull] XName name)

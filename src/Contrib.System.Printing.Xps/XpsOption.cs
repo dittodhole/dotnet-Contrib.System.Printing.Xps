@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Xml.Linq;
 using JetBrains.Annotations;
@@ -22,6 +23,7 @@ namespace Contrib.System.Printing.Xps
 
   public sealed class XpsOptionFactory : IXpsOptionFactory
   {
+    [DebuggerDisplay("{Name,nq}")]
     private sealed class XpsOption : IXpsOption
     {
       public XpsOption() { }
