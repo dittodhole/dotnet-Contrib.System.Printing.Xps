@@ -71,7 +71,6 @@ namespace Contrib.System.Printing.Xps
 
                                       return xpsPrinterDefinition;
                                     })
-                            .Cast<IXpsPrinterDefinition>()
                             .ToArray();
       }
 
