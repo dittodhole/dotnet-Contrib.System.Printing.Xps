@@ -9,7 +9,7 @@ namespace Contrib.System.Printing.Xps.Tests
   {
     [Test]
     [TestCaseSource(nameof(XpsPrintCapabilitiesReaderTests.Get_ReadXpsPrintCapabilities_TestCaseSources))]
-    public void ReadXpsPrintCapabilities_Should_Succeed(string printCapabilities)
+    public void ReadXpsPrintCapabilities(string printCapabilities)
     {
       var printCapabilitiesXDocument = XDocument.Parse(printCapabilities);
       var printCapabilitiesXElement = printCapabilitiesXDocument.Root;
