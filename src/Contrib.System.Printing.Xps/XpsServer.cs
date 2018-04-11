@@ -109,7 +109,7 @@ namespace Contrib.System.Printing.Xps
                                        .Select(xpsOption =>
                                                {
                                                  var featureName = inputBinXpsFeature.Name;
-                                                 var displayName = xpsOption.GetValue(Xps.XpsPrintCapabilitiesReader.DisplayNameXName) as string;
+                                                 var displayName = xpsOption.FindXpsProperty(Xps.XpsPrintCapabilitiesReader.DisplayNameXName)?.Value as string;
                                                  var name = xpsOption.Name;
                                                  var xpsPrintCapabilities = this.GetXpsPrintCapabilitiesImpl(printQueue,
                                                                                                              inputBinXpsFeature,
