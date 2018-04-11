@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 using JetBrains.Annotations;
 
@@ -53,6 +54,10 @@ namespace Contrib.System.Printing.Xps
     /// <exception cref="ArgumentNullException"><paramref name="name" /> is <see langword="null" />.</exception>
     [CanBeNull]
     IXpsProperty GetXpsProperty([NotNull] XName name);
+
+    [NotNull]
+    [ItemNotNull]
+    IXpsProperty[] GetXpsProperties();
 
     /// <exception cref="ArgumentNullException"><paramref name="xpsProperties" /> is <see langword="null" />.</exception>
     void AddXpsProperties([NotNull] [ItemNotNull] [InstantHandle] IEnumerable<IXpsProperty> xpsProperties);
@@ -109,6 +114,12 @@ namespace Contrib.System.Printing.Xps
                                     out var xpsProperty);
 
         return xpsProperty;
+      }
+
+      /// <inheritdoc />
+      public IXpsProperty[] GetXpsProperties()
+      {
+        return this.Properties.Values.ToArray();
       }
 
       /// <inheritdoc />
