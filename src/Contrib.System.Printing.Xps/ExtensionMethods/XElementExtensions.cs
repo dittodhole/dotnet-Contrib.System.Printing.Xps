@@ -8,30 +8,30 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   {
     /// <returns>The prefix of the namespace registration is returned.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/></exception>
-    /// <exception cref="ArgumentNullException"><paramref name="xname"/> is <see langword="null"/></exception>
+    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/></exception>
     /// <exception cref="Exception" />
     [MustUseReturnValue]
     [NotNull]
     public static string EnsurePrefixRegistrationOfNamespace([NotNull] this XElement xelement,
-                                                             [NotNull] XName xname)
+                                                             [NotNull] XName name)
     {
       if (xelement == null)
       {
         throw new ArgumentNullException(nameof(xelement));
       }
-      if (xname == null)
+      if (name == null)
       {
-        throw new ArgumentNullException(nameof(xname));
+        throw new ArgumentNullException(nameof(name));
       }
 
-      var prefix = xelement.GetPrefixOfNamespace(xname.Namespace);
+      var prefix = xelement.GetPrefixOfNamespace(name.Namespace);
       if (prefix == null)
       {
         prefix = xelement.FindUnusedPrefixForNamespace();
 
         var namespaceXName = XNamespace.Xmlns + prefix;
         xelement.SetAttributeValue(namespaceXName,
-                                   xname.NamespaceName);
+                                   name.NamespaceName);
       }
 
       return prefix;
