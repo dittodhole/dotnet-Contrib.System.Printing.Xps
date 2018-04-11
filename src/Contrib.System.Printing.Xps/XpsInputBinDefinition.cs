@@ -46,7 +46,6 @@ namespace Contrib.System.Printing.Xps
     IXpsInputBinDefinition Create([NotNull] IXpsFeature xpsFeature,
                                   [NotNull] IXpsOption xpsOption,
                                   [NotNull] IXpsPrintCapabilities xpsPrintCapabilities);
-
   }
 
   public sealed class XpsInputBinDefinitionFactory : IXpsInputBinDefinitionFactory
