@@ -35,11 +35,12 @@ namespace Contrib.System.Printing.Xps
         this.Name = name;
       }
 
+      [NotNull]
+      private IDictionary<XName, IXpsProperty> Properties { get; } = new Dictionary<XName, IXpsProperty>();
+
       /// <inheritdoc />
       public XName Name { get; }
 
-      [NotNull]
-      private IDictionary<XName, IXpsProperty> Properties { get; } = new Dictionary<XName, IXpsProperty>();
       /// <inheritdoc />
       public object GetValue(XName name)
       {
