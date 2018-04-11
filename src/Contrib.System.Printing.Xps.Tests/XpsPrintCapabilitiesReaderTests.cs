@@ -23,17 +23,17 @@ namespace Contrib.System.Printing.Xps.Tests
 
     public static IEnumerable<string> Get_ReadXpsPrintCapabilities_TestCaseSources()
     {
-      yield return PrintCapabilities.Datamax_O_Neil_E_4204B_Mark_III;
-      yield return PrintCapabilities.Fax;
-      yield return PrintCapabilities.Foxit_PhantomPDF_Printer;
-      yield return PrintCapabilities.HP_ePrint;
-      yield return PrintCapabilities.Lexmark_X790_Series;
-      yield return PrintCapabilities.Microsoft_Print_to_PDF;
-      yield return PrintCapabilities.Microsoft_XPS_Document_Writer;
-      yield return PrintCapabilities.PDF_Architect_6;
-      yield return PrintCapabilities.Send_To_OneNote_2013;
-      yield return PrintCapabilities.Send_To_OneNote_2016;
-      yield return PrintCapabilities.Zebra_ZP_450_CTP;
+      yield return XpsPrintCapabilitiesReaderTests_PrintCapabilities.Datamax_O_Neil_E_4204B_Mark_III;
+      yield return XpsPrintCapabilitiesReaderTests_PrintCapabilities.Fax;
+      yield return XpsPrintCapabilitiesReaderTests_PrintCapabilities.Foxit_PhantomPDF_Printer;
+      yield return XpsPrintCapabilitiesReaderTests_PrintCapabilities.HP_ePrint;
+      yield return XpsPrintCapabilitiesReaderTests_PrintCapabilities.Lexmark_X790_Series;
+      yield return XpsPrintCapabilitiesReaderTests_PrintCapabilities.Microsoft_Print_to_PDF;
+      yield return XpsPrintCapabilitiesReaderTests_PrintCapabilities.Microsoft_XPS_Document_Writer;
+      yield return XpsPrintCapabilitiesReaderTests_PrintCapabilities.PDF_Architect_6;
+      yield return XpsPrintCapabilitiesReaderTests_PrintCapabilities.Send_To_OneNote_2013;
+      yield return XpsPrintCapabilitiesReaderTests_PrintCapabilities.Send_To_OneNote_2016;
+      yield return XpsPrintCapabilitiesReaderTests_PrintCapabilities.Zebra_ZP_450_CTP;
     }
   }
 }

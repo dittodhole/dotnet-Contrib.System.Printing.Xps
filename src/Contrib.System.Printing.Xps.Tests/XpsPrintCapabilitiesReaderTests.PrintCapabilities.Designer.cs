@@ -22,14 +22,14 @@ namespace Contrib.System.Printing.Xps.Tests {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class PrintCapabilities {
+    internal class XpsPrintCapabilitiesReaderTests_PrintCapabilities {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal PrintCapabilities() {
+        internal XpsPrintCapabilitiesReaderTests_PrintCapabilities() {
         }
         
         /// <summary>
@@ -39,7 +39,8 @@ namespace Contrib.System.Printing.Xps.Tests {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Contrib.System.Printing.Xps.Tests.PrintCapabilities", typeof(PrintCapabilities).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Contrib.System.Printing.Xps.Tests.XpsPrintCapabilitiesReaderTests.PrintCapabiliti" +
+                            "es", typeof(XpsPrintCapabilitiesReaderTests_PrintCapabilities).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -62,8 +63,9 @@ namespace Contrib.System.Printing.Xps.Tests {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;psf:PrintCapabilities xmlns:psf=&quot;http://schemas.microsoft.com/windows/2003/08/printing/printschemaframework&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; version=&quot;1&quot; xmlns:ns0000=&quot;http://schemas.microsoft.com/windows/printing/oemdriverpt/Datamax_O_Neil_E_4204B_Mark_III_7_3_4_0_&quot; xmlns:psk=&quot;http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords&quot;&gt;
-        ///  &lt;psf:ParameterDef name=&quot;ns0000:PageDevmodeSnapshot&quot;&gt;
-        ///    &lt;psf:Property name=&quot;psf:DataT [rest of string was truncated]&quot;;.
+        ///  &lt;psf:Feature name=&quot;psk:PageOutputColor&quot;&gt;
+        ///    &lt;psf:Property name=&quot;psf:SelectionType&quot;&gt;
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Datamax_O_Neil_E_4204B_Mark_III {
             get {
@@ -73,8 +75,8 @@ namespace Contrib.System.Printing.Xps.Tests {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;psf:PrintCapabilities xmlns:psf=&quot;http://schemas.microsoft.com/windows/2003/08/printing/printschemaframework&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; version=&quot;1&quot; xmlns:ns0000=&quot;http://schemas.microsoft.com/windows/printing/oemdriverpt/Microsoft_Shared_Fax_Driver_6_1_7601_17514_&quot; xmlns:psk=&quot;http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords&quot;&gt;
-        ///  &lt;psf:ParameterDef name=&quot;ns0000:PageDevmodeSnapshot&quot;&gt;
-        ///    &lt;psf:Property name=&quot;psf:Da [rest of string was truncated]&quot;;.
+        ///  &lt;psf:Feature name=&quot;psk:PageOutputColor&quot;&gt;
+        ///    &lt;psf:Property name=&quot;psf:SelectionType&quot; [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Fax {
             get {
@@ -84,8 +86,9 @@ namespace Contrib.System.Printing.Xps.Tests {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;psf:PrintCapabilities xmlns:psf=&quot;http://schemas.microsoft.com/windows/2003/08/printing/printschemaframework&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; version=&quot;1&quot; xmlns:ns0000=&quot;http://schemas.microsoft.com/windows/printing/oemdriverpt/Foxit_PhantomPDF_Printer_Driver_6_0_0_0_&quot; xmlns:psk=&quot;http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords&quot;&gt;
-        ///  &lt;psf:ParameterDef name=&quot;ns0000:PageDevmodeSnapshot&quot;&gt;
-        ///    &lt;psf:Property name=&quot;psf:DataT [rest of string was truncated]&quot;;.
+        ///  &lt;psf:Feature name=&quot;psk:PageOutputColor&quot;&gt;
+        ///    &lt;psf:Property name=&quot;psf:SelectionType&quot;&gt;
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Foxit_PhantomPDF_Printer {
             get {
@@ -107,8 +110,8 @@ namespace Contrib.System.Printing.Xps.Tests {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;psf:PrintCapabilities xmlns:psf=&quot;http://schemas.microsoft.com/windows/2003/08/printing/printschemaframework&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; version=&quot;1&quot; xmlns:ns0000=&quot;http://schemas.lexmark.com/windows/2007/01/printing/printschemakeywords&quot; xmlns:psk=&quot;http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords&quot;&gt;
-        ///  &lt;psf:ParameterDef name=&quot;ns0000:PageDevmodeSnapshot&quot;&gt;
-        ///    &lt;psf:Property name=&quot;psf:DataType&quot;&gt;
+        ///  &lt;psf:Feature name=&quot;psk:PageICMRenderingIntent&quot;&gt;
+        ///    &lt;psf:Property name=&quot;psf:SelectionType&quot;&gt;
         ///      &lt;psf:Value xsi [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Lexmark_X790_Series {
@@ -128,8 +131,8 @@ namespace Contrib.System.Printing.Xps.Tests {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;psf:PrintCapabilities xmlns:psf=&quot;http://schemas.microsoft.com/windows/2003/08/printing/printschemaframework&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; version=&quot;1&quot; xmlns:ns0000=&quot;http://schemas.microsoft.com/windows/2006/06/printing/printschemakeywords/microsoftxpsdocumentwriter&quot; xmlns:psk=&quot;http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords&quot;&gt;
-        ///  &lt;psf:ParameterDef name=&quot;ns0000:PageDevmodeSnapshot&quot;&gt;
-        ///    &lt;psf:Property name=&quot;psf:Dat [rest of string was truncated]&quot;;.
+        ///  &lt;psf:ParameterDef name=&quot;psk:JobCopiesAllDocuments&quot;&gt;
+        ///    &lt;psf:Property name=&quot;psf:Data [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Microsoft_XPS_Document_Writer {
             get {
@@ -139,9 +142,9 @@ namespace Contrib.System.Printing.Xps.Tests {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;psf:PrintCapabilities xmlns:psf=&quot;http://schemas.microsoft.com/windows/2003/08/printing/printschemaframework&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; version=&quot;1&quot; xmlns:ns0000=&quot;http://schemas.microsoft.com/windows/printing/oemdriverpt/PDF_Architect 6 Driver/4.9.25.2/&quot; xmlns:psk=&quot;http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords&quot;&gt;
-        ///  &lt;psf:ParameterDef name=&quot;ns0000:PageDevmodeSnapshot&quot;&gt;
-        ///    &lt;psf:Property name=&quot;psf:DataType&quot;&gt;
-        ///  [rest of string was truncated]&quot;;.
+        ///  &lt;psf:Feature name=&quot;psk:PageOutputColor&quot;&gt;
+        ///    &lt;psf:Property name=&quot;psf:SelectionType&quot;&gt;
+        ///      &lt;p [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string PDF_Architect_6 {
             get {
@@ -151,8 +154,8 @@ namespace Contrib.System.Printing.Xps.Tests {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;psf:PrintCapabilities xmlns:psf=&quot;http://schemas.microsoft.com/windows/2003/08/printing/printschemaframework&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; version=&quot;1&quot; xmlns:ns0000=&quot;http://schemas.microsoft.com/windows/printing/oemdriverpt/Send_to_Microsoft_OneNote_15_Driver_6_1_7601_17514_&quot; xmlns:psk=&quot;http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords&quot;&gt;
-        ///  &lt;psf:ParameterDef name=&quot;ns0000:PageDevmodeSnapshot&quot;&gt;
-        ///    &lt;psf:Property name [rest of string was truncated]&quot;;.
+        ///  &lt;psf:ParameterDef name=&quot;psk:JobCopiesAllDocuments&quot;&gt;
+        ///    &lt;psf:Property name= [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Send_To_OneNote_2013 {
             get {
@@ -162,8 +165,8 @@ namespace Contrib.System.Printing.Xps.Tests {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;psf:PrintCapabilities xmlns:psf=&quot;http://schemas.microsoft.com/windows/2003/08/printing/printschemaframework&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; version=&quot;1&quot; xmlns:ns0000=&quot;http://schemas.microsoft.com/windows/printing/oemdriverpt/Send_to_Microsoft_OneNote_16_Driver_10_0_10240_17797_&quot; xmlns:psk=&quot;http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords&quot;&gt;
-        ///  &lt;psf:ParameterDef name=&quot;ns0000:PageDevmodeSnapshot&quot;&gt;
-        ///    &lt;psf:Property na [rest of string was truncated]&quot;;.
+        ///  &lt;psf:ParameterDef name=&quot;psk:JobCopiesAllDocuments&quot;&gt;
+        ///    &lt;psf:Property nam [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Send_To_OneNote_2016 {
             get {
@@ -173,9 +176,9 @@ namespace Contrib.System.Printing.Xps.Tests {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;psf:PrintCapabilities xmlns:psf=&quot;http://schemas.microsoft.com/windows/2003/08/printing/printschemaframework&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; version=&quot;1&quot; xmlns:ns0000=&quot;http://schemas.microsoft.com/windows/printing/oemdriverpt/Zebra_ZP 450 CTP/7.4.2.0/&quot; xmlns:psk=&quot;http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords&quot;&gt;
-        ///  &lt;psf:ParameterDef name=&quot;ns0000:PageDevmodeSnapshot&quot;&gt;
-        ///    &lt;psf:Property name=&quot;psf:DataType&quot;&gt;
-        ///      &lt;p [rest of string was truncated]&quot;;.
+        ///  &lt;psf:Feature name=&quot;psk:PageOutputColor&quot;&gt;
+        ///    &lt;psf:Property name=&quot;psf:SelectionType&quot;&gt;
+        ///      &lt;psf:Valu [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Zebra_ZP_450_CTP {
             get {

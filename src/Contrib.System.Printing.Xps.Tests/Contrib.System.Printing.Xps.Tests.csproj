@@ -41,10 +41,10 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PrintCapabilities.Designer.cs">
+    <Compile Include="XpsPrintCapabilitiesReaderTests.PrintCapabilities.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>PrintCapabilities.resx</DependentUpon>
+      <DependentUpon>XpsPrintCapabilitiesReaderTests.PrintCapabilities.resx</DependentUpon>
     </Compile>
     <Compile Include="XpsPrintCapabilitiesReaderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -62,9 +62,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PrintCapabilities.resx">
+    <EmbeddedResource Include="XpsPrintCapabilitiesReaderTests.PrintCapabilities.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>PrintCapabilities.Designer.cs</LastGenOutput>
+      <LastGenOutput>XpsPrintCapabilitiesReaderTests.PrintCapabilities.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
