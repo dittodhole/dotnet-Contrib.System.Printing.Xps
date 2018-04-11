@@ -108,12 +108,19 @@ namespace Contrib.System.Printing.Xps
             result = inputBinXpsFeature.GetXpsOptions()
                                        .Select(xpsOption =>
                                                {
+                                                 var featureName = inputBinXpsFeature.Name;
+                                                 var displayName = xpsOption.GetValue(Xps.XpsPrintCapabilitiesReader.DisplayNameXName) as string;
+                                                 var name = xpsOption.Name;
                                                  var xpsPrintCapabilities = this.GetXpsPrintCapabilitiesImpl(printQueue,
                                                                                                              inputBinXpsFeature,
                                                                                                              xpsOption);
-                                                 var xpsInputBinDefinition = this.XpsInputBinDefinitionFactory.Create(inputBinXpsFeature,
+
+                                                 var xpsInputBinDefinition = this.XpsInputBinDefinitionFactory.Create(featureName,
+                                                                                                                      displayName,
+                                                                                                                      name,
                                                                                                                       xpsOption,
                                                                                                                       xpsPrintCapabilities);
+
                                                  return xpsInputBinDefinition;
                                                })
                                        .ToArray();

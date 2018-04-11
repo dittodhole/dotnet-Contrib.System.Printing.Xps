@@ -25,6 +25,9 @@ namespace Contrib.System.Printing.Xps
     XName FeatureName { get; }
 
     [NotNull]
+    string DisplayName { get; }
+
+    [NotNull]
     XName Name { get; }
 
     [CanBeNull]
@@ -34,7 +37,9 @@ namespace Contrib.System.Printing.Xps
   public interface IXpsInputBinDefinitionFactory
   {
     [NotNull]
-    IXpsInputBinDefinition Create([NotNull] IXpsFeature xpsFeature,
+    IXpsInputBinDefinition Create([NotNull] XName featureName,
+                                  [NotNull] string displayName,
+                                  [NotNull] XName name,
                                   [NotNull] IXpsOption xpsOption,
                                   [NotNull] IXpsPrintCapabilities xpsPrintCapabilities);
   }
@@ -44,17 +49,18 @@ namespace Contrib.System.Printing.Xps
     private sealed class XpsInputBinDefinition : IXpsInputBinDefinition,
                                                  IEquatable<XpsInputBinDefinition>
     {
-      public XpsInputBinDefinition([NotNull] IXpsFeature xpsFeature,
+      public XpsInputBinDefinition([NotNull] XName featureName,
+                                   [NotNull] string displayName,
+                                   [NotNull] XName name,
                                    [NotNull] IXpsOption xpsOption,
                                    [NotNull] IXpsPrintCapabilities xpsPrintCapabilities)
       {
-        this.XpsFeature = xpsFeature;
+        this.FeatureName = featureName;
+        this.DisplayName = displayName;
+        this.Name = name;
         this.XpsOption = xpsOption;
         this.XpsPrintCapabilities = xpsPrintCapabilities;
       }
-
-      [NotNull]
-      private IXpsFeature XpsFeature { get; }
 
       [NotNull]
       private IXpsOption XpsOption { get; }
@@ -63,10 +69,13 @@ namespace Contrib.System.Printing.Xps
       private IXpsPrintCapabilities XpsPrintCapabilities { get; }
 
       /// <inheritdoc />
-      public XName FeatureName => this.XpsFeature.Name;
+      public XName FeatureName { get; }
 
       /// <inheritdoc />
-      public XName Name => this.XpsOption.Name;
+      public string DisplayName { get; }
+
+      /// <inheritdoc />
+      public XName Name { get; }
 
       /// <inheritdoc />
       public object GetValue(XName name)
@@ -159,11 +168,15 @@ namespace Contrib.System.Printing.Xps
     }
 
     /// <inheritdoc />
-    public IXpsInputBinDefinition Create(IXpsFeature xpsFeature,
+    public IXpsInputBinDefinition Create(XName featureName,
+                                         string displayName,
+                                         XName name,
                                          IXpsOption xpsOption,
                                          IXpsPrintCapabilities xpsPrintCapabilities)
     {
-      var xpsInputBinDefinition = new XpsInputBinDefinition(xpsFeature,
+      var xpsInputBinDefinition = new XpsInputBinDefinition(featureName,
+                                                            displayName,
+                                                            name,
                                                             xpsOption,
                                                             xpsPrintCapabilities);
 
