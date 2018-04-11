@@ -8,6 +8,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   {
     /// <exception cref="ArgumentNullException"><paramref name="hasXpsProperties"/> is <see langword="null"/></exception>
     /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/></exception>
+    [Pure]
     [CanBeNull]
     public static IXpsProperty FindXpsProperty([NotNull] this IHasXpsProperties hasXpsProperties,
                                                [NotNull] XName name)
