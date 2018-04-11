@@ -22,7 +22,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <exception cref="ArgumentNullException"><paramref name="xpsPrintCapabilities"/> is <see langword="null"/></exception>
     [Pure]
     [CanBeNull]
-    public static IXpsFeature GetInputBinXpsFeature([NotNull] this IXpsPrintCapabilities xpsPrintCapabilities)
+    public static IXpsFeature FindInputBinXpsFeature([NotNull] this IXpsPrintCapabilities xpsPrintCapabilities)
     {
       if (xpsPrintCapabilities == null)
       {

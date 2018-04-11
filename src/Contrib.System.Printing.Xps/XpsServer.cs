@@ -99,7 +99,7 @@ namespace Contrib.System.Printing.Xps
         else
         {
           var inputBinXpsFeature = this.GetXpsPrintCapabilitiesImpl(printQueue)
-                                       .GetInputBinXpsFeature();
+                                       .FindInputBinXpsFeature();
           if (inputBinXpsFeature == null)
           {
             result = new IXpsInputBinDefinition[0];
