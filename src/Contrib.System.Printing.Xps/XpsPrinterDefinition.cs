@@ -5,7 +5,13 @@ using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps
 {
-  public interface IXpsPrinterDefinition
+  public interface IHasValues
+  {
+    [CanBeNull]
+    object GetValue([NotNull] XName name);
+  }
+
+  public interface IXpsPrinterDefinition : IHasValues
   {
     [NotNull]
     string DisplayName { get; }
@@ -18,9 +24,6 @@ namespace Contrib.System.Printing.Xps
 
     [CanBeNull]
     string DriverName { get; }
-
-    [CanBeNull]
-    object GetValue([NotNull] XName name);
   }
 
   public interface IXpsPrinterDefinitionFactory

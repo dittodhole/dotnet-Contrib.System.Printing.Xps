@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps
 {
-  public interface IXpsInputBinDefinition
+  public interface IXpsInputBinDefinition : IHasValues
   {
     /// <remarks>
     ///   The value is one of the following:
@@ -29,9 +29,6 @@ namespace Contrib.System.Printing.Xps
 
     [NotNull]
     XName Name { get; }
-
-    [CanBeNull]
-    object GetValue([NotNull] XName name);
   }
 
   public interface IXpsInputBinDefinitionFactory
