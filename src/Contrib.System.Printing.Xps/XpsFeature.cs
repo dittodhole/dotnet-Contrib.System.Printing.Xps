@@ -6,7 +6,22 @@ using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps
 {
-  public interface IXpsFeature
+  public interface IHasXpsOptions
+  {
+    /// <exception cref="ArgumentNullException"><paramref name="name" /> is <see langword="null" />.</exception>
+    [CanBeNull]
+    IXpsOption GetXpsOption([NotNull] XName name);
+
+    [NotNull]
+    [ItemNotNull]
+    IXpsOption[] GetXpsOptions();
+
+    /// <exception cref="ArgumentNullException"><paramref name="xpsOptions" /> is <see langword="null" />.</exception>
+    void AddXpsOptions([NotNull] [ItemNotNull] [InstantHandle] IEnumerable<IXpsOption> xpsOptions);
+  }
+
+  public interface IXpsFeature : IHasXpsOptions,
+                                 IHasXpsProperties
   {
     /// <remarks>
     ///   The value is one of the following (but not limited to):
@@ -24,28 +39,6 @@ namespace Contrib.System.Printing.Xps
     /// </remarks>
     [NotNull]
     XName Name { get; }
-
-    /// <exception cref="ArgumentNullException"><paramref name="name" /> is <see langword="null" />.</exception>
-    [CanBeNull]
-    IXpsProperty GetXpsProperty([NotNull] XName name);
-
-    [NotNull]
-    [ItemNotNull]
-    IXpsProperty[] GetXpsProperties();
-
-    /// <exception cref="ArgumentNullException"><paramref name="name" /> is <see langword="null" />.</exception>
-    [CanBeNull]
-    IXpsOption GetXpsOption([NotNull] XName name);
-
-    [NotNull]
-    [ItemNotNull]
-    IXpsOption[] GetXpsOptions();
-
-    /// <exception cref="ArgumentNullException"><paramref name="xpsProperties" /> is <see langword="null" />.</exception>
-    void AddXpsProperties([NotNull] [ItemNotNull] [InstantHandle] IEnumerable<IXpsProperty> xpsProperties);
-
-    /// <exception cref="ArgumentNullException"><paramref name="xpsOptions" /> is <see langword="null" />.</exception>
-    void AddXpsOptions([NotNull] [ItemNotNull] [InstantHandle] IEnumerable<IXpsOption> xpsOptions);
   }
 
   public interface IXpsFeatureFactory

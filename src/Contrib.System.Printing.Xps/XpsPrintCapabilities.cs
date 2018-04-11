@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps
 {
-  public interface IXpsPrintCapabilities
+  public interface IHasXpsFeatures
   {
     /// <exception cref="ArgumentNullException"><paramref name="name" /> is <see langword="null" />.</exception>
     [CanBeNull]
@@ -16,6 +16,12 @@ namespace Contrib.System.Printing.Xps
     [ItemNotNull]
     IXpsFeature[] GetXpsFeatures();
 
+    /// <exception cref="ArgumentNullException"><paramref name="xpsFeatures" /> is <see langword="null" />.</exception>
+    void AddXpsFeatures([NotNull] [ItemNotNull] [InstantHandle] IEnumerable<IXpsFeature> xpsFeatures);
+  }
+
+  public interface IHasXpsProperties
+  {
     /// <exception cref="ArgumentNullException"><paramref name="name" /> is <see langword="null" />.</exception>
     [CanBeNull]
     IXpsProperty GetXpsProperty([NotNull] XName name);
@@ -24,12 +30,12 @@ namespace Contrib.System.Printing.Xps
     [ItemNotNull]
     IXpsProperty[] GetXpsProperties();
 
-    /// <exception cref="ArgumentNullException"><paramref name="xpsFeatures" /> is <see langword="null" />.</exception>
-    void AddXpsFeatures([NotNull] [ItemNotNull] [InstantHandle] IEnumerable<IXpsFeature> xpsFeatures);
-
     /// <exception cref="ArgumentNullException"><paramref name="xpsProperties" /> is <see langword="null" />.</exception>
     void AddXpsProperties([NotNull] [ItemNotNull] [InstantHandle] IEnumerable<IXpsProperty> xpsProperties);
   }
+
+  public interface IXpsPrintCapabilities : IHasXpsFeatures,
+                                           IHasXpsProperties { }
 
   public interface IXpsPrintCapabilitiesFactory
   {

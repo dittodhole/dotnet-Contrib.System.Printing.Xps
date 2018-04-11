@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps
 {
-  public interface IXpsProperty
+  public interface IXpsProperty : IHasXpsProperties
   {
     /// <remarks>
     ///   The value is one of the following (but not limited to):
@@ -50,17 +49,6 @@ namespace Contrib.System.Printing.Xps
 
     [CanBeNull]
     object Value { get; }
-
-    /// <exception cref="ArgumentNullException"><paramref name="name" /> is <see langword="null" />.</exception>
-    [CanBeNull]
-    IXpsProperty GetXpsProperty([NotNull] XName name);
-
-    [NotNull]
-    [ItemNotNull]
-    IXpsProperty[] GetXpsProperties();
-
-    /// <exception cref="ArgumentNullException"><paramref name="xpsProperties" /> is <see langword="null" />.</exception>
-    void AddXpsProperties([NotNull] [ItemNotNull] [InstantHandle] IEnumerable<IXpsProperty> xpsProperties);
   }
 
   public interface IXpsPropertyFactory

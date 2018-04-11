@@ -1,26 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps
 {
-  public interface IXpsOption
+  public interface IXpsOption : IHasXpsProperties
   {
     [CanBeNull]
     XName Name { get; }
-
-    [NotNull]
-    [ItemNotNull]
-    IXpsProperty[] GetXpsProperties();
-
-    /// <exception cref="ArgumentNullException"><paramref name="name" /> is <see langword="null" />.</exception>
-    [CanBeNull]
-    IXpsProperty GetXpsProperty([NotNull] XName name);
-
-    /// <exception cref="ArgumentNullException"><paramref name="xpsProperties" /> is <see langword="null" />.</exception>
-    void AddXpsProperties([NotNull] [ItemNotNull] [InstantHandle] IEnumerable<IXpsProperty> xpsProperties);
   }
 
   public interface IXpsOptionFactory

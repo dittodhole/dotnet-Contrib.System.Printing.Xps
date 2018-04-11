@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Xml.Linq;
+using Contrib.System.Printing.Xps.ExtensionMethods;
 using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps
@@ -19,10 +20,7 @@ namespace Contrib.System.Printing.Xps
     string DriverName { get; }
 
     [CanBeNull]
-    long? ImageableSizeWidth { get; }
-
-    [CanBeNull]
-    long? ImageableSizeHeight { get; }
+    object GetValue([NotNull] XName name);
   }
 
   public interface IXpsPrinterDefinitionFactory
@@ -99,6 +97,24 @@ namespace Contrib.System.Printing.Xps
 
       /// <inheritdoc />
       public string DriverName { get; }
+
+      /// <inheritdoc />
+      public object GetValue(XName name)
+      {
+        object value;
+
+        var xpsProperty = this.XpsPrintCapabilities.FindXpsProperty(name);
+        if (xpsProperty == null)
+        {
+          value = null;
+        }
+        else
+        {
+          value = xpsProperty.Value;
+        }
+
+        return value;
+      }
 
       [CanBeNull]
       private long? GetImageableSize([NotNull] XName imageableSizeXName)
