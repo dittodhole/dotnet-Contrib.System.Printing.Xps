@@ -12,22 +12,22 @@ namespace Contrib.System.Printing.Xps
     ///   The value is one of the following (but not limited to):
     ///   <list type="bullet">
     ///     <item>
-    ///       <description><see cref="PrintCapabilitiesReader.DisplayNameXName"/></description>
+    ///       <description><see cref="XpsPrintCapabilitiesReader.DisplayNameXName"/></description>
     ///     </item>
     ///     <item>
-    ///       <description><see cref="PrintCapabilitiesReader.MediaSizeWidthXName"/></description>
+    ///       <description><see cref="XpsPrintCapabilitiesReader.MediaSizeWidthXName"/></description>
     ///     </item>
     ///     <item>
-    ///       <description><see cref="PrintCapabilitiesReader.MediaSizeHeightXName"/></description>
+    ///       <description><see cref="XpsPrintCapabilitiesReader.MediaSizeHeightXName"/></description>
     ///     </item>
     ///     <item>
-    ///       <description><see cref="PrintCapabilitiesReader.ImageableSizeWidthXName"/></description>
+    ///       <description><see cref="XpsPrintCapabilitiesReader.ImageableSizeWidthXName"/></description>
     ///     </item>
     ///     <item>
-    ///       <description><see cref="PrintCapabilitiesReader.ImageableSizeHeightXName"/></description>
+    ///       <description><see cref="XpsPrintCapabilitiesReader.ImageableSizeHeightXName"/></description>
     ///     </item>
     ///     <item>
-    ///       <description><see cref="PrintCapabilitiesReader.PageImageableSizeXName"/></description>
+    ///       <description><see cref="XpsPrintCapabilitiesReader.PageImageableSizeXName"/></description>
     ///     </item>
     ///   </list>
     /// </remarks>
@@ -38,10 +38,10 @@ namespace Contrib.System.Printing.Xps
     ///   The value is one of the following:
     ///   <list type="bullet">
     ///     <item>
-    ///       <description><see cref="PrintCapabilitiesReader.PropertyElementXName"/></description>
+    ///       <description><see cref="XpsPrintCapabilitiesReader.PropertyElementXName"/></description>
     ///     </item>
     ///     <item>
-    ///       <description><see cref="PrintCapabilitiesReader.ScoredPropertyElementXName"/></description>
+    ///       <description><see cref="XpsPrintCapabilitiesReader.ScoredPropertyElementXName"/></description>
     ///     </item>
     ///   </list>
     /// </remarks>

@@ -46,7 +46,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PrintCapabilities.resx</DependentUpon>
     </Compile>
-    <Compile Include="PrintCapabilitiesReaderTests.cs" />
+    <Compile Include="XpsPrintCapabilitiesReaderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

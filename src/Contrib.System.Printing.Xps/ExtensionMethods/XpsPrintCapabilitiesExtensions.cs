@@ -9,13 +9,13 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     ///   The first input bin feature is returned:
     ///   <list type="number">
     ///     <item>
-    ///       <description><see cref="PrintCapabilitiesReader.PageInputBinXName"/></description>
+    ///       <description><see cref="XpsPrintCapabilitiesReader.PageInputBinXName"/></description>
     ///     </item>
     ///     <item>
-    ///       <description><see cref="PrintCapabilitiesReader.DocumentInputBinXName"/></description>
+    ///       <description><see cref="XpsPrintCapabilitiesReader.DocumentInputBinXName"/></description>
     ///     </item>
     ///     <item>
-    ///       <description><see cref="PrintCapabilitiesReader.JobInputBinXName"/></description>
+    ///       <description><see cref="XpsPrintCapabilitiesReader.JobInputBinXName"/></description>
     ///     </item>
     ///   </list>
     /// </remarks>
@@ -29,9 +29,9 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         throw new ArgumentNullException(nameof(xpsPrintCapabilities));
       }
 
-      var result = xpsPrintCapabilities.GetXpsFeature(PrintCapabilitiesReader.PageInputBinXName)
-                   ?? xpsPrintCapabilities.GetXpsFeature(PrintCapabilitiesReader.DocumentInputBinXName)
-                   ?? xpsPrintCapabilities.GetXpsFeature(PrintCapabilitiesReader.JobInputBinXName);
+      var result = xpsPrintCapabilities.GetXpsFeature(XpsPrintCapabilitiesReader.PageInputBinXName)
+                   ?? xpsPrintCapabilities.GetXpsFeature(XpsPrintCapabilitiesReader.DocumentInputBinXName)
+                   ?? xpsPrintCapabilities.GetXpsFeature(XpsPrintCapabilitiesReader.JobInputBinXName);
 
       return result;
     }

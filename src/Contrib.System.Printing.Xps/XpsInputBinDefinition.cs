@@ -11,13 +11,13 @@ namespace Contrib.System.Printing.Xps
     ///   The value is one of the following:
     ///   <list type="bullet">
     ///     <item>
-    ///       <description><see cref="PrintCapabilitiesReader.PageInputBinXName"/></description>
+    ///       <description><see cref="XpsPrintCapabilitiesReader.PageInputBinXName"/></description>
     ///     </item>
     ///     <item>
-    ///       <description><see cref="PrintCapabilitiesReader.DocumentInputBinXName"/></description>
+    ///       <description><see cref="XpsPrintCapabilitiesReader.DocumentInputBinXName"/></description>
     ///     </item>
     ///     <item>
-    ///       <description><see cref="PrintCapabilitiesReader.JobInputBinXName"/></description>
+    ///       <description><see cref="XpsPrintCapabilitiesReader.JobInputBinXName"/></description>
     ///     </item>
     ///   </list>
     /// </remarks>
@@ -85,7 +85,7 @@ namespace Contrib.System.Printing.Xps
         {
           string displayName;
 
-          var xpsProperty = this.XpsOption.GetXpsProperty(Xps.PrintCapabilitiesReader.DisplayNameXName);
+          var xpsProperty = this.XpsOption.GetXpsProperty(XpsPrintCapabilitiesReader.DisplayNameXName);
           if (xpsProperty == null)
           {
             displayName = null;
@@ -112,8 +112,8 @@ namespace Contrib.System.Printing.Xps
       {
         get
         {
-          var mediaSizeWidth = this.GetPageMediaSize(Xps.PrintCapabilitiesReader.MediaSizeWidthXName);
-          var mediaSizeHeight = this.GetPageMediaSize(Xps.PrintCapabilitiesReader.MediaSizeHeightXName);
+          var mediaSizeWidth = this.GetPageMediaSize(XpsPrintCapabilitiesReader.MediaSizeWidthXName);
+          var mediaSizeHeight = this.GetPageMediaSize(XpsPrintCapabilitiesReader.MediaSizeHeightXName);
 
           var result = NumberHelper.GetDimension(mediaSizeWidth,
                                                  mediaSizeHeight,
@@ -128,8 +128,8 @@ namespace Contrib.System.Printing.Xps
       {
         get
         {
-          var mediaSizeWidth = this.GetPageMediaSize(Xps.PrintCapabilitiesReader.MediaSizeWidthXName);
-          var mediaSizeHeight = this.GetPageMediaSize(Xps.PrintCapabilitiesReader.MediaSizeHeightXName);
+          var mediaSizeWidth = this.GetPageMediaSize(XpsPrintCapabilitiesReader.MediaSizeWidthXName);
+          var mediaSizeHeight = this.GetPageMediaSize(XpsPrintCapabilitiesReader.MediaSizeHeightXName);
 
           var result = NumberHelper.GetDimension(mediaSizeWidth,
                                                  mediaSizeHeight,
@@ -145,7 +145,7 @@ namespace Contrib.System.Printing.Xps
         get
         {
           XName feedType;
-          var xpsProperty = this.XpsOption.GetXpsProperty(Xps.PrintCapabilitiesReader.FeedTypeXName);
+          var xpsProperty = this.XpsOption.GetXpsProperty(XpsPrintCapabilitiesReader.FeedTypeXName);
           if (xpsProperty == null)
           {
             feedType = null;
@@ -172,7 +172,7 @@ namespace Contrib.System.Printing.Xps
       {
         long? pageMediaSize;
 
-        var xpsFeature = this.XpsPrintCapabilities.GetXpsFeature(Xps.PrintCapabilitiesReader.PageMediaSizeXName);
+        var xpsFeature = this.XpsPrintCapabilities.GetXpsFeature(XpsPrintCapabilitiesReader.PageMediaSizeXName);
         if (xpsFeature != null)
         {
           var xpsOptions = xpsFeature.GetXpsOptions();

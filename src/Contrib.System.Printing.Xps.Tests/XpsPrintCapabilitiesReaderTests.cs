@@ -5,18 +5,18 @@ using NUnit.Framework;
 namespace Contrib.System.Printing.Xps.Tests
 {
   [TestFixture]
-  public sealed class PrintCapabilitiesReaderTests
+  public sealed class XpsPrintCapabilitiesReaderTests
   {
     [Test]
-    [TestCaseSource(nameof(PrintCapabilitiesReaderTests.Get_ReadXpsPrintCapabilities_TestCaseSources))]
+    [TestCaseSource(nameof(XpsPrintCapabilitiesReaderTests.Get_ReadXpsPrintCapabilities_TestCaseSources))]
     public void ReadXpsPrintCapabilities_Should_Succeed(string printCapabilities)
     {
       var printCapabilitiesXDocument = XDocument.Parse(printCapabilities);
       var printCapabilitiesXElement = printCapabilitiesXDocument.Root;
 
-      var printCapabilitiesReader = new PrintCapabilitiesReader();
+      var xpsPrintCapabilitiesReader = new XpsPrintCapabilitiesReader();
 
-      var xpsPrintCapabilities = printCapabilitiesReader.ReadXpsPrintCapabilities(printCapabilitiesXElement);
+      var xpsPrintCapabilities = xpsPrintCapabilitiesReader.ReadXpsPrintCapabilities(printCapabilitiesXElement);
 
       Assert.NotNull(xpsPrintCapabilities);
     }

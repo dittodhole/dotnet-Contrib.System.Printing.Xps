@@ -12,13 +12,13 @@ namespace Contrib.System.Printing.Xps
     ///   The value is one of the following (but not limited to):
     ///   <list type="bullet">
     ///     <item>
-    ///       <description><see cref="PrintCapabilitiesReader.PageInputBinXName"/></description>
+    ///       <description><see cref="XpsPrintCapabilitiesReader.PageInputBinXName"/></description>
     ///     </item>
     ///     <item>
-    ///       <description><see cref="PrintCapabilitiesReader.DocumentInputBinXName"/></description>
+    ///       <description><see cref="XpsPrintCapabilitiesReader.DocumentInputBinXName"/></description>
     ///     </item>
     ///     <item>
-    ///       <description><see cref="PrintCapabilitiesReader.JobInputBinXName"/></description>
+    ///       <description><see cref="XpsPrintCapabilitiesReader.JobInputBinXName"/></description>
     ///     </item>
     ///   </list>
     /// </remarks>

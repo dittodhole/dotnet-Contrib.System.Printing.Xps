@@ -54,12 +54,12 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       //                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
       //                  xmlns:{prefix0}="{FeatureName.NamespaceName}"
       //                  xmlns:{prefix1}="{FeatureName.NamespaceName}"
-      //                  xmlns:{prefix2}="{PrintCapabilitiesReader.FeedTypeXName.NamespaceName}"
+      //                  xmlns:{prefix2}="{XpsPrintCapabilitiesReader.FeedTypeXName.NamespaceName}"
       //                  xmlns:{prefix3}="{FeedType.NamespaceName}"
       //                  version="1">
       //   <psf:Feature name="{prefix0}:{FeatureName.LocalName}">
       //     <psf:Option name="{prefix1}:{DisplayName.LocalName}">
-      //       <psf:ScoredProperty name="{prefix2}:{PrintCapabilitiesReader.FeedTypeXName.LocalName}"> ! TODO !
+      //       <psf:ScoredProperty name="{prefix2}:{XpsPrintCapabilitiesReader.FeedTypeXName.LocalName}"> ! TODO !
       //         <psf:Value>{prefix3}:{FeedType.LocalName}</psf:Value>
       //       </psf:ScoredProperty>
       //     </psf:Option>
@@ -73,8 +73,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
 
         var prefix0 = printTicketXElement.EnsurePrefixRegistrationOfNamespace(featureXName);
 
-        featureXElement = new XElement(PrintCapabilitiesReader.FeatureElementXName);
-        featureXElement.SetAttributeValue(PrintCapabilitiesReader.NameAttributeXName,
+        featureXElement = new XElement(XpsPrintCapabilitiesReader.FeatureElementXName);
+        featureXElement.SetAttributeValue(XpsPrintCapabilitiesReader.NameAttributeXName,
                                           $"{prefix0}:{featureXName.LocalName}");
         printTicketXElement.Add(featureXElement);
       }
@@ -85,8 +85,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
 
         var prefix1 = printTicketXElement.EnsurePrefixRegistrationOfNamespace(inputBinXName);
 
-        optionXElement = new XElement(PrintCapabilitiesReader.OptionElementXName);
-        optionXElement.SetAttributeValue(PrintCapabilitiesReader.NameAttributeXName,
+        optionXElement = new XElement(XpsPrintCapabilitiesReader.OptionElementXName);
+        optionXElement.SetAttributeValue(XpsPrintCapabilitiesReader.NameAttributeXName,
                                          $"{prefix1}:{inputBinXName.LocalName}");
         featureXElement.Add(optionXElement);
       }
@@ -95,16 +95,16 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         var feedTypeXName = xpsInputBinDefinition.FeedType;
         if (feedTypeXName != null)
         {
-          var prefix2 = printTicketXElement.EnsurePrefixRegistrationOfNamespace(PrintCapabilitiesReader.FeedTypeXName);
+          var prefix2 = printTicketXElement.EnsurePrefixRegistrationOfNamespace(XpsPrintCapabilitiesReader.FeedTypeXName);
 
-          var scoredPropertyXElement = new XElement(PrintCapabilitiesReader.ScoredPropertyElementXName);
-          scoredPropertyXElement.SetAttributeValue(PrintCapabilitiesReader.NameAttributeXName,
-                                                   $"{prefix2}:{PrintCapabilitiesReader.FeedTypeXName.LocalName}");
+          var scoredPropertyXElement = new XElement(XpsPrintCapabilitiesReader.ScoredPropertyElementXName);
+          scoredPropertyXElement.SetAttributeValue(XpsPrintCapabilitiesReader.NameAttributeXName,
+                                                   $"{prefix2}:{XpsPrintCapabilitiesReader.FeedTypeXName.LocalName}");
           optionXElement.Add(scoredPropertyXElement);
 
           var prefix3 = printTicketXElement.EnsurePrefixRegistrationOfNamespace(feedTypeXName);
 
-          var valueXElement = new XElement(PrintCapabilitiesReader.ValueElementXName);
+          var valueXElement = new XElement(XpsPrintCapabilitiesReader.ValueElementXName);
           valueXElement.Value = $"{prefix3}:{feedTypeXName.LocalName}";
           scoredPropertyXElement.Add(valueXElement);
         }

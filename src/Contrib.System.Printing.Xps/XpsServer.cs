@@ -28,24 +28,24 @@ namespace Contrib.System.Printing.Xps
   public partial class XpsServer : IXpsServer
   {
     public XpsServer()
-      : this(new PrintCapabilitiesReader(),
+      : this(new XpsPrintCapabilitiesReader(),
              new XpsPrinterDefinitionFactory(),
              new XpsInputBinDefinitionFactory()) { }
 
-    /// <exception cref="ArgumentNullException"><paramref name="printCapabilitiesReader" /> is <see langword="null" />.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="xpsPrintCapabilitiesReader" /> is <see langword="null" />.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinitionFactory" /> is <see langword="null" />.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="xpsInputBinDefinitionFactory" /> is <see langword="null" />.</exception>
-    public XpsServer([NotNull] IPrintCapabilitiesReader printCapabilitiesReader,
+    public XpsServer([NotNull] IXpsPrintCapabilitiesReader xpsPrintCapabilitiesReader,
                      [NotNull] IXpsPrinterDefinitionFactory xpsPrinterDefinitionFactory,
                      [NotNull] IXpsInputBinDefinitionFactory xpsInputBinDefinitionFactory)
     {
-      this.PrintCapabilitiesReader = printCapabilitiesReader ?? throw new ArgumentNullException(nameof(printCapabilitiesReader));
+      this.XpsPrintCapabilitiesReader = xpsPrintCapabilitiesReader ?? throw new ArgumentNullException(nameof(xpsPrintCapabilitiesReader));
       this.XpsPrinterDefinitionFactory = xpsPrinterDefinitionFactory;
       this.XpsInputBinDefinitionFactory = xpsInputBinDefinitionFactory;
     }
 
     [NotNull]
-    private IPrintCapabilitiesReader PrintCapabilitiesReader { get; }
+    private IXpsPrintCapabilitiesReader XpsPrintCapabilitiesReader { get; }
 
     [NotNull]
     private IXpsPrinterDefinitionFactory XpsPrinterDefinitionFactory { get; }
@@ -198,7 +198,7 @@ namespace Contrib.System.Printing.Xps
       }
       else
       {
-        xpsPrintCapabilities = this.PrintCapabilitiesReader.ReadXpsPrintCapabilities(printCapabilitiesXElement);
+        xpsPrintCapabilities = this.XpsPrintCapabilitiesReader.ReadXpsPrintCapabilities(printCapabilitiesXElement);
       }
 
       return xpsPrintCapabilities;
@@ -255,8 +255,8 @@ namespace Contrib.System.Printing.Xps
       {
         var prefix0 = printTicketXElement.EnsurePrefixRegistrationOfNamespace(featureXName);
 
-        featureXElement = new XElement(Xps.PrintCapabilitiesReader.FeatureElementXName);
-        featureXElement.SetAttributeValue(Xps.PrintCapabilitiesReader.NameAttributeXName,
+        featureXElement = new XElement(Xps.XpsPrintCapabilitiesReader.FeatureElementXName);
+        featureXElement.SetAttributeValue(Xps.XpsPrintCapabilitiesReader.NameAttributeXName,
                                           $"{prefix0}:{featureXName.LocalName}");
         printTicketXElement.Add(featureXElement);
       }
@@ -264,8 +264,8 @@ namespace Contrib.System.Printing.Xps
       {
         var prefix1 = printTicketXElement.EnsurePrefixRegistrationOfNamespace(inputBinXName);
 
-        var optionXElement = new XElement(Xps.PrintCapabilitiesReader.OptionElementXName);
-        optionXElement.SetAttributeValue(Xps.PrintCapabilitiesReader.NameAttributeXName,
+        var optionXElement = new XElement(Xps.XpsPrintCapabilitiesReader.OptionElementXName);
+        optionXElement.SetAttributeValue(Xps.XpsPrintCapabilitiesReader.NameAttributeXName,
                                          $"{prefix1}:{inputBinXName.LocalName}");
         featureXElement.Add(optionXElement);
       }

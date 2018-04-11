@@ -67,8 +67,8 @@ namespace Contrib.System.Printing.Xps
       {
         get
         {
-          var imageableSizeWidth = this.GetImageableSize(Xps.PrintCapabilitiesReader.ImageableSizeWidthXName);
-          var imageableSizeHeight = this.GetImageableSize(Xps.PrintCapabilitiesReader.ImageableSizeHeightXName);
+          var imageableSizeWidth = this.GetImageableSize(XpsPrintCapabilitiesReader.ImageableSizeWidthXName);
+          var imageableSizeHeight = this.GetImageableSize(XpsPrintCapabilitiesReader.ImageableSizeHeightXName);
 
           var result = NumberHelper.GetDimension(imageableSizeWidth,
                                                  imageableSizeHeight,
@@ -83,8 +83,8 @@ namespace Contrib.System.Printing.Xps
       {
         get
         {
-          var imageableSizeWidth = this.GetImageableSize(Xps.PrintCapabilitiesReader.ImageableSizeWidthXName);
-          var imageableSizeHeight = this.GetImageableSize(Xps.PrintCapabilitiesReader.ImageableSizeHeightXName);
+          var imageableSizeWidth = this.GetImageableSize(XpsPrintCapabilitiesReader.ImageableSizeWidthXName);
+          var imageableSizeHeight = this.GetImageableSize(XpsPrintCapabilitiesReader.ImageableSizeHeightXName);
 
           var result = NumberHelper.GetDimension(imageableSizeWidth,
                                                  imageableSizeHeight,
@@ -105,7 +105,7 @@ namespace Contrib.System.Printing.Xps
       {
         long? imageableSize;
 
-        var xpsProperty = this.XpsPrintCapabilities.GetXpsProperty(Xps.PrintCapabilitiesReader.PageImageableSizeXName);
+        var xpsProperty = this.XpsPrintCapabilities.GetXpsProperty(XpsPrintCapabilitiesReader.PageImageableSizeXName);
         if (xpsProperty == null)
         {
           imageableSize = null;

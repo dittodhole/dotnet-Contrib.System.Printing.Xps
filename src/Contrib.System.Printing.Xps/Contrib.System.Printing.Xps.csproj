@@ -61,7 +61,7 @@
     <Compile Include="ExtensionMethods\XpsPrintCapabilitiesExtensions.cs" />
     <Compile Include="ExtensionMethods\XpsPrinterDefinitionExtensions.cs" />
     <Compile Include="NumberHelper.cs" />
-    <Compile Include="PrintCapabilitiesReader.cs" />
+    <Compile Include="XpsPrintCapabilitiesReader.cs" />
     <Compile Include="XpsFeature.cs" />
     <Compile Include="XpsOption.cs" />
     <Compile Include="XpsPrintCapabilities.cs" />
