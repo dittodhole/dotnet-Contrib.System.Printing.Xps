@@ -27,7 +27,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       var prefix = xelement.GetPrefixOfNamespace(xname.Namespace);
       if (prefix == null)
       {
-        prefix = xelement.GetUnusedPrefixForNamespace();
+        prefix = xelement.FindUnusedPrefixForNamespace();
 
         var namespaceXName = XNamespace.Xmlns + prefix;
         xelement.SetAttributeValue(namespaceXName,
@@ -41,7 +41,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/></exception>
     [Pure]
     [NotNull]
-    public static string GetUnusedPrefixForNamespace([NotNull] this XElement xelement)
+    public static string FindUnusedPrefixForNamespace([NotNull] this XElement xelement)
     {
       if (xelement == null)
       {
