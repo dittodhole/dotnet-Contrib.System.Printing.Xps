@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using Contrib.System.Printing.Xps.ExtensionMethods;
 using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps
@@ -9,6 +10,9 @@ namespace Contrib.System.Printing.Xps
   {
     [CanBeNull]
     XName Name { get; }
+
+    [CanBeNull]
+    object GetValue([NotNull] XName name);
   }
 
   public interface IXpsOptionFactory
@@ -36,6 +40,23 @@ namespace Contrib.System.Printing.Xps
 
       [NotNull]
       private IDictionary<XName, IXpsProperty> Properties { get; } = new Dictionary<XName, IXpsProperty>();
+      /// <inheritdoc />
+      public object GetValue(XName name)
+      {
+        object value;
+
+        var xpsProperty = this.FindXpsProperty(name);
+        if (xpsProperty == null)
+        {
+          value = null;
+        }
+        else
+        {
+          value = xpsProperty.Value;
+        }
+
+        return value;
+      }
 
       /// <inheritdoc />
       public IXpsProperty[] GetXpsProperties()
