@@ -41,11 +41,11 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExtensionMethods\HasXpsPropertiesExtensionsTests.cs" />
-    <Compile Include="ExtensionMethods\HasXpsPropertiesExtensionsTests.PrintCapabilities.Designer.cs">
-      <DependentUpon>HasXpsPropertiesExtensionsTests.PrintCapabilities.resx</DependentUpon>
+    <Compile Include="ExtensionMethods\XpsPrintCapabilitiesExtensionsTests.cs" />
+    <Compile Include="ExtensionMethods\XpsPrintCapabilitiesExtensionsTests.PrintCapabilities.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <DependentUpon>XpsPrintCapabilitiesExtensionsTests.PrintCapabilities.resx</DependentUpon>
     </Compile>
     <Compile Include="XpsPrintCapabilitiesReaderTests.PrintCapabilities.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -65,13 +65,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ExtensionMethods\XpsPrintCapabilitiesExtensionsTests.PrintCapabilities.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>XpsPrintCapabilitiesExtensionsTests.PrintCapabilities.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ExtensionMethods\HasXpsPropertiesExtensionsTests.PrintCapabilities.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>HasXpsPropertiesExtensionsTests.PrintCapabilities.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="XpsPrintCapabilitiesReaderTests.PrintCapabilities.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>XpsPrintCapabilitiesReaderTests.PrintCapabilities.Designer.cs</LastGenOutput>

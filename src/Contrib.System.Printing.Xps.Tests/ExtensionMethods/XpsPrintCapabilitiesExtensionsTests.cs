@@ -1,14 +1,14 @@
 ﻿using System.Collections;
+using NUnit.Framework;
 using System.Xml.Linq;
 using Contrib.System.Printing.Xps.ExtensionMethods;
-using NUnit.Framework;
 
 namespace Contrib.System.Printing.Xps.Tests.ExtensionMethods
 {
   [TestFixture]
-  public class HasXpsPropertiesExtensionsTests
+  public class XpsPrintCapabilitiesExtensionsTests
   {
-    [TestCaseSource(typeof(HasXpsPropertiesExtensionsTests.FindXpsPropertyCases))]
+    [TestCaseSource(typeof(XpsPrintCapabilitiesExtensionsTests.FindXpsPropertyCases))]
     public void FindXpsProperty(string printCapabilities,
                                 XName name)
     {
@@ -30,57 +30,57 @@ namespace Contrib.System.Printing.Xps.Tests.ExtensionMethods
       {
         yield return new object[]
                      {
-                       XpsPrintCapabilitiesReaderTests_PrintCapabilities.Datamax_O_Neil_E_4204B_Mark_III,
+                       XpsPrintCapabilitiesExtensionsTests_PrintCapabilities.Datamax_O_Neil_E_4204B_Mark_III,
                        XpsPrintCapabilitiesReader.ImageableSizeWidthXName
                      };
         yield return new object[]
                      {
-                       XpsPrintCapabilitiesReaderTests_PrintCapabilities.Fax,
+                       XpsPrintCapabilitiesExtensionsTests_PrintCapabilities.Fax,
                        XpsPrintCapabilitiesReader.ImageableSizeWidthXName
                      };
         yield return new object[]
                      {
-                       XpsPrintCapabilitiesReaderTests_PrintCapabilities.Foxit_PhantomPDF_Printer,
+                       XpsPrintCapabilitiesExtensionsTests_PrintCapabilities.Foxit_PhantomPDF_Printer,
                        XpsPrintCapabilitiesReader.ImageableSizeWidthXName
                      };
         yield return new object[]
                      {
-                       XpsPrintCapabilitiesReaderTests_PrintCapabilities.HP_ePrint,
+                       XpsPrintCapabilitiesExtensionsTests_PrintCapabilities.HP_ePrint,
                        XpsPrintCapabilitiesReader.ImageableSizeWidthXName
                      };
         yield return new object[]
                      {
-                       XpsPrintCapabilitiesReaderTests_PrintCapabilities.Lexmark_X790_Series,
+                       XpsPrintCapabilitiesExtensionsTests_PrintCapabilities.Lexmark_X790_Series,
                        XpsPrintCapabilitiesReader.ImageableSizeWidthXName
                      };
         yield return new object[]
                      {
-                       XpsPrintCapabilitiesReaderTests_PrintCapabilities.Microsoft_Print_to_PDF,
+                       XpsPrintCapabilitiesExtensionsTests_PrintCapabilities.Microsoft_Print_to_PDF,
                        XpsPrintCapabilitiesReader.ImageableSizeWidthXName
                      };
         yield return new object[]
                      {
-                       XpsPrintCapabilitiesReaderTests_PrintCapabilities.Microsoft_XPS_Document_Writer,
+                       XpsPrintCapabilitiesExtensionsTests_PrintCapabilities.Microsoft_XPS_Document_Writer,
                        XpsPrintCapabilitiesReader.ImageableSizeWidthXName
                      };
         yield return new object[]
                      {
-                       XpsPrintCapabilitiesReaderTests_PrintCapabilities.PDF_Architect_6,
+                       XpsPrintCapabilitiesExtensionsTests_PrintCapabilities.PDF_Architect_6,
                        XpsPrintCapabilitiesReader.ImageableSizeWidthXName
                      };
         yield return new object[]
                      {
-                       XpsPrintCapabilitiesReaderTests_PrintCapabilities.Send_To_OneNote_2013,
+                       XpsPrintCapabilitiesExtensionsTests_PrintCapabilities.Send_To_OneNote_2013,
                        XpsPrintCapabilitiesReader.ImageableSizeWidthXName
                      };
         yield return new object[]
                      {
-                       XpsPrintCapabilitiesReaderTests_PrintCapabilities.Send_To_OneNote_2016,
+                       XpsPrintCapabilitiesExtensionsTests_PrintCapabilities.Send_To_OneNote_2016,
                        XpsPrintCapabilitiesReader.ImageableSizeWidthXName
                      };
         yield return new object[]
                      {
-                       XpsPrintCapabilitiesReaderTests_PrintCapabilities.Zebra_ZP_450_CTP,
+                       XpsPrintCapabilitiesExtensionsTests_PrintCapabilities.Zebra_ZP_450_CTP,
                        XpsPrintCapabilitiesReader.ImageableSizeWidthXName
                      };
       }
