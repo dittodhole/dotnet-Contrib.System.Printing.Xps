@@ -53,6 +53,9 @@ namespace Contrib.System.Printing.Xps
         this.XpsPrintCapabilities = xpsPrintCapabilities;
       }
 
+      [NotNull]
+      private IXpsPrintCapabilities XpsPrintCapabilities { get; }
+
       /// <inheritdoc />
       public string DisplayName { get; }
 
@@ -96,9 +99,6 @@ namespace Contrib.System.Printing.Xps
 
       /// <inheritdoc />
       public string DriverName { get; }
-
-      [NotNull]
-      private IXpsPrintCapabilities XpsPrintCapabilities { get; }
 
       [CanBeNull]
       private long? GetImageableSize([NotNull] XName imageableSizeXName)
