@@ -61,38 +61,6 @@ namespace Contrib.System.Printing.Xps
       public string FullName { get; }
 
       /// <inheritdoc />
-      public long? ImageableSizeWidth
-      {
-        get
-        {
-          var imageableSizeWidth = this.GetImageableSize(XpsPrintCapabilitiesReader.ImageableSizeWidthXName);
-          var imageableSizeHeight = this.GetImageableSize(XpsPrintCapabilitiesReader.ImageableSizeHeightXName);
-
-          var result = NumberHelper.GetDimension(imageableSizeWidth,
-                                                 imageableSizeHeight,
-                                                 false);
-
-          return result;
-        }
-      }
-
-      /// <inheritdoc />
-      public long? ImageableSizeHeight
-      {
-        get
-        {
-          var imageableSizeWidth = this.GetImageableSize(XpsPrintCapabilitiesReader.ImageableSizeWidthXName);
-          var imageableSizeHeight = this.GetImageableSize(XpsPrintCapabilitiesReader.ImageableSizeHeightXName);
-
-          var result = NumberHelper.GetDimension(imageableSizeWidth,
-                                                 imageableSizeHeight,
-                                                 true);
-
-          return result;
-        }
-      }
-
-      /// <inheritdoc />
       public string PortName { get; }
 
       /// <inheritdoc />
@@ -114,40 +82,6 @@ namespace Contrib.System.Printing.Xps
         }
 
         return value;
-      }
-
-      [CanBeNull]
-      private long? GetImageableSize([NotNull] XName imageableSizeXName)
-      {
-        long? imageableSize;
-
-        var xpsProperty = this.XpsPrintCapabilities.GetXpsProperty(XpsPrintCapabilitiesReader.PageImageableSizeXName);
-        if (xpsProperty == null)
-        {
-          imageableSize = null;
-        }
-        else
-        {
-          xpsProperty = xpsProperty.GetXpsProperty(imageableSizeXName);
-          if (xpsProperty == null)
-          {
-            imageableSize = null;
-          }
-          else
-          {
-            var value = xpsProperty.Value;
-            if (value is long longValue)
-            {
-              imageableSize = longValue;
-            }
-            else
-            {
-              imageableSize = null;
-            }
-          }
-        }
-
-        return imageableSize;
       }
 
       /// <inheritdoc />
