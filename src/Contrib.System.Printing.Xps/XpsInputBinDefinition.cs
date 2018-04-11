@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Xml.Linq;
+using Contrib.System.Printing.Xps.ExtensionMethods;
 using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps
@@ -31,13 +31,7 @@ namespace Contrib.System.Printing.Xps
     string DisplayName { get; }
 
     [CanBeNull]
-    long? MediaSizeWidth { get; }
-
-    [CanBeNull]
-    long? MediaSizeHeight { get; }
-
-    [CanBeNull]
-    XName FeedType { get; }
+    object GetValue([NotNull] XName name);
   }
 
   public interface IXpsInputBinDefinitionFactory
@@ -82,131 +76,36 @@ namespace Contrib.System.Printing.Xps
       {
         get
         {
-          string displayName;
-
-          var xpsProperty = this.XpsOption.GetXpsProperty(XpsPrintCapabilitiesReader.DisplayNameXName);
-          if (xpsProperty == null)
-          {
-            displayName = null;
-          }
-          else
-          {
-            var value = xpsProperty.Value;
-            if (value == null)
-            {
-              displayName = null;
-            }
-            else
-            {
-              displayName = value as string;
-            }
-          }
+          var displayName = this.GetValue(XpsPrintCapabilitiesReader.DisplayNameXName) as string;
 
           return displayName;
         }
       }
 
       /// <inheritdoc />
-      public long? MediaSizeWidth
+      public object GetValue(XName name)
       {
-        get
+        object value;
+
+        var xpsProperty = this.XpsOption.FindXpsProperty(name);
+        if (xpsProperty == null)
         {
-          var mediaSizeWidth = this.GetPageMediaSize(XpsPrintCapabilitiesReader.MediaSizeWidthXName);
-          var mediaSizeHeight = this.GetPageMediaSize(XpsPrintCapabilitiesReader.MediaSizeHeightXName);
-
-          var result = NumberHelper.GetDimension(mediaSizeWidth,
-                                                 mediaSizeHeight,
-                                                 false);
-
-          return result;
-        }
-      }
-
-      /// <inheritdoc />
-      public long? MediaSizeHeight
-      {
-        get
-        {
-          var mediaSizeWidth = this.GetPageMediaSize(XpsPrintCapabilitiesReader.MediaSizeWidthXName);
-          var mediaSizeHeight = this.GetPageMediaSize(XpsPrintCapabilitiesReader.MediaSizeHeightXName);
-
-          var result = NumberHelper.GetDimension(mediaSizeWidth,
-                                                 mediaSizeHeight,
-                                                 true);
-
-          return result;
-        }
-      }
-
-      /// <inheritdoc />
-      public XName FeedType
-      {
-        get
-        {
-          XName feedType;
-          var xpsProperty = this.XpsOption.GetXpsProperty(XpsPrintCapabilitiesReader.FeedTypeXName);
+          xpsProperty = this.XpsPrintCapabilities.FindXpsProperty(name);
           if (xpsProperty == null)
           {
-            feedType = null;
+            value = null;
           }
           else
           {
-            var value = xpsProperty.Value;
-            if (value == null)
-            {
-              feedType = null;
-            }
-            else
-            {
-              feedType = xpsProperty.Value as XName;
-            }
-          }
-
-          return feedType;
-        }
-      }
-
-      [CanBeNull]
-      private long? GetPageMediaSize([NotNull] XName mediaSizeXName)
-      {
-        long? pageMediaSize;
-
-        var xpsFeature = this.XpsPrintCapabilities.GetXpsFeature(XpsPrintCapabilitiesReader.PageMediaSizeXName);
-        if (xpsFeature != null)
-        {
-          var xpsOptions = xpsFeature.GetXpsOptions();
-          var xpsOption = xpsOptions.FirstOrDefault();
-          if (xpsOption == null)
-          {
-            pageMediaSize = null;
-          }
-          else
-          {
-            var xpsProperty = xpsOption.GetXpsProperty(mediaSizeXName);
-            if (xpsProperty == null)
-            {
-              pageMediaSize = null;
-            }
-            else
-            {
-              var value = xpsProperty.Value;
-              if (value is long longValue)
-              {
-                pageMediaSize = longValue;
-              }
-              else
-              {
-                pageMediaSize = null;
-              }
-            }
+            value = xpsProperty.Value;
           }
         }
         else
         {
-          pageMediaSize = null;
+          value = xpsProperty.Value;
         }
 
-        return pageMediaSize;
+        return value;
       }
 
       /// <inheritdoc />
