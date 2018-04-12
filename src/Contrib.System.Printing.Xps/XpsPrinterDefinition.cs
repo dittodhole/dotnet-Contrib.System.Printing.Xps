@@ -39,9 +39,7 @@ namespace Contrib.System.Printing.Xps
 
   public sealed class XpsPrinterDefinitionFactory : IXpsPrinterDefinitionFactory
   {
-    // TODO check need for IEquatable
-    private sealed class XpsPrinterDefinition : IXpsPrinterDefinition,
-                                                IEquatable<XpsPrinterDefinition>
+    private sealed class XpsPrinterDefinition : IXpsPrinterDefinition
     {
       public XpsPrinterDefinition([NotNull] string displayName,
                                   [NotNull] string fullName,
@@ -89,69 +87,6 @@ namespace Contrib.System.Printing.Xps
         }
 
         return value;
-      }
-
-      /// <inheritdoc />
-      public bool Equals(XpsPrinterDefinition other)
-      {
-        if (object.ReferenceEquals(null,
-                                   other))
-        {
-          return false;
-        }
-
-        if (object.ReferenceEquals(this,
-                                   other))
-        {
-          return true;
-        }
-
-        return string.Equals(this.FullName,
-                             other.FullName);
-      }
-
-      /// <inheritdoc />
-      public override bool Equals(object obj)
-      {
-        if (object.ReferenceEquals(null,
-                                   obj))
-        {
-          return false;
-        }
-
-        if (object.ReferenceEquals(this,
-                                   obj))
-        {
-          return true;
-        }
-
-        return obj is XpsPrinterDefinition && this.Equals((XpsPrinterDefinition) obj);
-      }
-
-      /// <inheritdoc />
-      public override int GetHashCode()
-      {
-        return this.FullName.GetHashCode();
-      }
-
-      public static bool operator ==(XpsPrinterDefinition left,
-                                     XpsPrinterDefinition right)
-      {
-        return object.Equals(left,
-                             right);
-      }
-
-      public static bool operator !=(XpsPrinterDefinition left,
-                                     XpsPrinterDefinition right)
-      {
-        return !object.Equals(left,
-                              right);
-      }
-
-      /// <inheritdoc />
-      public override string ToString()
-      {
-        return this.FullName;
       }
     }
 
