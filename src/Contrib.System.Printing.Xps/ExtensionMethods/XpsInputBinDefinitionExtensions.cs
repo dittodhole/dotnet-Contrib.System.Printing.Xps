@@ -59,7 +59,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       //                  version="1">
       //   <psf:Feature name="{prefix0}:{FeatureName.LocalName}">
       //     <psf:Option name="{prefix1}:{DisplayName.LocalName}">
-      //       <psf:ScoredProperty name="{prefix2}:{XpsPrintCapabilitiesReader.FeedTypeXName.LocalName}"> ! TODO !
+      //       <psf:ScoredProperty name="{prefix2}:{XpsPrintCapabilitiesReader.FeedTypeXName.LocalName}">
       //         <psf:Value>{prefix3}:{FeedType.LocalName}</psf:Value>
       //       </psf:ScoredProperty>
       //     </psf:Option>
