@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Xml.Linq;
 using Contrib.System.Printing.Xps.ExtensionMethods;
 using JetBrains.Annotations;
@@ -7,94 +8,107 @@ namespace Contrib.System.Printing.Xps
 {
   public interface IXpsInputBinDefinition : IHasValues
   {
-    /// <remarks>
-    ///   The value is one of the following:
-    ///   <list type="bullet">
-    ///     <item>
-    ///       <description><see cref="XpsPrintCapabilitiesReader.PageInputBinXName"/></description>
-    ///     </item>
-    ///     <item>
-    ///       <description><see cref="XpsPrintCapabilitiesReader.DocumentInputBinXName"/></description>
-    ///     </item>
-    ///     <item>
-    ///       <description><see cref="XpsPrintCapabilitiesReader.JobInputBinXName"/></description>
-    ///     </item>
-    ///   </list>
-    /// </remarks>
     [NotNull]
     XName FeatureName { get; }
 
     [NotNull]
-    string DisplayName { get; }
-
-    [NotNull]
     XName Name { get; }
+
+    [CanBeNull]
+    string DisplayName { get; }
   }
 
   public interface IXpsInputBinDefinitionFactory
   {
     [NotNull]
-    IXpsInputBinDefinition Create([NotNull] XName featureName,
-                                  [NotNull] string displayName,
-                                  [NotNull] XName name,
-                                  [NotNull] IXpsOption xpsOption,
-                                  [NotNull] IXpsPrintCapabilities xpsPrintCapabilities);
+    IXpsInputBinDefinition Create([NotNull] XElement optionXElement,
+                                  [NotNull] XElement printCapabilitiesXElement);
   }
 
   public sealed class XpsInputBinDefinitionFactory : IXpsInputBinDefinitionFactory
   {
+    // TODO check need for IEquatable
     private sealed class XpsInputBinDefinition : IXpsInputBinDefinition,
                                                  IEquatable<XpsInputBinDefinition>
     {
-      public XpsInputBinDefinition([NotNull] XName featureName,
-                                   [NotNull] string displayName,
-                                   [NotNull] XName name,
-                                   [NotNull] IXpsOption xpsOption,
-                                   [NotNull] IXpsPrintCapabilities xpsPrintCapabilities)
+      public XpsInputBinDefinition([NotNull] XElement optionXElement,
+                                   [NotNull] XElement printCapabilitiesXElement)
       {
-        this.FeatureName = featureName;
-        this.DisplayName = displayName;
-        this.Name = name;
-        this.XpsOption = xpsOption;
-        this.XpsPrintCapabilities = xpsPrintCapabilities;
+        this.OptionXElement = optionXElement;
+        this.PrintCapabilitiesXElement = printCapabilitiesXElement;
       }
 
       [NotNull]
-      private IXpsOption XpsOption { get; }
+      private XElement PrintCapabilitiesXElement { get; }
 
       [NotNull]
-      private IXpsPrintCapabilities XpsPrintCapabilities { get; }
+      private XElement OptionXElement { get; }
 
       /// <inheritdoc />
-      public XName FeatureName { get; }
-
-      /// <inheritdoc />
-      public string DisplayName { get; }
-
-      /// <inheritdoc />
-      public XName Name { get; }
-
-      /// <inheritdoc />
-      public object GetValue(XName name)
+      public XName FeatureName
       {
-        object value;
-
-        var xpsProperty = this.XpsOption.FindXpsProperty(name);
-        if (xpsProperty == null)
+        get
         {
-          xpsProperty = this.XpsPrintCapabilities.FindXpsProperty(name);
-          if (xpsProperty == null)
+          XName featureName;
+
+          var featureXElement = this.OptionXElement.Parent;
+          if (featureXElement == null)
           {
-            value = null;
+            featureName = null;
           }
           else
           {
-            value = xpsProperty.Value;
+            featureName = featureXElement.GetNameFromNameAttribute();
           }
+
+          return featureName;
+        }
+      }
+
+      /// <inheritdoc />
+      public string DisplayName
+      {
+        get
+        {
+          var displayName = this.GetValue(XpsServer.DisplayNameXName) as string;
+
+          return displayName;
+        }
+      }
+
+      /// <inheritdoc />
+      public XName Name
+      {
+        get
+        {
+          var name = this.OptionXElement.GetNameFromNameAttribute();
+
+          return name;
+        }
+      }
+
+      /// <inheritdoc />
+      public object GetValue(params XName[] names)
+      {
+        object value;
+
+        var xelement = names.Aggregate(this.OptionXElement,
+                                       (current,
+                                        name) => current?.FindElementByNameAttribute(name));
+        if (xelement == null)
+        {
+          xelement = names.Aggregate(this.PrintCapabilitiesXElement,
+                                     (current,
+                                      name) => current?.FindElementByNameAttribute(name));
+        }
+
+        if (xelement == null)
+        {
+          value = null;
         }
         else
         {
-          value = xpsProperty.Value;
+          value = xelement.GetValueFromValueElement();
         }
 
         return value;
@@ -165,17 +179,11 @@ namespace Contrib.System.Printing.Xps
     }
 
     /// <inheritdoc />
-    public IXpsInputBinDefinition Create(XName featureName,
-                                         string displayName,
-                                         XName name,
-                                         IXpsOption xpsOption,
-                                         IXpsPrintCapabilities xpsPrintCapabilities)
+    public IXpsInputBinDefinition Create(XElement optionXElement,
+                                         XElement printCapabilitiesXElement)
     {
-      var xpsInputBinDefinition = new XpsInputBinDefinition(featureName,
-                                                            displayName,
-                                                            name,
-                                                            xpsOption,
-                                                            xpsPrintCapabilities);
+      var xpsInputBinDefinition = new XpsInputBinDefinition(optionXElement,
+                                                            printCapabilitiesXElement);
 
       return xpsInputBinDefinition;
     }

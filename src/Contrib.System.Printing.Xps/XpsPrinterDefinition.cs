@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Xml.Linq;
 using Contrib.System.Printing.Xps.ExtensionMethods;
 using JetBrains.Annotations;
@@ -8,7 +9,7 @@ namespace Contrib.System.Printing.Xps
   public interface IHasValues
   {
     [CanBeNull]
-    object GetValue([NotNull] XName name);
+    object GetValue([NotNull] [ItemNotNull] params XName[] names);
   }
 
   public interface IXpsPrinterDefinition : IHasValues
@@ -33,11 +34,12 @@ namespace Contrib.System.Printing.Xps
                                  [NotNull] string fullName,
                                  [CanBeNull] string portName,
                                  [CanBeNull] string driverName,
-                                 [NotNull] IXpsPrintCapabilities xpsPrintCapabilities);
+                                 [NotNull] XElement printCapabilitiesXElement);
   }
 
   public sealed class XpsPrinterDefinitionFactory : IXpsPrinterDefinitionFactory
   {
+    // TODO check need for IEquatable
     private sealed class XpsPrinterDefinition : IXpsPrinterDefinition,
                                                 IEquatable<XpsPrinterDefinition>
     {
@@ -45,17 +47,17 @@ namespace Contrib.System.Printing.Xps
                                   [NotNull] string fullName,
                                   [CanBeNull] string portName,
                                   [CanBeNull] string driverName,
-                                  [NotNull] IXpsPrintCapabilities xpsPrintCapabilities)
+                                  [NotNull] XElement printCapabilitiesXElement)
       {
         this.DisplayName = displayName;
         this.FullName = fullName;
         this.PortName = portName;
         this.DriverName = driverName;
-        this.XpsPrintCapabilities = xpsPrintCapabilities;
+        this.PrintCapabilitiesXElement = printCapabilitiesXElement;
       }
 
       [NotNull]
-      private IXpsPrintCapabilities XpsPrintCapabilities { get; }
+      private XElement PrintCapabilitiesXElement  { get; }
 
       /// <inheritdoc />
       public string DisplayName { get; }
@@ -70,18 +72,20 @@ namespace Contrib.System.Printing.Xps
       public string DriverName { get; }
 
       /// <inheritdoc />
-      public object GetValue(XName name)
+      public object GetValue(params XName[] names)
       {
         object value;
 
-        var xpsProperty = this.XpsPrintCapabilities.FindXpsProperty(name);
-        if (xpsProperty == null)
+        var xelement = names.Aggregate(this.PrintCapabilitiesXElement,
+                                       (current,
+                                        name) => current?.FindElementByNameAttribute(name));
+        if (xelement == null)
         {
           value = null;
         }
         else
         {
-          value = xpsProperty.Value;
+          value = xelement.GetValueFromValueElement();
         }
 
         return value;
@@ -156,13 +160,13 @@ namespace Contrib.System.Printing.Xps
                                         string fullName,
                                         string portName,
                                         string driverName,
-                                        IXpsPrintCapabilities xpsPrintCapabilities)
+                                        XElement printCapabilitiesXElement)
     {
       var xpsPrinterDefinition = new XpsPrinterDefinition(displayName,
                                                           fullName,
                                                           portName,
                                                           driverName,
-                                                          xpsPrintCapabilities);
+                                                          printCapabilitiesXElement);
 
       return xpsPrinterDefinition;
     }
