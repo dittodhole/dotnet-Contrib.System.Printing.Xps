@@ -27,9 +27,7 @@ namespace Contrib.System.Printing.Xps
 
   public sealed class XpsInputBinDefinitionFactory : IXpsInputBinDefinitionFactory
   {
-    // TODO check need for IEquatable
-    private sealed class XpsInputBinDefinition : IXpsInputBinDefinition,
-                                                 IEquatable<XpsInputBinDefinition>
+    private sealed class XpsInputBinDefinition : IXpsInputBinDefinition
     {
       public XpsInputBinDefinition([NotNull] XElement optionXElement,
                                    [NotNull] XElement printCapabilitiesXElement)
@@ -112,69 +110,6 @@ namespace Contrib.System.Printing.Xps
         }
 
         return value;
-      }
-
-      /// <inheritdoc />
-      public bool Equals(XpsInputBinDefinition other)
-      {
-        if (object.ReferenceEquals(null,
-                                   other))
-        {
-          return false;
-        }
-
-        if (object.ReferenceEquals(this,
-                                   other))
-        {
-          return true;
-        }
-
-        return string.Equals(this.Name,
-                             other.Name);
-      }
-
-      /// <inheritdoc />
-      public override bool Equals(object obj)
-      {
-        if (object.ReferenceEquals(null,
-                                   obj))
-        {
-          return false;
-        }
-
-        if (object.ReferenceEquals(this,
-                                   obj))
-        {
-          return true;
-        }
-
-        return obj is XpsInputBinDefinition && this.Equals((XpsInputBinDefinition) obj);
-      }
-
-      /// <inheritdoc />
-      public override int GetHashCode()
-      {
-        return this.Name.GetHashCode();
-      }
-
-      public static bool operator ==(XpsInputBinDefinition left,
-                                     XpsInputBinDefinition right)
-      {
-        return object.Equals(left,
-                             right);
-      }
-
-      public static bool operator !=(XpsInputBinDefinition left,
-                                     XpsInputBinDefinition right)
-      {
-        return !object.Equals(left,
-                              right);
-      }
-
-      /// <inheritdoc />
-      public override string ToString()
-      {
-        return this.Name.ToString();
       }
     }
 
