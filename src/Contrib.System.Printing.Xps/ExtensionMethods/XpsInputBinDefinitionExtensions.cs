@@ -50,17 +50,18 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       // <?xml version="1.0" encoding="UTF-8"?>
       // <psf:PrintTicket xmlns:psf="http://schemas.microsoft.com/windows/2003/08/printing/printschemaframework"
       //                  xmlns:psk="http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords"
-      //                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      //                  xmlns:{xsi}="http://www.w3.org/2001/XMLSchema-instance"
       //                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-      //                  xmlns:{prefix0}="{FeatureName.NamespaceName}"
-      //                  xmlns:{prefix1}="{FeatureName.NamespaceName}"
-      //                  xmlns:{prefix2}="{PrintCapabilitiesReader.FeedTypeXName.NamespaceName}"
-      //                  xmlns:{prefix3}="{FeedType.NamespaceName}"
+      //                  xmlns:{prefix0}="{featureXName.NamespaceName}"
+      //                  xmlns:{prefix1}="{inputBinXName.NamespaceName}"
+      //                  xmlns:{prefix2}="{XpsServer.FeedTypeXName.NamespaceName}"
+      //                  xmlns:{prefix3}="{feedTypeXName.NamespaceName}"
+      //                  xmlns:{prefix4}="{XpsServer.QNameTypeXName.NamespaceName}"
       //                  version="1">
-      //   <psf:Feature name="{prefix0}:{FeatureName.LocalName}">
-      //     <psf:Option name="{prefix1}:{DisplayName.LocalName}">
-      //       <psf:ScoredProperty name="{prefix2}:{PrintCapabilitiesReader.FeedTypeXName.LocalName}"> ! TODO !
-      //         <psf:Value>{prefix3}:{FeedType.LocalName}</psf:Value>
+      //   <psf:Feature name="{prefix0}:{featureXName.LocalName}">
+      //     <psf:Option name="{prefix1}:{inputBinXName.LocalName}">
+      //       <psf:ScoredProperty name="{prefix2}:{XpsServer.FeedTypeXName.LocalName}">
+      //         <psf:Value {xsi}:{XpsServer.TypeXName.LocalName}="{prefix4}:{XpsServer.QNameTypeXName.LocalName}">{prefix3}:{feedTypeXName.LocalName}</psf:Value>
       //       </psf:ScoredProperty>
       //     </psf:Option>
       //   </psf:Feature>
@@ -73,8 +74,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
 
         var prefix0 = printTicketXElement.EnsurePrefixRegistrationOfNamespace(featureXName);
 
-        featureXElement = new XElement(PrintCapabilitiesReader.FeatureElementXName);
-        featureXElement.SetAttributeValue(PrintCapabilitiesReader.NameAttributeXName,
+        featureXElement = new XElement(XpsServer.FeatureElementXName);
+        featureXElement.SetAttributeValue(XpsServer.NameAttributeXName,
                                           $"{prefix0}:{featureXName.LocalName}");
         printTicketXElement.Add(featureXElement);
       }
@@ -85,27 +86,30 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
 
         var prefix1 = printTicketXElement.EnsurePrefixRegistrationOfNamespace(inputBinXName);
 
-        optionXElement = new XElement(PrintCapabilitiesReader.OptionElementXName);
-        optionXElement.SetAttributeValue(PrintCapabilitiesReader.NameAttributeXName,
+        optionXElement = new XElement(XpsServer.OptionElementXName);
+        optionXElement.SetAttributeValue(XpsServer.NameAttributeXName,
                                          $"{prefix1}:{inputBinXName.LocalName}");
         featureXElement.Add(optionXElement);
       }
 
       {
-        var feedTypeXName = xpsInputBinDefinition.FeedType;
+        var feedTypeXName = xpsInputBinDefinition.GetValue(XpsServer.FeedTypeXName) as XName;
         if (feedTypeXName != null)
         {
-          var prefix2 = printTicketXElement.EnsurePrefixRegistrationOfNamespace(PrintCapabilitiesReader.FeedTypeXName);
+          var prefix2 = printTicketXElement.EnsurePrefixRegistrationOfNamespace(XpsServer.FeedTypeXName);
 
-          var scoredPropertyXElement = new XElement(PrintCapabilitiesReader.ScoredPropertyElementXName);
-          scoredPropertyXElement.SetAttributeValue(PrintCapabilitiesReader.NameAttributeXName,
-                                                   $"{prefix2}:{PrintCapabilitiesReader.FeedTypeXName.LocalName}");
+          var scoredPropertyXElement = new XElement(XpsServer.ScoredPropertyElementXName);
+          scoredPropertyXElement.SetAttributeValue(XpsServer.NameAttributeXName,
+                                                   $"{prefix2}:{XpsServer.FeedTypeXName.LocalName}");
           optionXElement.Add(scoredPropertyXElement);
 
           var prefix3 = printTicketXElement.EnsurePrefixRegistrationOfNamespace(feedTypeXName);
+          var prefix4 = printTicketXElement.EnsurePrefixRegistrationOfNamespace(XpsServer.QNameTypeXName);
 
-          var valueXElement = new XElement(PrintCapabilitiesReader.ValueElementXName);
+          var valueXElement = new XElement(XpsServer.ValueElementXName);
           valueXElement.Value = $"{prefix3}:{feedTypeXName.LocalName}";
+          valueXElement.SetAttributeValue(XpsServer.TypeXName,
+                                          $"{prefix4}:{XpsServer.QNameTypeXName.LocalName}");
           scoredPropertyXElement.Add(valueXElement);
         }
       }
