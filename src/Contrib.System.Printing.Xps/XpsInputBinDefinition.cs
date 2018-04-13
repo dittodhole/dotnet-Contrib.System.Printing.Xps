@@ -75,7 +75,8 @@ namespace Contrib.System.Printing.Xps
       {
         get
         {
-          var displayName = this.GetValue(XpsServer.DisplayNameXName) as string;
+          var displayName = this.OptionXElement.FindElementByNameAttribute(XpsServer.DisplayNameXName)
+                                ?.GetValueFromValueElement() as string;
 
           return displayName;
         }
