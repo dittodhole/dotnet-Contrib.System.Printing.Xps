@@ -43,37 +43,42 @@ namespace Contrib.System.Printing.Xps
     TXpsInputBinDefinition[] GetXpsInputBinDefinitions([NotNull] TXpsPrinterDefinition xpsPrinterDefinition);
   }
 
-  public partial class XpsServer : IXpsServerEx<IXpsPrinterDefinition, IXpsInputBinDefinition>
+  public partial class XpsServer : XpsServerEx<IXpsPrinterDefinition, IXpsInputBinDefinition>
   {
     public XpsServer()
-      : this(new XpsPrinterDefinitionFactory(),
+      : base(new XpsPrinterDefinitionFactory(),
              new XpsInputBinDefinitionFactory()) { }
 
-    /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinitionFactory" /> is <see langword="null" />.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="xpsInputBinDefinitionFactory" /> is <see langword="null" />.</exception>
+    /// <inheritdoc />
     public XpsServer([NotNull] IXpsPrinterDefinitionFactoryEx<IXpsPrinterDefinition> xpsPrinterDefinitionFactory,
                      [NotNull] IXpsInputBinDefinitionFactoryEx<IXpsInputBinDefinition> xpsInputBinDefinitionFactory)
+      : base(xpsPrinterDefinitionFactory,
+             xpsInputBinDefinitionFactory) { }
+  }
+
+  public class XpsServerEx<TXpsPrinterDefinition, TXpsInputBinDefinition> : IXpsServerEx<TXpsPrinterDefinition, TXpsInputBinDefinition>
+    where TXpsPrinterDefinition : class, IXpsPrinterDefinition
+    where TXpsInputBinDefinition : class, IXpsInputBinDefinition
+  {
+    /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinitionFactory" /> is <see langword="null" />.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="xpsInputBinDefinitionFactory" /> is <see langword="null" />.</exception>
+    public XpsServerEx([NotNull] IXpsPrinterDefinitionFactoryEx<TXpsPrinterDefinition> xpsPrinterDefinitionFactory,
+                       [NotNull] IXpsInputBinDefinitionFactoryEx<TXpsInputBinDefinition> xpsInputBinDefinitionFactory)
     {
-      this.XpsPrinterDefinitionFactory = xpsPrinterDefinitionFactory;
-      this.XpsInputBinDefinitionFactory = xpsInputBinDefinitionFactory;
+      this.XpsPrinterDefinitionFactory = xpsPrinterDefinitionFactory ?? throw new ArgumentNullException(nameof(xpsPrinterDefinitionFactory));
+      this.XpsInputBinDefinitionFactory = xpsInputBinDefinitionFactory ?? throw new ArgumentNullException(nameof(xpsInputBinDefinitionFactory));
     }
 
     [NotNull]
-    private IXpsPrinterDefinitionFactoryEx<IXpsPrinterDefinition> XpsPrinterDefinitionFactory { get; }
+    private IXpsPrinterDefinitionFactoryEx<TXpsPrinterDefinition> XpsPrinterDefinitionFactory { get; }
 
     [NotNull]
-    private IXpsInputBinDefinitionFactoryEx<IXpsInputBinDefinition> XpsInputBinDefinitionFactory { get; }
+    private IXpsInputBinDefinitionFactoryEx<TXpsInputBinDefinition> XpsInputBinDefinitionFactory { get; }
 
     /// <inheritdoc />
-    IXpsPrinterDefinition[] IXpsServer.GetXpsPrinterDefinitions()
+    public virtual TXpsPrinterDefinition[] GetXpsPrinterDefinitions()
     {
-      return this.GetXpsPrinterDefinitions();
-    }
-
-    /// <inheritdoc />
-    public virtual IXpsPrinterDefinition[] GetXpsPrinterDefinitions()
-    {
-      IXpsPrinterDefinition[] result;
+      TXpsPrinterDefinition[] result;
       using (var printServer = new PrintServer())
       using (var printQueues = printServer.GetLocalAndRemotePrintQueues())
       {
@@ -100,20 +105,22 @@ namespace Contrib.System.Printing.Xps
     }
 
     /// <inheritdoc />
-    IXpsInputBinDefinition[] IXpsServer.GetXpsInputBinDefinitions(IXpsPrinterDefinition xpsPrinterDefinition)
+    IXpsPrinterDefinition[] IXpsServer.GetXpsPrinterDefinitions()
     {
-      return this.GetXpsInputBinDefinitions(xpsPrinterDefinition);
+      return this.GetXpsPrinterDefinitions()
+                 .Cast<IXpsPrinterDefinition>()
+                 .ToArray();
     }
 
     /// <inheritdoc />
-    public virtual IXpsInputBinDefinition[] GetXpsInputBinDefinitions(IXpsPrinterDefinition xpsPrinterDefinition)
+    public virtual TXpsInputBinDefinition[] GetXpsInputBinDefinitions(TXpsPrinterDefinition xpsPrinterDefinition)
     {
       if (xpsPrinterDefinition == null)
       {
         throw new ArgumentNullException(nameof(xpsPrinterDefinition));
       }
 
-      IXpsInputBinDefinition[] result;
+      TXpsInputBinDefinition[] result;
       using (var printServer = new PrintServer())
       using (var printQueues = printServer.GetLocalAndRemotePrintQueues())
       {
@@ -121,7 +128,7 @@ namespace Contrib.System.Printing.Xps
         if (printQueue == null)
         {
           LogTo.Warn($"Could not get {nameof(PrintQueue)} '{xpsPrinterDefinition.FullName}'.");
-          result = new IXpsInputBinDefinition[0];
+          result = new TXpsInputBinDefinition[0];
         }
         else
         {
@@ -136,7 +143,7 @@ namespace Contrib.System.Printing.Xps
 
           if (inputBinXElement == null)
           {
-            result = new IXpsInputBinDefinition[0];
+            result = new TXpsInputBinDefinition[0];
           }
           else
           {
@@ -161,6 +168,14 @@ namespace Contrib.System.Printing.Xps
       }
 
       return result;
+    }
+
+    /// <inheritdoc />
+    IXpsInputBinDefinition[] IXpsServer.GetXpsInputBinDefinitions(IXpsPrinterDefinition xpsPrinterDefinition)
+    {
+      return this.GetXpsInputBinDefinitions(xpsPrinterDefinition as TXpsPrinterDefinition)
+                 .Cast<IXpsInputBinDefinition>()
+                 .ToArray();
     }
 
     [NotNull]
