@@ -17,7 +17,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\$(Platform)\$(Configuration)</OutputPath>
-    <BaseIntermediateOutputPath>obj\$(Platform)\$(Configuration)</BaseIntermediateOutputPath>
+    <BaseIntermediateOutputPath>obj\$(Platform)</BaseIntermediateOutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -28,7 +28,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\$(Platform)\$(Configuration)</OutputPath>
-    <BaseIntermediateOutputPath>obj\$(Platform)\$(Configuration)</BaseIntermediateOutputPath>
+    <BaseIntermediateOutputPath>obj\$(Platform)</BaseIntermediateOutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
