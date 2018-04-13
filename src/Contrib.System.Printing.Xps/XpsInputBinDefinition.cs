@@ -113,16 +113,9 @@ namespace Contrib.System.Printing.Xps
       {
         object value;
 
-        var xelement = names.Aggregate(this.OptionXElement,
+        var xelement = names.Aggregate(this.PrintCapabilitiesXElement,
                                        (current,
                                         name) => current?.FindElementByNameAttribute(name));
-        if (xelement == null)
-        {
-          xelement = names.Aggregate(this.PrintCapabilitiesXElement,
-                                     (current,
-                                      name) => current?.FindElementByNameAttribute(name));
-        }
-
         if (xelement == null)
         {
           value = null;
