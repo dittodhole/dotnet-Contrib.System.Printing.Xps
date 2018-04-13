@@ -15,6 +15,9 @@ namespace Contrib.System.Printing.Xps
 
     [CanBeNull]
     string DisplayName { get; }
+
+    [CanBeNull]
+    XName FeedType { get; }
   }
 
   public interface IXpsInputBinDefinitionFactory
@@ -71,6 +74,17 @@ namespace Contrib.System.Printing.Xps
       }
 
       /// <inheritdoc />
+      public XName Name
+      {
+        get
+        {
+          var name = this.OptionXElement.GetNameFromNameAttribute();
+
+          return name;
+        }
+      }
+
+      /// <inheritdoc />
       public string DisplayName
       {
         get
@@ -83,13 +97,14 @@ namespace Contrib.System.Printing.Xps
       }
 
       /// <inheritdoc />
-      public XName Name
+      public XName FeedType
       {
         get
         {
-          var name = this.OptionXElement.GetNameFromNameAttribute();
+          var feedType = this.OptionXElement.FindElementByNameAttribute(XpsServer.FeedTypeXName)
+                             ?.GetValueFromValueElement() as XName;
 
-          return name;
+          return feedType;
         }
       }
 
