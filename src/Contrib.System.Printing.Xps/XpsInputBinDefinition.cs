@@ -1,11 +1,10 @@
-﻿using System.Linq;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 using Contrib.System.Printing.Xps.ExtensionMethods;
 using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps
 {
-  public interface IXpsInputBinDefinition : IHasValues
+  public interface IXpsInputBinDefinition
   {
     [NotNull]
     XName FeatureName { get; }
@@ -106,26 +105,6 @@ namespace Contrib.System.Printing.Xps
 
           return feedType;
         }
-      }
-
-      /// <inheritdoc />
-      public object GetValue(params XName[] names)
-      {
-        object value;
-
-        var xelement = names.Aggregate(this.PrintCapabilitiesXElement,
-                                       (current,
-                                        name) => current?.FindElementByNameAttribute(name));
-        if (xelement == null)
-        {
-          value = null;
-        }
-        else
-        {
-          value = xelement.GetValueFromValueElement();
-        }
-
-        return value;
       }
     }
 

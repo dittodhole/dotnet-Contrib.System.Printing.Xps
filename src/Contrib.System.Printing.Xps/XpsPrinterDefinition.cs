@@ -1,17 +1,9 @@
-﻿using System.Linq;
-using System.Xml.Linq;
-using Contrib.System.Printing.Xps.ExtensionMethods;
+﻿using System.Xml.Linq;
 using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps
 {
-  public interface IHasValues
-  {
-    [CanBeNull]
-    object GetValue([NotNull] [ItemNotNull] params XName[] names);
-  }
-
-  public interface IXpsPrinterDefinition : IHasValues
+  public interface IXpsPrinterDefinition
   {
     [NotNull]
     string DisplayName { get; }
@@ -78,26 +70,6 @@ namespace Contrib.System.Printing.Xps
 
       /// <inheritdoc />
       public string DriverName { get; }
-
-      /// <inheritdoc />
-      public object GetValue(params XName[] names)
-      {
-        object value;
-
-        var xelement = names.Aggregate(this.PrintCapabilitiesXElement,
-                                       (current,
-                                        name) => current?.FindElementByNameAttribute(name));
-        if (xelement == null)
-        {
-          value = null;
-        }
-        else
-        {
-          value = xelement.GetValueFromValueElement();
-        }
-
-        return value;
-      }
     }
 
     /// <inheritdoc />
