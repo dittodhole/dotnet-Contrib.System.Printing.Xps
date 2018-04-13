@@ -36,7 +36,18 @@ namespace Contrib.System.Printing.Xps
                                  [NotNull] XElement printCapabilitiesXElement);
   }
 
-  public sealed class XpsPrinterDefinitionFactory : IXpsPrinterDefinitionFactory
+  public interface IXpsPrinterDefinitionFactoryEx<TXpsPrinterDefinition> : IXpsPrinterDefinitionFactory
+    where TXpsPrinterDefinition : IXpsPrinterDefinition
+  {
+    [NotNull]
+    TXpsPrinterDefinition Create([NotNull] string displayName,
+                                 [NotNull] string fullName,
+                                 [CanBeNull] string portName,
+                                 [CanBeNull] string driverName,
+                                 [NotNull] XElement printCapabilitiesXElement);
+  }
+
+  public sealed class XpsPrinterDefinitionFactory : IXpsPrinterDefinitionFactoryEx<IXpsPrinterDefinition>
   {
     private sealed class XpsPrinterDefinition : IXpsPrinterDefinition
     {
@@ -103,6 +114,20 @@ namespace Contrib.System.Printing.Xps
                                                           printCapabilitiesXElement);
 
       return xpsPrinterDefinition;
+    }
+
+    /// <inheritdoc />
+    IXpsPrinterDefinition IXpsPrinterDefinitionFactory.Create(string displayName,
+                                                              string fullName,
+                                                              string portName,
+                                                              string driverName,
+                                                              XElement printCapabilitiesXElement)
+    {
+      return this.Create(displayName,
+                         fullName,
+                         portName,
+                         driverName,
+                         printCapabilitiesXElement);
     }
   }
 }

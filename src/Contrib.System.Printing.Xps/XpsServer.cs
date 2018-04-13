@@ -25,7 +25,25 @@ namespace Contrib.System.Printing.Xps
     IXpsInputBinDefinition[] GetXpsInputBinDefinitions([NotNull] IXpsPrinterDefinition xpsPrinterDefinition);
   }
 
-  public partial class XpsServer : IXpsServer
+  public interface IXpsServerEx<TXpsPrinterDefinition, TXpsInputBinDefinition> : IXpsServer
+    where TXpsPrinterDefinition : IXpsPrinterDefinition
+    where TXpsInputBinDefinition : IXpsInputBinDefinition
+  {
+    /// <exception cref="Exception" />
+    [Pure]
+    [NotNull]
+    [ItemNotNull]
+    TXpsPrinterDefinition[] GetXpsPrinterDefinitions();
+
+    /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinition" /> is <see langword="null" />.</exception>
+    /// <exception cref="Exception" />
+    [Pure]
+    [NotNull]
+    [ItemNotNull]
+    TXpsInputBinDefinition[] GetXpsInputBinDefinitions([NotNull] TXpsPrinterDefinition xpsPrinterDefinition);
+  }
+
+  public partial class XpsServer : IXpsServerEx<IXpsPrinterDefinition, IXpsInputBinDefinition>
   {
     public XpsServer()
       : this(new XpsPrinterDefinitionFactory(),
@@ -33,18 +51,24 @@ namespace Contrib.System.Printing.Xps
 
     /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinitionFactory" /> is <see langword="null" />.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="xpsInputBinDefinitionFactory" /> is <see langword="null" />.</exception>
-    public XpsServer([NotNull] IXpsPrinterDefinitionFactory xpsPrinterDefinitionFactory,
-                     [NotNull] IXpsInputBinDefinitionFactory xpsInputBinDefinitionFactory)
+    public XpsServer([NotNull] IXpsPrinterDefinitionFactoryEx<IXpsPrinterDefinition> xpsPrinterDefinitionFactory,
+                     [NotNull] IXpsInputBinDefinitionFactoryEx<IXpsInputBinDefinition> xpsInputBinDefinitionFactory)
     {
       this.XpsPrinterDefinitionFactory = xpsPrinterDefinitionFactory;
       this.XpsInputBinDefinitionFactory = xpsInputBinDefinitionFactory;
     }
 
     [NotNull]
-    private IXpsPrinterDefinitionFactory XpsPrinterDefinitionFactory { get; }
+    private IXpsPrinterDefinitionFactoryEx<IXpsPrinterDefinition> XpsPrinterDefinitionFactory { get; }
 
     [NotNull]
-    private IXpsInputBinDefinitionFactory XpsInputBinDefinitionFactory { get; }
+    private IXpsInputBinDefinitionFactoryEx<IXpsInputBinDefinition> XpsInputBinDefinitionFactory { get; }
+
+    /// <inheritdoc />
+    IXpsPrinterDefinition[] IXpsServer.GetXpsPrinterDefinitions()
+    {
+      return this.GetXpsPrinterDefinitions();
+    }
 
     /// <inheritdoc />
     public virtual IXpsPrinterDefinition[] GetXpsPrinterDefinitions()
@@ -73,6 +97,12 @@ namespace Contrib.System.Printing.Xps
       }
 
       return result;
+    }
+
+    /// <inheritdoc />
+    IXpsInputBinDefinition[] IXpsServer.GetXpsInputBinDefinitions(IXpsPrinterDefinition xpsPrinterDefinition)
+    {
+      return this.GetXpsInputBinDefinitions(xpsPrinterDefinition);
     }
 
     /// <inheritdoc />

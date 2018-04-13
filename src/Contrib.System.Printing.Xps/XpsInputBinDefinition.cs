@@ -24,7 +24,15 @@ namespace Contrib.System.Printing.Xps
                                   [NotNull] XElement printCapabilitiesXElement);
   }
 
-  public sealed class XpsInputBinDefinitionFactory : IXpsInputBinDefinitionFactory
+  public interface IXpsInputBinDefinitionFactoryEx<TXpsInputBinDefinition> : IXpsInputBinDefinitionFactory
+    where TXpsInputBinDefinition : IXpsInputBinDefinition
+  {
+    [NotNull]
+    TXpsInputBinDefinition Create([NotNull] XElement optionXElement,
+                                  [NotNull] XElement printCapabilitiesXElement);
+  }
+
+  public sealed class XpsInputBinDefinitionFactory : IXpsInputBinDefinitionFactoryEx<IXpsInputBinDefinition>
   {
     private sealed class XpsInputBinDefinition : IXpsInputBinDefinition
     {
@@ -120,6 +128,14 @@ namespace Contrib.System.Printing.Xps
                                                             printCapabilitiesXElement);
 
       return xpsInputBinDefinition;
+    }
+
+    /// <inheritdoc />
+    IXpsInputBinDefinition IXpsInputBinDefinitionFactory.Create(XElement optionXElement,
+                                                                XElement printCapabilitiesXElement)
+    {
+      return this.Create(optionXElement,
+                         printCapabilitiesXElement);
     }
   }
 }
