@@ -60,7 +60,6 @@
     <Compile Include="ExtensionMethods\XElementExtensions.cs" />
     <Compile Include="ExtensionMethods\XpsInputBinDefinitionExtensions.cs" />
     <Compile Include="ExtensionMethods\XpsPrinterDefinitionExtensions.cs" />
-    <Compile Include="NumberHelper.cs" />
     <Compile Include="UnitConverter.cs" />
     <Compile Include="XpsServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
