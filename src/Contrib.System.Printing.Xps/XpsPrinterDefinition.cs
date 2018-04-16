@@ -42,30 +42,19 @@ namespace Contrib.System.Printing.Xps
   public sealed partial class XpsPrinterDefinitionFactory : IXpsPrinterDefinitionFactoryEx<IXpsPrinterDefinition>,
                                                             IXpsPrinterDefinitionFactory
   {
-    private sealed partial class XpsPrinterDefinition : IXpsPrinterDefinition
+    private partial struct XpsPrinterDefinition : IXpsPrinterDefinition
     {
-      public XpsPrinterDefinition([NotNull] string displayName,
-                                  [NotNull] string fullName,
-                                  [CanBeNull] string portName,
-                                  [CanBeNull] string driverName)
-      {
-        this.DisplayName = displayName;
-        this.FullName = fullName;
-        this.PortName = portName;
-        this.DriverName = driverName;
-      }
+      /// <inheritdoc />
+      public string DisplayName { get; set; }
 
       /// <inheritdoc />
-      public string DisplayName { get; }
+      public string FullName { get; set; }
 
       /// <inheritdoc />
-      public string FullName { get; }
+      public string PortName { get; set; }
 
       /// <inheritdoc />
-      public string PortName { get; }
-
-      /// <inheritdoc />
-      public string DriverName { get; }
+      public string DriverName { get; set; }
     }
 
     /// <inheritdoc />
@@ -75,10 +64,13 @@ namespace Contrib.System.Printing.Xps
                                         string driverName,
                                         XElement printCapabilitiesXElement)
     {
-      var xpsPrinterDefinition = new XpsPrinterDefinition(displayName,
-                                                          fullName,
-                                                          portName,
-                                                          driverName);
+      var xpsPrinterDefinition = new XpsPrinterDefinition
+                                 {
+                                   DisplayName = displayName,
+                                   FullName = fullName,
+                                   PortName = portName,
+                                   DriverName = driverName
+                                 };
 
       return xpsPrinterDefinition;
     }
