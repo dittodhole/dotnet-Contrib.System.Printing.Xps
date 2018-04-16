@@ -19,7 +19,8 @@ namespace Contrib.System.Printing.Xps
     IXpsInputBinDefinition[] GetXpsInputBinDefinitions([NotNull] IXpsPrinterDefinition xpsPrinterDefinition);
   }
 
-  public partial class XpsServer : XpsServerEx<IXpsPrinterDefinition, IXpsInputBinDefinition>
+  public partial class XpsServer : XpsServerEx<IXpsPrinterDefinition, IXpsInputBinDefinition>,
+                                   IXpsServer
   {
     public XpsServer()
       : base(new XpsPrinterDefinitionFactory(),

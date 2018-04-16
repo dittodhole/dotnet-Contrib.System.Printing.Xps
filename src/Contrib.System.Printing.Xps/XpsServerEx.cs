@@ -9,7 +9,7 @@ using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps
 {
-  public partial interface IXpsServerEx<TXpsPrinterDefinition, TXpsInputBinDefinition> : IXpsServer
+  public partial interface IXpsServerEx<TXpsPrinterDefinition, TXpsInputBinDefinition>
     where TXpsPrinterDefinition : IXpsPrinterDefinition
     where TXpsInputBinDefinition : IXpsInputBinDefinition
   {
@@ -76,14 +76,6 @@ namespace Contrib.System.Printing.Xps
     }
 
     /// <inheritdoc />
-    IXpsPrinterDefinition[] IXpsServer.GetXpsPrinterDefinitions()
-    {
-      return this.GetXpsPrinterDefinitions()
-                 .Cast<IXpsPrinterDefinition>()
-                 .ToArray();
-    }
-
-    /// <inheritdoc />
     public virtual TXpsInputBinDefinition[] GetXpsInputBinDefinitions(TXpsPrinterDefinition xpsPrinterDefinition)
     {
       if (xpsPrinterDefinition == null)
@@ -139,14 +131,6 @@ namespace Contrib.System.Printing.Xps
       }
 
       return result;
-    }
-
-    /// <inheritdoc />
-    IXpsInputBinDefinition[] IXpsServer.GetXpsInputBinDefinitions(IXpsPrinterDefinition xpsPrinterDefinition)
-    {
-      return this.GetXpsInputBinDefinitions(xpsPrinterDefinition as TXpsPrinterDefinition)
-                 .Cast<IXpsInputBinDefinition>()
-                 .ToArray();
     }
 
     [NotNull]

@@ -28,7 +28,7 @@ namespace Contrib.System.Printing.Xps
                                  [NotNull] XElement printCapabilitiesXElement);
   }
 
-  public partial interface IXpsPrinterDefinitionFactoryEx<TXpsPrinterDefinition> : IXpsPrinterDefinitionFactory
+  public partial interface IXpsPrinterDefinitionFactoryEx<TXpsPrinterDefinition>
     where TXpsPrinterDefinition : IXpsPrinterDefinition
   {
     [NotNull]
@@ -39,7 +39,8 @@ namespace Contrib.System.Printing.Xps
                                  [NotNull] XElement printCapabilitiesXElement);
   }
 
-  public sealed partial class XpsPrinterDefinitionFactory : IXpsPrinterDefinitionFactoryEx<IXpsPrinterDefinition>
+  public sealed partial class XpsPrinterDefinitionFactory : IXpsPrinterDefinitionFactoryEx<IXpsPrinterDefinition>,
+                                                            IXpsPrinterDefinitionFactory
   {
     private sealed partial class XpsPrinterDefinition : IXpsPrinterDefinition
     {
