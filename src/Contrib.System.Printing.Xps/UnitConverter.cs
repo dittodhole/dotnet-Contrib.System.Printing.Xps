@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Printing;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -12,10 +11,8 @@ namespace Contrib.System.Printing.Xps
     [NotNull]
     private static Type FindInternalType()
     {
-      var printTicket = new PrintTicket(); // to force loading of ReachFramework
-      var unitConverterType = AppDomain.CurrentDomain.GetAssemblies()
-                                       .Select(assembly => assembly.GetType("MS.Internal.Printing.Configuration.UnitConverter"))
-                                       .FirstOrDefault(type => type != null);
+      var unitConverterType = new PrintTicket().GetType()
+                                               .Assembly.GetType("MS.Internal.Printing.Configuration.UnitConverter");
 
       return unitConverterType;
     }
