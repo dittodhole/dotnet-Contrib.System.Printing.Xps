@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
-  public static class XElementExtensions
+  public static partial class XElementExtensions
   {
     /// <returns>The prefix of the namespace registration is returned.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/></exception>

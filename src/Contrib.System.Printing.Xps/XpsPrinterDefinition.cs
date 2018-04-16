@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps
 {
-  public interface IXpsPrinterDefinition
+  public partial interface IXpsPrinterDefinition
   {
     [NotNull]
     string DisplayName { get; }
@@ -18,7 +18,7 @@ namespace Contrib.System.Printing.Xps
     string DriverName { get; }
   }
 
-  public interface IXpsPrinterDefinitionFactory
+  public partial interface IXpsPrinterDefinitionFactory
   {
     [NotNull]
     IXpsPrinterDefinition Create([NotNull] string displayName,
@@ -28,7 +28,7 @@ namespace Contrib.System.Printing.Xps
                                  [NotNull] XElement printCapabilitiesXElement);
   }
 
-  public interface IXpsPrinterDefinitionFactoryEx<TXpsPrinterDefinition> : IXpsPrinterDefinitionFactory
+  public partial interface IXpsPrinterDefinitionFactoryEx<TXpsPrinterDefinition> : IXpsPrinterDefinitionFactory
     where TXpsPrinterDefinition : IXpsPrinterDefinition
   {
     [NotNull]
@@ -39,9 +39,9 @@ namespace Contrib.System.Printing.Xps
                                  [NotNull] XElement printCapabilitiesXElement);
   }
 
-  public sealed class XpsPrinterDefinitionFactory : IXpsPrinterDefinitionFactoryEx<IXpsPrinterDefinition>
+  public sealed partial class XpsPrinterDefinitionFactory : IXpsPrinterDefinitionFactoryEx<IXpsPrinterDefinition>
   {
-    private sealed class XpsPrinterDefinition : IXpsPrinterDefinition
+    private sealed partial class XpsPrinterDefinition : IXpsPrinterDefinition
     {
       public XpsPrinterDefinition([NotNull] string displayName,
                                   [NotNull] string fullName,

@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps
 {
-  public interface IXpsInputBinDefinition
+  public partial interface IXpsInputBinDefinition
   {
     [NotNull]
     XName FeatureName { get; }
@@ -19,14 +19,14 @@ namespace Contrib.System.Printing.Xps
     XName FeedType { get; }
   }
 
-  public interface IXpsInputBinDefinitionFactory
+  public partial interface IXpsInputBinDefinitionFactory
   {
     [NotNull]
     IXpsInputBinDefinition Create([NotNull] XElement optionXElement,
                                   [NotNull] XElement printCapabilitiesXElement);
   }
 
-  public interface IXpsInputBinDefinitionFactoryEx<TXpsInputBinDefinition> : IXpsInputBinDefinitionFactory
+  public partial interface IXpsInputBinDefinitionFactoryEx<TXpsInputBinDefinition> : IXpsInputBinDefinitionFactory
     where TXpsInputBinDefinition : IXpsInputBinDefinition
   {
     [NotNull]
@@ -34,9 +34,9 @@ namespace Contrib.System.Printing.Xps
                                   [NotNull] XElement printCapabilitiesXElement);
   }
 
-  public sealed class XpsInputBinDefinitionFactory : IXpsInputBinDefinitionFactoryEx<IXpsInputBinDefinition>
+  public sealed partial class XpsInputBinDefinitionFactory : IXpsInputBinDefinitionFactoryEx<IXpsInputBinDefinition>
   {
-    private sealed class XpsInputBinDefinition : IXpsInputBinDefinition
+    private sealed partial class XpsInputBinDefinition : IXpsInputBinDefinition
     {
       public XpsInputBinDefinition([NotNull] XElement optionXElement,
                                    [NotNull] XElement printCapabilitiesXElement)
