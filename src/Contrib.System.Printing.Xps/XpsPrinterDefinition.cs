@@ -28,7 +28,7 @@ namespace Contrib.System.Printing.Xps
                                  [NotNull] XElement printCapabilitiesXElement);
   }
 
-  public partial interface IXpsPrinterDefinitionFactoryEx<TXpsPrinterDefinition>
+  public partial interface IXpsPrinterDefinitionFactoryEx<out TXpsPrinterDefinition>
     where TXpsPrinterDefinition : IXpsPrinterDefinition
   {
     [NotNull]
