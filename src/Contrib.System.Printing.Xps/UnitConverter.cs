@@ -8,6 +8,7 @@ namespace Contrib.System.Printing.Xps
 {
   public static class UnitConverter
   {
+    /// <exception cref="Exception" />
     [NotNull]
     private static Type FindInternalType()
     {
@@ -17,6 +18,7 @@ namespace Contrib.System.Printing.Xps
       return unitConverterType;
     }
 
+    /// <exception cref="Exception" />
     [NotNull]
     private static MethodInfo FindInternalMethod([CallerMemberName] string callerMemberName = "")
     {
@@ -26,6 +28,7 @@ namespace Contrib.System.Printing.Xps
       return methodInfo;
     }
 
+    /// <exception cref="Exception" />
     public static double LengthValueFromMicronToDIP(int micronValue)
     {
       var methodInfo = UnitConverter.FindInternalMethod();
@@ -38,6 +41,7 @@ namespace Contrib.System.Printing.Xps
       return (double) result;
     }
 
+    /// <exception cref="Exception" />
     public static int LengthValueFromDIPToMicron(double dipValue)
     {
       var methodInfo = UnitConverter.FindInternalMethod();
