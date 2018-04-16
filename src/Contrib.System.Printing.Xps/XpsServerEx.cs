@@ -28,8 +28,8 @@ namespace Contrib.System.Printing.Xps
   }
 
   public partial class XpsServerEx<TXpsPrinterDefinition, TXpsInputBinDefinition> : IXpsServerEx<TXpsPrinterDefinition, TXpsInputBinDefinition>
-    where TXpsPrinterDefinition : class, IXpsPrinterDefinition
-    where TXpsInputBinDefinition : class, IXpsInputBinDefinition
+    where TXpsPrinterDefinition : IXpsPrinterDefinition
+    where TXpsInputBinDefinition : IXpsInputBinDefinition
   {
     /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinitionFactory" /> is <see langword="null" />.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="xpsInputBinDefinitionFactory" /> is <see langword="null" />.</exception>
