@@ -46,18 +46,13 @@ namespace Contrib.System.Printing.Xps
       public XpsPrinterDefinition([NotNull] string displayName,
                                   [NotNull] string fullName,
                                   [CanBeNull] string portName,
-                                  [CanBeNull] string driverName,
-                                  [NotNull] XElement printCapabilitiesXElement)
+                                  [CanBeNull] string driverName)
       {
         this.DisplayName = displayName;
         this.FullName = fullName;
         this.PortName = portName;
         this.DriverName = driverName;
-        this.PrintCapabilitiesXElement = printCapabilitiesXElement;
       }
-
-      [NotNull]
-      private XElement PrintCapabilitiesXElement  { get; }
 
       /// <inheritdoc />
       public string DisplayName { get; }
@@ -82,8 +77,7 @@ namespace Contrib.System.Printing.Xps
       var xpsPrinterDefinition = new XpsPrinterDefinition(displayName,
                                                           fullName,
                                                           portName,
-                                                          driverName,
-                                                          printCapabilitiesXElement);
+                                                          driverName);
 
       return xpsPrinterDefinition;
     }
