@@ -1,17 +1,9 @@
-﻿using System.Linq;
-using System.Xml.Linq;
-using Contrib.System.Printing.Xps.ExtensionMethods;
+﻿using System.Xml.Linq;
 using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps
 {
-  public interface IHasValues
-  {
-    [CanBeNull]
-    object GetValue([NotNull] [ItemNotNull] params XName[] names);
-  }
-
-  public interface IXpsPrinterDefinition : IHasValues
+  public partial interface IXpsPrinterDefinition
   {
     [NotNull]
     string DisplayName { get; }
@@ -26,7 +18,7 @@ namespace Contrib.System.Printing.Xps
     string DriverName { get; }
   }
 
-  public interface IXpsPrinterDefinitionFactory
+  public partial interface IXpsPrinterDefinitionFactory
   {
     [NotNull]
     IXpsPrinterDefinition Create([NotNull] string displayName,
@@ -36,7 +28,7 @@ namespace Contrib.System.Printing.Xps
                                  [NotNull] XElement printCapabilitiesXElement);
   }
 
-  public interface IXpsPrinterDefinitionFactoryEx<TXpsPrinterDefinition> : IXpsPrinterDefinitionFactory
+  public partial interface IXpsPrinterDefinitionFactoryEx<TXpsPrinterDefinition> : IXpsPrinterDefinitionFactory
     where TXpsPrinterDefinition : IXpsPrinterDefinition
   {
     [NotNull]
@@ -47,25 +39,20 @@ namespace Contrib.System.Printing.Xps
                                  [NotNull] XElement printCapabilitiesXElement);
   }
 
-  public sealed class XpsPrinterDefinitionFactory : IXpsPrinterDefinitionFactoryEx<IXpsPrinterDefinition>
+  public sealed partial class XpsPrinterDefinitionFactory : IXpsPrinterDefinitionFactoryEx<IXpsPrinterDefinition>
   {
-    private sealed class XpsPrinterDefinition : IXpsPrinterDefinition
+    private sealed partial class XpsPrinterDefinition : IXpsPrinterDefinition
     {
       public XpsPrinterDefinition([NotNull] string displayName,
                                   [NotNull] string fullName,
                                   [CanBeNull] string portName,
-                                  [CanBeNull] string driverName,
-                                  [NotNull] XElement printCapabilitiesXElement)
+                                  [CanBeNull] string driverName)
       {
         this.DisplayName = displayName;
         this.FullName = fullName;
         this.PortName = portName;
         this.DriverName = driverName;
-        this.PrintCapabilitiesXElement = printCapabilitiesXElement;
       }
-
-      [NotNull]
-      private XElement PrintCapabilitiesXElement  { get; }
 
       /// <inheritdoc />
       public string DisplayName { get; }
@@ -78,26 +65,6 @@ namespace Contrib.System.Printing.Xps
 
       /// <inheritdoc />
       public string DriverName { get; }
-
-      /// <inheritdoc />
-      public object GetValue(params XName[] names)
-      {
-        object value;
-
-        var xelement = names.Aggregate(this.PrintCapabilitiesXElement,
-                                       (current,
-                                        name) => current?.FindElementByNameAttribute(name));
-        if (xelement == null)
-        {
-          value = null;
-        }
-        else
-        {
-          value = xelement.GetValueFromValueElement();
-        }
-
-        return value;
-      }
     }
 
     /// <inheritdoc />
@@ -110,8 +77,7 @@ namespace Contrib.System.Printing.Xps
       var xpsPrinterDefinition = new XpsPrinterDefinition(displayName,
                                                           fullName,
                                                           portName,
-                                                          driverName,
-                                                          printCapabilitiesXElement);
+                                                          driverName);
 
       return xpsPrinterDefinition;
     }

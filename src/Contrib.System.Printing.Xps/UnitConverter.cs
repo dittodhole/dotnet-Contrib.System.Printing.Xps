@@ -1,22 +1,57 @@
-﻿namespace Contrib.System.Printing.Xps
+﻿using System;
+using System.Printing;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using JetBrains.Annotations;
+
+namespace Contrib.System.Printing.Xps
 {
-  /// <remarks>Copied from MS.Internal.Printing.Configuration.UnitConverter, ReachFramework</remarks>
-  public class UnitConverter
+  public static partial class UnitConverter
   {
-    private UnitConverter()
+    /// <exception cref="Exception" />
+    [NotNull]
+    private static Type FindInternalType()
     {
+      var unitConverterType = new PrintTicket().GetType()
+                                               .Assembly.GetType("MS.Internal.Printing.Configuration.UnitConverter");
+
+      return unitConverterType;
     }
 
+    /// <exception cref="Exception" />
+    [NotNull]
+    private static MethodInfo FindInternalMethod([CallerMemberName] string callerMemberName = "")
+    {
+      var unitConverterType = UnitConverter.FindInternalType();
+      var methodInfo = unitConverterType.GetMethod(callerMemberName);
+
+      return methodInfo;
+    }
+
+    /// <exception cref="Exception" />
     public static double LengthValueFromMicronToDIP(int micronValue)
     {
-      if (micronValue == int.MinValue)
-        return double.MinValue;
-      return (double) micronValue / 25400.0 * 96.0;
+      var methodInfo = UnitConverter.FindInternalMethod();
+      var result = methodInfo.Invoke(null,
+                                     new object[]
+                                     {
+                                       micronValue
+                                     });
+
+      return (double) result;
     }
 
+    /// <exception cref="Exception" />
     public static int LengthValueFromDIPToMicron(double dipValue)
     {
-      return (int) (dipValue / 96.0 * 25400.0 + 0.5);
+      var methodInfo = UnitConverter.FindInternalMethod();
+      var result = methodInfo.Invoke(null,
+                                     new object[]
+                                     {
+                                       dipValue
+                                     });
+
+      return (int) result;
     }
   }
 }

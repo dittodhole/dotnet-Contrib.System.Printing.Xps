@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
-  public static class XpsInputBinDefinitionExtensions
+  public static partial class XpsInputBinDefinitionExtensions
   {
     /// <exception cref="ArgumentNullException"><paramref name="xpsInputBinDefinition"/> is <see langword="null"/></exception>
     /// <exception cref="Exception" />
@@ -93,7 +93,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       }
 
       {
-        var feedTypeXName = xpsInputBinDefinition.GetValue(XpsServer.FeedTypeXName) as XName;
+        var feedTypeXName = xpsInputBinDefinition.FeedType;
         if (feedTypeXName != null)
         {
           var prefix2 = printTicketXElement.EnsurePrefixRegistrationOfNamespace(XpsServer.FeedTypeXName);

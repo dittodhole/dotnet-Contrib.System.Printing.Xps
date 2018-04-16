@@ -1,11 +1,10 @@
-﻿using System.Linq;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 using Contrib.System.Printing.Xps.ExtensionMethods;
 using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps
 {
-  public interface IXpsInputBinDefinition : IHasValues
+  public partial interface IXpsInputBinDefinition
   {
     [NotNull]
     XName FeatureName { get; }
@@ -15,16 +14,19 @@ namespace Contrib.System.Printing.Xps
 
     [CanBeNull]
     string DisplayName { get; }
+
+    [CanBeNull]
+    XName FeedType { get; }
   }
 
-  public interface IXpsInputBinDefinitionFactory
+  public partial interface IXpsInputBinDefinitionFactory
   {
     [NotNull]
     IXpsInputBinDefinition Create([NotNull] XElement optionXElement,
                                   [NotNull] XElement printCapabilitiesXElement);
   }
 
-  public interface IXpsInputBinDefinitionFactoryEx<TXpsInputBinDefinition> : IXpsInputBinDefinitionFactory
+  public partial interface IXpsInputBinDefinitionFactoryEx<TXpsInputBinDefinition> : IXpsInputBinDefinitionFactory
     where TXpsInputBinDefinition : IXpsInputBinDefinition
   {
     [NotNull]
@@ -32,100 +34,62 @@ namespace Contrib.System.Printing.Xps
                                   [NotNull] XElement printCapabilitiesXElement);
   }
 
-  public sealed class XpsInputBinDefinitionFactory : IXpsInputBinDefinitionFactoryEx<IXpsInputBinDefinition>
+  public sealed partial class XpsInputBinDefinitionFactory : IXpsInputBinDefinitionFactoryEx<IXpsInputBinDefinition>
   {
-    private sealed class XpsInputBinDefinition : IXpsInputBinDefinition
+    private sealed partial class XpsInputBinDefinition : IXpsInputBinDefinition
     {
-      public XpsInputBinDefinition([NotNull] XElement optionXElement,
-                                   [NotNull] XElement printCapabilitiesXElement)
+      public XpsInputBinDefinition([NotNull] XName featureName,
+                                   [NotNull] XName name,
+                                   [CanBeNull] string displayName,
+                                   [CanBeNull] XName feedType)
       {
-        this.OptionXElement = optionXElement;
-        this.PrintCapabilitiesXElement = printCapabilitiesXElement;
-      }
-
-      [NotNull]
-      private XElement PrintCapabilitiesXElement { get; }
-
-      [NotNull]
-      private XElement OptionXElement { get; }
-
-      /// <inheritdoc />
-      public XName FeatureName
-      {
-        get
-        {
-          XName featureName;
-
-          var featureXElement = this.OptionXElement.Parent;
-          if (featureXElement == null)
-          {
-            featureName = null;
-          }
-          else
-          {
-            featureName = featureXElement.GetNameFromNameAttribute();
-          }
-
-          return featureName;
-        }
+        this.FeatureName = featureName;
+        this.Name = name;
+        this.DisplayName = displayName;
+        this.FeedType = feedType;
       }
 
       /// <inheritdoc />
-      public string DisplayName
-      {
-        get
-        {
-          var displayName = this.GetValue(XpsServer.DisplayNameXName) as string;
-
-          return displayName;
-        }
-      }
+      public XName FeatureName { get; }
 
       /// <inheritdoc />
-      public XName Name
-      {
-        get
-        {
-          var name = this.OptionXElement.GetNameFromNameAttribute();
-
-          return name;
-        }
-      }
+      public XName Name { get; }
 
       /// <inheritdoc />
-      public object GetValue(params XName[] names)
-      {
-        object value;
+      public string DisplayName { get; }
 
-        var xelement = names.Aggregate(this.OptionXElement,
-                                       (current,
-                                        name) => current?.FindElementByNameAttribute(name));
-        if (xelement == null)
-        {
-          xelement = names.Aggregate(this.PrintCapabilitiesXElement,
-                                     (current,
-                                      name) => current?.FindElementByNameAttribute(name));
-        }
-
-        if (xelement == null)
-        {
-          value = null;
-        }
-        else
-        {
-          value = xelement.GetValueFromValueElement();
-        }
-
-        return value;
-      }
+      /// <inheritdoc />
+      public XName FeedType { get; }
     }
 
     /// <inheritdoc />
     public IXpsInputBinDefinition Create(XElement optionXElement,
                                          XElement printCapabilitiesXElement)
     {
-      var xpsInputBinDefinition = new XpsInputBinDefinition(optionXElement,
-                                                            printCapabilitiesXElement);
+      XName featureName;
+
+      var featureXElement = optionXElement.Parent;
+      if (featureXElement == null)
+      {
+        featureName = null;
+      }
+      else
+      {
+        featureName = featureXElement.GetNameFromNameAttribute();
+      }
+
+      var name = optionXElement.GetNameFromNameAttribute();
+
+      var displayName = optionXElement.FindElementByNameAttribute(XpsServer.DisplayNameXName)
+                                      ?.GetValueFromValueElement() as string;
+
+      var feedType = optionXElement.FindElementByNameAttribute(XpsServer.FeedTypeXName)
+                                   ?.GetValueFromValueElement() as XName;
+
+      var xpsInputBinDefinition = new XpsInputBinDefinition(featureName,
+                                                            name,
+                                                            displayName,
+                                                            feedType);
 
       return xpsInputBinDefinition;
     }
