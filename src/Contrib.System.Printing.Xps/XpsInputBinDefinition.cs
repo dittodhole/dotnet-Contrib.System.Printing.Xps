@@ -37,30 +37,19 @@ namespace Contrib.System.Printing.Xps
   public sealed partial class XpsInputBinDefinitionFactory : IXpsInputBinDefinitionFactoryEx<IXpsInputBinDefinition>,
                                                              IXpsInputBinDefinitionFactory
   {
-    private sealed partial class XpsInputBinDefinition : IXpsInputBinDefinition
+    private partial struct XpsInputBinDefinition : IXpsInputBinDefinition
     {
-      public XpsInputBinDefinition([NotNull] XName featureName,
-                                   [NotNull] XName name,
-                                   [CanBeNull] string displayName,
-                                   [CanBeNull] XName feedType)
-      {
-        this.FeatureName = featureName;
-        this.Name = name;
-        this.DisplayName = displayName;
-        this.FeedType = feedType;
-      }
+      /// <inheritdoc />
+      public XName FeatureName { get; set; }
 
       /// <inheritdoc />
-      public XName FeatureName { get; }
+      public XName Name { get; set; }
 
       /// <inheritdoc />
-      public XName Name { get; }
+      public string DisplayName { get; set; }
 
       /// <inheritdoc />
-      public string DisplayName { get; }
-
-      /// <inheritdoc />
-      public XName FeedType { get; }
+      public XName FeedType { get; set; }
     }
 
     /// <inheritdoc />
@@ -87,10 +76,13 @@ namespace Contrib.System.Printing.Xps
       var feedType = optionXElement.FindElementByNameAttribute(XpsServer.FeedTypeXName)
                                    ?.GetValueFromValueElement() as XName;
 
-      var xpsInputBinDefinition = new XpsInputBinDefinition(featureName,
-                                                            name,
-                                                            displayName,
-                                                            feedType);
+      var xpsInputBinDefinition = new XpsInputBinDefinition
+                                  {
+                                    FeatureName = featureName,
+                                    Name = name,
+                                    DisplayName = displayName,
+                                    FeedType = feedType
+                                  };
 
       return xpsInputBinDefinition;
     }
