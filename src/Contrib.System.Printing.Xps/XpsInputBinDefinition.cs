@@ -26,7 +26,7 @@ namespace Contrib.System.Printing.Xps
                                   [NotNull] XElement printCapabilitiesXElement);
   }
 
-  public partial interface IXpsInputBinDefinitionFactoryEx<TXpsInputBinDefinition>
+  public partial interface IXpsInputBinDefinitionFactoryEx<out TXpsInputBinDefinition>
     where TXpsInputBinDefinition : IXpsInputBinDefinition
   {
     [NotNull]
