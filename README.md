@@ -150,6 +150,8 @@ public class CustomXpsPrinterDefinitionFactory : IXpsPrinterDefinitionFactoryEx<
 
 ### `Contrib.System.Printing.Xps.IXpsInputBinDefinition`
 
+This interface provides basic properties of an input bin. You can further customize the interface by extending the interface, and creating your own implementation of `Contrib.System.Printing.Xps.IXpsInputBinDefinitionFactoryEx<TXpsInputBinDefinition>`.
+
 | Property      | Type                    | Example
 |:--------------|:------------------------|:-|
 | `FeatureName` | `System.Xml.Linq.XName` | {http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords}JobInputBin
