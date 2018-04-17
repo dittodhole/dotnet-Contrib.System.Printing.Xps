@@ -197,13 +197,13 @@ public class CustomXpsInputBinDefinitionFactory : IXpsInputBinDefinitionFactoryE
     public XName FeedType { get; set; }
   }
 
-  private IXpsInputBinDefinitionFactory XpsPrinterDefinitionFactory { get; } = new XpsInputBinDefinitionFactory();
+  private IXpsInputBinDefinitionFactory XpsInputBinFactory { get; } = new XpsInputBinDefinitionFactory();
 
   public ICustomXpsInputBinDefinition Create(XElement optionXElement,
                                              XElement printCapabilitiesXElement)
   {
-    var xpsInputBinDefinition = this.XpsPrinterDefinitionFactory.Create(optionXElement,
-                                                                        printCapabilitiesXElement);
+    var xpsInputBinDefinition = this.XpsInputBinFactory.Create(optionXElement,
+                                                               printCapabilitiesXElement);
     var customXpsInputBinDefinition = new CustomXpsInputBinDefinition
                                      {
                                        FeatureName = xpsInputBinDefinition.FeatureName,
