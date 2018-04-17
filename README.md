@@ -54,6 +54,8 @@ PM> Install-Package Contrib.System.Printing.Xps -pre
 | `GetXpsPrinterDefinitions`  | `Contrib.System.Printing.Xps.IXpsPrinterDefinition[]`
 | `GetXpsInputBinDefinitions` | `Contrib.System.Printing.Xps.IXpsInputBinDefinition[]`
 
+Default implementation: `Contrib.System.Printing.Xps.XpsServer`
+
 ### `Contrib.System.Printing.Xps.IXpsServerEx<TXpsPrinterDefinition, TXpsInputBinDefinition>`
 
 This interface provides full customization of the return types via generics, to easily extend the default layout of `Contrib.System.Printing.Xps.IXpsPrinterDefinition` and `Contrib.System.Printing.Xps.IXpsInputBinDefinition`.
@@ -62,6 +64,8 @@ This interface provides full customization of the return types via generics, to 
 |:----------------------------|:-|
 | `GetXpsPrinterDefinitions`  | `TXpsPrinterDefinition[] : Contrib.System.Printing.Xps.IXpsPrinterDefinition`
 | `GetXpsInputBinDefinitions` | `TXpsInputBinDefinition[] : Contrib.System.Printing.Xps.IXpsInputBinDefinition`
+
+Default implementation: `Contrib.System.Printing.Xps.XpsServerEx<TXpsPrinterDefinition, TXpsInputBinDefinition`
 
 ---
 
@@ -76,11 +80,15 @@ This interface provides basic properties of a printer. You can further customize
 | `PortName`    | `string` | PORTPROMPT:
 | `DriverName`  | `string` | Microsoft XPS Document Writer v4
 
+Default implementation: `Contrib.System.Printing.Xps.XpsPrinterDefinitionFactory+XpsPrinterDefinition`
+
 ### `Contrib.System.Printing.Xps.IXpsPrinterDefinitionFactory`
 
 | Method   | Return type
 |:---------|:-|
 | `Create` | `Contrib.System.Printing.Xps.IXpsPrinterDefinition`
+
+Default implementation: `Contrib.System.Printing.Xps.XpsPrinterDefinitionFactory`
 
 ### `Contrib.System.Printing.Xps.IXpsPrinterDefinitionFactoryEx<TXpsPrinterDefinition>`
 
@@ -89,6 +97,8 @@ This extended interface is used to provide generic extension and offer full cust
 | Method   | Return type
 |:---------|:-|
 | `Create` | `TXpsPrinterDefinition : Contrib.System.Printing.Xps.IXpsPrinterDefinition`
+
+Default implementation: `Contrib.System.Printing.Xps.XpsPrinterDefinitionFactory`
 
 #### Example
 
@@ -147,11 +157,15 @@ public class CustomXpsPrinterDefinitionFactory : IXpsPrinterDefinitionFactoryEx<
 | `DisplayName` | `string`                | Automatically Select
 | `FeedType`    | `System.Xml.Linq.XName` | {http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords}Automatic
 
+Default implementation: `Contrib.System.Printing.Xps.XpsInputBinDefinitionFactory+XpsInputBinDefinition`
+
 ### `Contrib.System.Printing.Xps.IXpsInputBinDefinitionFactory`
 
 | Method   | Return type
 |:---------|:-|
 | `Create` | `Contrib.System.Printing.Xps.IXpsInputBinDefinition`
+
+Default implementation: `Contrib.System.Printing.Xps.XpsInputBinDefinitionFactory`
 
 ### `Contrib.System.Printing.Xps.IXpsInputBinDefinitionFactoryEx<TXpsInputBinDefinition>`
 
@@ -160,6 +174,8 @@ This extended interface is used to provide generic extension and offer full cust
 | Method   | Return type
 |:---------|:-|
 | `Create` | `TXpsInputBinDefinition : Contrib.System.Printing.Xps.IXpsInputBinDefinition`
+
+Default implementation: `Contrib.System.Printing.Xps.XpsInputBinDefinitionFactory`
 
 #### Example
 
