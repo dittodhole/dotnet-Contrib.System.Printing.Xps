@@ -7,7 +7,7 @@
 
 > Easily access and use [XPS](https://en.wikipedia.org/wiki/Open_XML_Paper_Specification) printers.
 
-## Table of Contents
+## Contents
 
 - [Example](#example)
 - [Installing](#installing)
