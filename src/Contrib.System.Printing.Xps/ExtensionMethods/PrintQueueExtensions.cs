@@ -13,7 +13,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   public static partial class PrintQueueExtensions
   {
     /// <summary>
-    /// 
+    ///   Gets the print capabilities (see https://msdn.microsoft.com/en-us/library/windows/desktop/ms715274) as <see cref="XDocument"/>-instance.
     /// </summary>
     /// <param name="printQueue" />
     /// <exception cref="ArgumentNullException"><paramref name="printQueue" /> is <see langword="null" /></exception>
@@ -45,7 +45,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     }
 
     /// <summary>
-    /// 
+    ///   Gets the print capabilities (see https://msdn.microsoft.com/en-us/library/windows/desktop/ms715274) as <see cref="XDocument"/>-instance.
     /// </summary>
     /// <param name="printQueue" />
     /// <param name="printTicket" />
