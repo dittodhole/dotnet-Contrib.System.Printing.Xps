@@ -14,11 +14,13 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <summary>
     ///   Finds the matching <see cref="PrintQueue"/> instance for <paramref name="xpsPrinterDefinition"/>.
     /// </summary>
-    /// <param name="printQueueCollection" />
-    /// <param name="xpsPrinterDefinition" />
-    /// <exception cref="ArgumentNullException"><paramref name="printQueueCollection" /> is <see langword="null" />.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinition" /> is <see langword="null" />.</exception>
-    /// <exception cref="Exception" />
+    /// <param name="printQueueCollection"/>
+    /// <param name="xpsPrinterDefinition"/>
+    /// <seealso cref="IXpsPrinterDefinition.FullName"/>
+    /// <seealso cref="PrintQueue.FullName"/>
+    /// <exception cref="ArgumentNullException"><paramref name="printQueueCollection"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinition"/> is <see langword="null"/>.</exception>
+    /// <exception cref="Exception"/>
     [Pure]
     [CanBeNull]
     public static PrintQueue FindPrintQueue([NotNull] this PrintQueueCollection printQueueCollection,

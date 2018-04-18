@@ -15,8 +15,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <summary>
     ///   Gets the print capabilities (see https://msdn.microsoft.com/en-us/library/windows/desktop/ms715274) as <see cref="XDocument"/>-instance.
     /// </summary>
-    /// <param name="printQueue" />
-    /// <exception cref="ArgumentNullException"><paramref name="printQueue" /> is <see langword="null" /></exception>
+    /// <param name="printQueue"/>
+    /// <exception cref="ArgumentNullException"><paramref name="printQueue"/> is <see langword="null"/>.</exception>
     [Pure]
     [NotNull]
     public static XDocument GetPrintCapabilitiesAsXDocument([NotNull] this PrintQueue printQueue)
@@ -47,10 +47,10 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <summary>
     ///   Gets the print capabilities (see https://msdn.microsoft.com/en-us/library/windows/desktop/ms715274) as <see cref="XDocument"/>-instance.
     /// </summary>
-    /// <param name="printQueue" />
-    /// <param name="printTicket" />
-    /// <exception cref="ArgumentNullException"><paramref name="printQueue" /> is <see langword="null" /></exception>
-    /// <exception cref="ArgumentNullException"><paramref name="printTicket" /> is <see langword="null" /></exception>
+    /// <param name="printQueue"/>
+    /// <param name="printTicket"/>
+    /// <exception cref="ArgumentNullException"><paramref name="printQueue"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="printTicket"/> is <see langword="null"/>.</exception>
     [Pure]
     [NotNull]
     public static XDocument GetPrintCapabilitiesAsXDocument([NotNull] this PrintQueue printQueue,

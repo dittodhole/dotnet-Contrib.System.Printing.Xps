@@ -13,11 +13,11 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   public static partial class XpsInputBinDefinitionExtensions
   {
     /// <summary>
-    /// 
+    ///   Gets the <see cref="PrintTicket"/> for <paramref name="xpsInputBinDefinition"/>.
     /// </summary>
-    /// <param name="xpsInputBinDefinition" />
-    /// <exception cref="ArgumentNullException"><paramref name="xpsInputBinDefinition"/> is <see langword="null"/></exception>
-    /// <exception cref="Exception" />
+    /// <param name="xpsInputBinDefinition"/>
+    /// <exception cref="ArgumentNullException"><paramref name="xpsInputBinDefinition"/> is <see langword="null"/>.</exception>
+    /// <exception cref="Exception"/>
     [Pure]
     [NotNull]
     public static PrintTicket GetPrintTicket([NotNull] this IXpsInputBinDefinition xpsInputBinDefinition)

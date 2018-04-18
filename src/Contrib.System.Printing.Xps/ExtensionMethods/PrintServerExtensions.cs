@@ -11,11 +11,11 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   public static partial class PrintServerExtensions
   {
     /// <summary>
-    /// 
+    ///   Gets local and remote <see cref="PrintQueue"/>-instances, wrapped in <see cref="PrintQueueCollection"/>.
     /// </summary>
-    /// <param name="printServer" />
-    /// <exception cref="ArgumentNullException"><paramref name="printServer" /> is <see langword="null" /></exception>
-    /// <exception cref="Exception" />
+    /// <param name="printServer"/>
+    /// <exception cref="ArgumentNullException"><paramref name="printServer"/> is <see langword="null"/>.</exception>
+    /// <exception cref="Exception"/>
     [Pure]
     [NotNull]
     [ItemNotNull]

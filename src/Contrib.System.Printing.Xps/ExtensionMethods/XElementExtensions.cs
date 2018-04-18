@@ -13,14 +13,15 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   public static partial class XElementExtensions
   {
     /// <summary>
-    /// 
+    ///   Ensures and gets the prefix of the namespace registration of <paramref name="name"/>.
     /// </summary>
-    /// <param name="xelement" />
-    /// <param name="name" />
-    /// <returns>The prefix of the namespace registration is returned.</returns>
-    /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/></exception>
-    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/></exception>
-    /// <exception cref="Exception" />
+    /// <param name="xelement"/>
+    /// <param name="name"/>
+    /// <seealso cref="XElement.GetPrefixOfNamespace"/>
+    /// <seealso cref="FindUnusedPrefixForNamespace"/>
+    /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
+    /// <exception cref="Exception"/>
     [MustUseReturnValue]
     [NotNull]
     public static string EnsurePrefixRegistrationOfNamespace([NotNull] this XElement xelement,
@@ -49,11 +50,12 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     }
 
     /// <summary>
-    /// 
+    ///   Finds an unused prefix for namespace registration.
     /// </summary>
-    /// <param name="xelement" />
+    /// <param name="xelement"/>
+    /// <seealso cref="XElement.GetNamespaceOfPrefix"/>
     /// <remarks>The prefix is constructed via following pattern: "ns{0000}"</remarks>
-    /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/></exception>
+    /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/>.</exception>
     [Pure]
     [NotNull]
     public static string FindUnusedPrefixForNamespace([NotNull] this XElement xelement)
@@ -74,10 +76,12 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     }
 
     /// <summary>
-    /// 
+    ///   Gets the value from descending value-<see cref="XElement"/>.
     /// </summary>
-    /// <param name="xelement" />
-    /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/></exception>
+    /// <param name="xelement"/>
+    /// <seealso cref="XpsServer.ValueElementXName"/>
+    /// <seealso cref="GetValue"/>
+    /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/>.</exception>
     [Pure]
     [CanBeNull]
     public static object GetValueFromValueElement([NotNull] this XElement xelement)
@@ -99,11 +103,15 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     }
 
     /// <summary>
-    /// 
+    ///   Gets the value by taking type-<see cref="XAttribute"/> into account.
     /// </summary>
-    /// <param name="xelement" />
-    /// <remarks>Parses and returns <see cref="XElement.Value"/> of <paramref name="xelement"/> by looking for <see cref="XAttribute"/> with <see cref="XAttribute.Name"/> <see cref="XpsServer.TypeXName"/></remarks>
-    /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/></exception>
+    /// <param name="xelement"/>
+    /// <seealso cref="XpsServer.TypeXName"/>
+    /// <seealso cref="XpsServer.StringTypeXName"/>
+    /// <seealso cref="XpsServer.IntegerTypeXName"/>
+    /// <seealso cref="XpsServer.QNameTypeXName"/>
+    /// <seealso cref="GetXName"/>
+    /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/>.</exception>
     [Pure]
     [CanBeNull]
     public static object GetValue([NotNull] this XElement xelement)
@@ -172,12 +180,13 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     }
 
     /// <summary>
-    /// 
+    ///  Finds the descending <paramref name="name"/>-<see cref="XElement"/>.
     /// </summary>
-    /// <param name="xelement" />
-    /// <param name="name" />
-    /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/></exception>
-    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/></exception>
+    /// <param name="xelement"/>
+    /// <param name="name"/>
+    /// <seealso cref="GetNameFromNameAttribute"/>
+    /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
     [Pure]
     [CanBeNull]
     public static XElement FindElementByNameAttribute([NotNull] this XElement xelement,
@@ -205,10 +214,11 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     }
 
     /// <summary>
-    /// 
+    ///  Gets the <see cref="XName"/> from name-<see cref="XAttribute"/> of <paramref name="xelement"/>.
     /// </summary>
-    /// <param name="xelement" />
-    /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/></exception>
+    /// <param name="xelement"/>
+    /// <seealso cref="GetXName"/>
+    /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/>.</exception>
     [Pure]
     [CanBeNull]
     public static XName GetNameFromNameAttribute([NotNull] this XElement xelement)
@@ -234,11 +244,12 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     }
 
     /// <summary>
-    /// 
+    ///  Gets the <see cref="XName"/> from <paramref name="str"/>.
     /// </summary>
-    /// <param name="xelement" />
-    /// <param name="str" />
-    /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/></exception>
+    /// <param name="xelement"/>
+    /// <param name="str"/>
+    /// <remarks><paramref name="xelement"/> is used to find the namespace for the prefix, contained in <paramref name="str"/>.</remarks>
+    /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/>.</exception>
     [Pure]
     [CanBeNull]
     public static XName GetXName([NotNull] this XElement xelement,
