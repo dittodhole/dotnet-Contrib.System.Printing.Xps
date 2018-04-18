@@ -35,14 +35,13 @@ foreach (var xpsPrinterDefinition in xpsPrinterDefinition)
 ### [Releases](https://www.nuget.org/packages/Contrib.System.Printing.Xps)
 
 ```powershell
-PM> Install-Package Contrib.System.Printing.Xps
+PM> Install-Package -Id Contrib.System.Printing.Xps
 ```
 
 ### [Pre Releases](https://www.myget.org/feed/dittodhole/package/nuget/Contrib.System.Printing.Xps)
 
 ```powershell
-PM> nuget sources Add "dittodhole" https://www.myget.org/F/dittodhole/api/v3/index.json
-PM> Install-Package Contrib.System.Printing.Xps -pre
+PM> Install-Package -Id Contrib.System.Printing.Xps -Source https://www.myget.org/F/dittodhole/api/v3/index.json -IncludePrerelease
 ```
 
 ## API Reference
