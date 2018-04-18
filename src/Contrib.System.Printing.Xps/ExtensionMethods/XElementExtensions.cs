@@ -92,12 +92,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       }
 
       var valueXElement = xelement.Element(XpsServer.ValueElementXName);
-      if (valueXElement == null)
-      {
-        return null;
-      }
-
-      var value = valueXElement.GetValue();
+      var value = valueXElement?.GetValue();
 
       return value;
     }
@@ -228,17 +223,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         throw new ArgumentNullException(nameof(xelement));
       }
 
-      XName result;
-
       var nameXAttribute = xelement.Attribute(XpsServer.NameAttributeXName);
-      if (nameXAttribute == null)
-      {
-        result = null;
-      }
-      else
-      {
-        result = xelement.GetXName(nameXAttribute.Value);
-      }
+      var result = xelement.GetXName(nameXAttribute?.Value);
 
       return result;
     }
