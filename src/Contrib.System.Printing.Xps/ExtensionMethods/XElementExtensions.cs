@@ -7,7 +7,7 @@ using JetBrains.Annotations;
 namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
   /// <summary>
-  /// 
+  ///  Provides extensions to query <see cref="XElement"/> instances
   /// </summary>
   [PublicAPI]
   public static partial class XElementExtensions
