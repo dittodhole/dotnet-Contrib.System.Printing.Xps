@@ -19,13 +19,34 @@
 
 ```csharp
 using Contrib.System.Printing.Xps;
+using System.Windows.Documents;
+
+IDocumentPaginatorSource documentPaginatorSource;
 
 var xpsServer = new XpsServer();
 var xpsPrinterDefinitions = xpsServer.GetXpsPrinterDefinitions();
 
 foreach (var xpsPrinterDefinition in xpsPrinterDefinition)
 {
+  xpsPrinterDefinition.Print(documentPaginatorSource,
+                             printQueue =>
+                             {
+                               var printTicket = new PrintTicket();
+
+                               return printTicket;
+                             });
+
   var xpsInputBinDefinitions = xpsServer.GetXpsInputBinDefinitions(xpsPrinterDefinition);
+  foreach (var xpsInputBinDefinition in xpsInputBinDefinitions)
+  {
+    xpsPrinterDefinition.Print(documentPaginatorSource,
+                               printQueue =>
+                               {
+                                 var printTicket = xpsInputBinDefinition.GetPrintTicket();
+
+                                 return printTicket;
+                               });
+  }
 }
 ```
 
