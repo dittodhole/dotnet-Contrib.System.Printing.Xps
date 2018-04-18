@@ -1,12 +1,11 @@
 ![](assets/noun_1230289_cc.png)
 
 # dotnet-Contrib.System.Printing.Xps
-> Easily access and use [XPS](https://en.wikipedia.org/wiki/Open_XML_Paper_Specification) printers.
 
-[![Build status](https://img.shields.io/appveyor/ci/dittodhole/dotnet-contrib-system-printing-xps.svg)](https://ci.appveyor.com/project/dittodhole/dotnet-contrib-system-printing-xps)
-[![Test status](https://img.shields.io/appveyor/tests/dittodhole/dotnet-contrib-system-printing-xps.svg)](https://ci.appveyor.com/project/dittodhole/dotnet-contrib-system-printing-xps)
-[![NuGet Status](https://img.shields.io/nuget/v/Contrib.System.Printing.Xps.svg)](https://www.nuget.org/packages/Contrib.System.Printing.Xps)
-[![MyGet Pre Release](https://img.shields.io/myget/dittodhole/vpre/Contrib.System.Printing.Xps.svg)](https://www.myget.org/feed/dittodhole/package/nuget/Contrib.System.Printing.Xps)
+| [![Build status](https://img.shields.io/appveyor/ci/dittodhole/dotnet-contrib-system-printing-xps.svg)](https://ci.appveyor.com/project/dittodhole/dotnet-contrib-system-printing-xps) | [![Test status](https://img.shields.io/appveyor/tests/dittodhole/dotnet-contrib-system-printing-xps.svg)](https://ci.appveyor.com/project/dittodhole/dotnet-contrib-system-printing-xps) | [![NuGet Status](https://img.shields.io/nuget/v/Contrib.System.Printing.Xps.svg)](https://www.nuget.org/packages/Contrib.System.Printing.Xps) | [![MyGet Pre Release](https://img.shields.io/myget/dittodhole/vpre/Contrib.System.Printing.Xps.svg)](https://www.myget.org/feed/dittodhole/package/nuget/Contrib.System.Printing.Xps)
+|:-|:-|:-|:-|
+
+> Easily access and use [XPS](https://en.wikipedia.org/wiki/Open_XML_Paper_Specification) printers.
 
 ## Table of Contents
 
