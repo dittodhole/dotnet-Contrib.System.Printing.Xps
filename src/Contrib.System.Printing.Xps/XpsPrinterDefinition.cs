@@ -3,24 +3,50 @@ using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps
 {
+  /// <summary>
+  /// 
+  /// </summary>
   [PublicAPI]
   public partial interface IXpsPrinterDefinition
   {
+    /// <summary>
+    /// 
+    /// </summary>
     [NotNull]
     string DisplayName { get; }
 
+    /// <summary>
+    /// 
+    /// </summary>
     [NotNull]
     string FullName { get; }
 
+    /// <summary>
+    /// 
+    /// </summary>
     [CanBeNull]
     string PortName { get; }
 
+    /// <summary>
+    /// 
+    /// </summary>
     [CanBeNull]
     string DriverName { get; }
   }
 
+  /// <summary>
+  /// 
+  /// </summary>
   public partial interface IXpsPrinterDefinitionFactory
   {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="displayName" />
+    /// <param name="fullName" />
+    /// <param name="portName" />
+    /// <param name="driverName" />
+    /// <param name="printCapabilitiesXElement" />
     [NotNull]
     IXpsPrinterDefinition Create([NotNull] string displayName,
                                  [NotNull] string fullName,
@@ -29,9 +55,21 @@ namespace Contrib.System.Printing.Xps
                                  [NotNull] XElement printCapabilitiesXElement);
   }
 
+  /// <summary>
+  /// 
+  /// </summary>
+  /// <typeparam name="TXpsPrinterDefinition" />
   public partial interface IXpsPrinterDefinitionFactoryEx<out TXpsPrinterDefinition>
     where TXpsPrinterDefinition : IXpsPrinterDefinition
   {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="displayName" />
+    /// <param name="fullName" />
+    /// <param name="portName" />
+    /// <param name="driverName" />
+    /// <param name="printCapabilitiesXElement" />
     [NotNull]
     TXpsPrinterDefinition Create([NotNull] string displayName,
                                  [NotNull] string fullName,
@@ -40,9 +78,11 @@ namespace Contrib.System.Printing.Xps
                                  [NotNull] XElement printCapabilitiesXElement);
   }
 
+  /// <inheritdoc cref="IXpsInputBinDefinitionFactoryEx{TXpsInputBinDefinition}"/>
   public sealed partial class XpsPrinterDefinitionFactory : IXpsPrinterDefinitionFactoryEx<IXpsPrinterDefinition>,
                                                             IXpsPrinterDefinitionFactory
   {
+    /// <inheritdoc cref="IXpsPrinterDefinition"/>
     private partial struct XpsPrinterDefinition : IXpsPrinterDefinition
     {
       /// <inheritdoc />

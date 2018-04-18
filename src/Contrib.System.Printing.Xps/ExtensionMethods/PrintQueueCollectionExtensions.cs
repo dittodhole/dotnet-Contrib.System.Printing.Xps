@@ -5,9 +5,17 @@ using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
+  /// <summary>
+  ///  Provides extensions to query <see cref="PrintQueueCollection"/> instances
+  /// </summary>
   [PublicAPI]
   public static partial class PrintQueueCollectionExtensions
   {
+    /// <summary>
+    ///   Finds the matching <see cref="PrintQueue"/> instance for <paramref name="xpsPrinterDefinition"/>.
+    /// </summary>
+    /// <param name="printQueueCollection" />
+    /// <param name="xpsPrinterDefinition" />
     /// <exception cref="ArgumentNullException"><paramref name="printQueueCollection" /> is <see langword="null" />.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinition" /> is <see langword="null" />.</exception>
     /// <exception cref="Exception" />

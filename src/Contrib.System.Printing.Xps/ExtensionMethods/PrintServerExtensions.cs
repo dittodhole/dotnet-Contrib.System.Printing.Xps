@@ -4,9 +4,16 @@ using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
+  /// <summary>
+  /// 
+  /// </summary>
   [PublicAPI]
   public static partial class PrintServerExtensions
   {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="printServer" />
     /// <exception cref="ArgumentNullException"><paramref name="printServer" /> is <see langword="null" /></exception>
     /// <exception cref="Exception" />
     [Pure]

@@ -6,6 +6,9 @@ using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps
 {
+  /// <summary>
+  /// 
+  /// </summary>
   [PublicAPI]
   public static partial class UnitConverter
   {
@@ -29,6 +32,10 @@ namespace Contrib.System.Printing.Xps
       return methodInfo;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="micronValue" />
     /// <exception cref="Exception" />
     public static double LengthValueFromMicronToDIP(int micronValue)
     {
@@ -42,6 +49,10 @@ namespace Contrib.System.Printing.Xps
       return (double) result;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dipValue" />
     /// <exception cref="Exception" />
     public static int LengthValueFromDIPToMicron(double dipValue)
     {

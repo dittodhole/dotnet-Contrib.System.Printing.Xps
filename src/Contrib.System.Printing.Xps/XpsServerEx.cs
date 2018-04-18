@@ -9,17 +9,29 @@ using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps
 {
+  /// <summary>
+  ///   Default implementation: <see cref="XpsServerEx{TXpsPrinterDefinition,TXpsInputBinDefinition}"/>
+  /// </summary>
+  /// <typeparam name="TXpsPrinterDefinition" />
+  /// <typeparam name="TXpsInputBinDefinition" />
   [PublicAPI]
   public partial interface IXpsServerEx<TXpsPrinterDefinition, TXpsInputBinDefinition>
     where TXpsPrinterDefinition : IXpsPrinterDefinition
     where TXpsInputBinDefinition : IXpsInputBinDefinition
   {
+    /// <summary>
+    /// 
+    /// </summary>
     /// <exception cref="Exception" />
     [Pure]
     [NotNull]
     [ItemNotNull]
     TXpsPrinterDefinition[] GetXpsPrinterDefinitions();
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="xpsPrinterDefinition" />
     /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinition" /> is <see langword="null" />.</exception>
     /// <exception cref="Exception" />
     [Pure]
@@ -28,10 +40,16 @@ namespace Contrib.System.Printing.Xps
     TXpsInputBinDefinition[] GetXpsInputBinDefinitions([NotNull] TXpsPrinterDefinition xpsPrinterDefinition);
   }
 
+  /// <inheritdoc cref="IXpsServerEx{TXpsPrinterDefinition,TXpsInputBinDefinition}"/>
   public partial class XpsServerEx<TXpsPrinterDefinition, TXpsInputBinDefinition> : IXpsServerEx<TXpsPrinterDefinition, TXpsInputBinDefinition>
     where TXpsPrinterDefinition : IXpsPrinterDefinition
     where TXpsInputBinDefinition : IXpsInputBinDefinition
   {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="xpsPrinterDefinitionFactory" />
+    /// <param name="xpsInputBinDefinitionFactory" />
     /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinitionFactory" /> is <see langword="null" />.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="xpsInputBinDefinitionFactory" /> is <see langword="null" />.</exception>
     public XpsServerEx([NotNull] IXpsPrinterDefinitionFactoryEx<TXpsPrinterDefinition> xpsPrinterDefinitionFactory,
@@ -134,6 +152,11 @@ namespace Contrib.System.Printing.Xps
       return result;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="featureXName" />
+    /// <param name="inputBinXName" />
     [NotNull]
     protected virtual PrintTicket GetPrintTicketImpl([NotNull] XName featureXName,
                                                      [NotNull] XName inputBinXName)

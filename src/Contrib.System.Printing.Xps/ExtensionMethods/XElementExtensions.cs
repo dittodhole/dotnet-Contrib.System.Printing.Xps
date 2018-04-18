@@ -6,9 +6,17 @@ using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
+  /// <summary>
+  /// 
+  /// </summary>
   [PublicAPI]
   public static partial class XElementExtensions
   {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="xelement" />
+    /// <param name="name" />
     /// <returns>The prefix of the namespace registration is returned.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/></exception>
     /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/></exception>
@@ -40,6 +48,10 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       return prefix;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="xelement" />
     /// <remarks>The prefix is constructed via following pattern: "ns{0000}"</remarks>
     /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/></exception>
     [Pure]
@@ -61,6 +73,10 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       return namespacePrefix;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="xelement" />
     /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/></exception>
     [Pure]
     [CanBeNull]
@@ -82,6 +98,10 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       return value;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="xelement" />
     /// <remarks>Parses and returns <see cref="XElement.Value"/> of <paramref name="xelement"/> by looking for <see cref="XAttribute"/> with <see cref="XAttribute.Name"/> <see cref="XpsServer.TypeXName"/></remarks>
     /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/></exception>
     [Pure]
@@ -151,6 +171,11 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       return result;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="xelement" />
+    /// <param name="name" />
     /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/></exception>
     /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/></exception>
     [Pure]
@@ -179,6 +204,10 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       return null;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="xelement" />
     /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/></exception>
     [Pure]
     [CanBeNull]
@@ -204,6 +233,11 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       return result;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="xelement" />
+    /// <param name="str" />
     /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/></exception>
     [Pure]
     [CanBeNull]

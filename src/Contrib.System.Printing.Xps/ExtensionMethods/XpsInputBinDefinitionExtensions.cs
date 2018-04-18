@@ -6,9 +6,16 @@ using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
+  /// <summary>
+  /// 
+  /// </summary>
   [PublicAPI]
   public static partial class XpsInputBinDefinitionExtensions
   {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="xpsInputBinDefinition" />
     /// <exception cref="ArgumentNullException"><paramref name="xpsInputBinDefinition"/> is <see langword="null"/></exception>
     /// <exception cref="Exception" />
     [Pure]

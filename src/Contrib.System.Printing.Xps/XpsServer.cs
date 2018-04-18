@@ -3,15 +3,25 @@ using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps
 {
+  /// <summary>
+  ///   Default implementation: <see cref="XpsServer"/>
+  /// </summary>
   [PublicAPI]
   public partial interface IXpsServer
   {
+    /// <summary>
+    /// 
+    /// </summary>
     /// <exception cref="Exception" />
     [Pure]
     [NotNull]
     [ItemNotNull]
     IXpsPrinterDefinition[] GetXpsPrinterDefinitions();
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="xpsPrinterDefinition" />
     /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinition" /> is <see langword="null" />.</exception>
     /// <exception cref="Exception" />
     [Pure]
@@ -20,9 +30,13 @@ namespace Contrib.System.Printing.Xps
     IXpsInputBinDefinition[] GetXpsInputBinDefinitions([NotNull] IXpsPrinterDefinition xpsPrinterDefinition);
   }
 
+  /// <inheritdoc cref="IXpsServer"/>
   public partial class XpsServer : XpsServerEx<IXpsPrinterDefinition, IXpsInputBinDefinition>,
                                    IXpsServer
   {
+    /// <summary>
+    /// 
+    /// </summary>
     public XpsServer()
       : base(new XpsPrinterDefinitionFactory(),
              new XpsInputBinDefinitionFactory()) { }

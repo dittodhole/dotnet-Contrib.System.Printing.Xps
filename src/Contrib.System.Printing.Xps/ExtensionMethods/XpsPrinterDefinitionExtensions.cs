@@ -6,13 +6,26 @@ using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
+  /// <summary>
+  /// 
+  /// </summary>
   [PublicAPI]
   public static partial class XpsPrinterDefinitionExtensions
   {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="printQueue" />
     /// <exception cref="ArgumentNullException"><paramref name="printQueue" /> is <see langword="null" />.</exception>
     [CanBeNull]
     public delegate PrintTicket PrintTicketFactory([NotNull] PrintQueue printQueue);
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="xpsPrinterDefinition" />
+    /// <param name="documentPaginatorSource" />
+    /// <param name="printTicketFactory" />
     /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinition" /> is <see langword="null" />.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="documentPaginatorSource" /> is <see langword="null" />.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="printTicketFactory" /> is <see langword="null" />.</exception>
