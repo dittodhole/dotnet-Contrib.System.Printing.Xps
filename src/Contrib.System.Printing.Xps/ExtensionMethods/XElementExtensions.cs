@@ -6,6 +6,7 @@ using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
+  [PublicAPI]
   public static partial class XElementExtensions
   {
     /// <returns>The prefix of the namespace registration is returned.</returns>
@@ -179,6 +180,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     }
 
     /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/></exception>
+    [Pure]
     [CanBeNull]
     public static XName GetNameFromNameAttribute([NotNull] this XElement xelement)
     {

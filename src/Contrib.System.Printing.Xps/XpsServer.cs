@@ -3,6 +3,7 @@ using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps
 {
+  [PublicAPI]
   public partial interface IXpsServer
   {
     /// <exception cref="Exception" />

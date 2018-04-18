@@ -6,6 +6,7 @@ using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
+  [PublicAPI]
   public static partial class XpsPrinterDefinitionExtensions
   {
     /// <exception cref="ArgumentNullException"><paramref name="printQueue" /> is <see langword="null" />.</exception>

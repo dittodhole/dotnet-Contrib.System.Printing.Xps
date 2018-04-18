@@ -6,6 +6,7 @@ using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps
 {
+  [PublicAPI]
   public static partial class UnitConverter
   {
     /// <exception cref="Exception" />

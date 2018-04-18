@@ -6,9 +6,11 @@ using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
+  [PublicAPI]
   public static partial class PrintQueueExtensions
   {
     /// <exception cref="ArgumentNullException"><paramref name="printQueue" /> is <see langword="null" /></exception>
+    [Pure]
     [NotNull]
     public static XDocument GetPrintCapabilitiesAsXDocument([NotNull] this PrintQueue printQueue)
     {
@@ -37,6 +39,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
 
     /// <exception cref="ArgumentNullException"><paramref name="printQueue" /> is <see langword="null" /></exception>
     /// <exception cref="ArgumentNullException"><paramref name="printTicket" /> is <see langword="null" /></exception>
+    [Pure]
     [NotNull]
     public static XDocument GetPrintCapabilitiesAsXDocument([NotNull] this PrintQueue printQueue,
                                                             [NotNull] PrintTicket printTicket)
