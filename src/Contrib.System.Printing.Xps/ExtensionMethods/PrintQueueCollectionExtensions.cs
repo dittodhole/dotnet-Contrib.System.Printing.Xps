@@ -12,8 +12,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <exception cref="Exception" />
     [Pure]
     [CanBeNull]
-    public static PrintQueue GetPrintQueue([NotNull] this PrintQueueCollection printQueueCollection,
-                                           [NotNull] IXpsPrinterDefinition xpsPrinterDefinition)
+    public static PrintQueue FindPrintQueue([NotNull] this PrintQueueCollection printQueueCollection,
+                                            [NotNull] IXpsPrinterDefinition xpsPrinterDefinition)
     {
       if (printQueueCollection == null)
       {

@@ -87,7 +87,7 @@ namespace Contrib.System.Printing.Xps
       using (var printServer = new PrintServer())
       using (var printQueues = printServer.GetLocalAndRemotePrintQueues())
       {
-        var printQueue = printQueues.GetPrintQueue(xpsPrinterDefinition);
+        var printQueue = printQueues.FindPrintQueue(xpsPrinterDefinition);
         if (printQueue == null)
         {
           LogTo.Warn($"Could not get {nameof(PrintQueue)} '{xpsPrinterDefinition.FullName}'.");
