@@ -12,12 +12,10 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   public static partial class PrintQueueCollectionExtensions
   {
     /// <summary>
-    ///   Finds the matching <see cref="PrintQueue"/> instance for <paramref name="xpsPrinterDefinition"/>.
+    ///   Finds the <see cref="PrintQueue"/> instance with matching <seealso cref="PrintQueue.FullName"/> for <paramref name="xpsPrinterDefinition"/>.
     /// </summary>
     /// <param name="printQueueCollection"/>
     /// <param name="xpsPrinterDefinition"/>
-    /// <seealso cref="IXpsPrinterDefinition.FullName"/>
-    /// <seealso cref="PrintQueue.FullName"/>
     /// <exception cref="ArgumentNullException"><paramref name="printQueueCollection"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinition"/> is <see langword="null"/>.</exception>
     /// <exception cref="Exception"/>

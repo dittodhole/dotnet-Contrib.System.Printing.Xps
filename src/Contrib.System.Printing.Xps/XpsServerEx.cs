@@ -10,30 +10,31 @@ using JetBrains.Annotations;
 namespace Contrib.System.Printing.Xps
 {
   /// <summary>
-  ///   Default implementation: <see cref="XpsServerEx{TXpsPrinterDefinition,TXpsInputBinDefinition}"/>
+  ///   Provides <typeparamref name="TXpsPrinterDefinition"/> and <typeparamref name="TXpsInputBinDefinition"/> instances.
   /// </summary>
-  /// <typeparam name="TXpsPrinterDefinition" />
-  /// <typeparam name="TXpsInputBinDefinition" />
+  /// <typeparam name="TXpsPrinterDefinition"/>
+  /// <typeparam name="TXpsInputBinDefinition"/>
+  /// <seealso cref="XpsServerEx{TXpsPrinterDefinition,TXpsInputBinDefinition}"/>
   [PublicAPI]
   public partial interface IXpsServerEx<TXpsPrinterDefinition, TXpsInputBinDefinition>
     where TXpsPrinterDefinition : IXpsPrinterDefinition
     where TXpsInputBinDefinition : IXpsInputBinDefinition
   {
     /// <summary>
-    /// 
+    ///   Gets all <typeparamref name="TXpsPrinterDefinition"/> instances.
     /// </summary>
-    /// <exception cref="Exception" />
+    /// <exception cref="Exception"/>
     [Pure]
     [NotNull]
     [ItemNotNull]
     TXpsPrinterDefinition[] GetXpsPrinterDefinitions();
 
     /// <summary>
-    /// 
+    ///   Gets all <typeparamref name="TXpsInputBinDefinition"/> instances.
     /// </summary>
-    /// <param name="xpsPrinterDefinition" />
-    /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinition" /> is <see langword="null" />.</exception>
-    /// <exception cref="Exception" />
+    /// <param name="xpsPrinterDefinition"/>
+    /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinition"/> is <see langword="null"/>.</exception>
+    /// <exception cref="Exception"/>
     [Pure]
     [NotNull]
     [ItemNotNull]
@@ -46,12 +47,13 @@ namespace Contrib.System.Printing.Xps
     where TXpsInputBinDefinition : IXpsInputBinDefinition
   {
     /// <summary>
-    /// 
+    ///   Initializes a new instance of the <see cref="XpsServerEx{TXpsPrinterDefinition,TXpsInputBinDefinition}"/> class.
     /// </summary>
-    /// <param name="xpsPrinterDefinitionFactory" />
-    /// <param name="xpsInputBinDefinitionFactory" />
-    /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinitionFactory" /> is <see langword="null" />.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="xpsInputBinDefinitionFactory" /> is <see langword="null" />.</exception>
+    /// <param name="xpsPrinterDefinitionFactory"/>
+    /// <param name="xpsInputBinDefinitionFactory"/>
+    /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinitionFactory"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="xpsInputBinDefinitionFactory"/> is <see langword="null"/>.</exception>
+    [PublicAPI]
     public XpsServerEx([NotNull] IXpsPrinterDefinitionFactoryEx<TXpsPrinterDefinition> xpsPrinterDefinitionFactory,
                        [NotNull] IXpsInputBinDefinitionFactoryEx<TXpsInputBinDefinition> xpsInputBinDefinitionFactory)
     {
@@ -65,7 +67,7 @@ namespace Contrib.System.Printing.Xps
     [NotNull]
     private IXpsInputBinDefinitionFactoryEx<TXpsInputBinDefinition> XpsInputBinDefinitionFactory { get; }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public virtual TXpsPrinterDefinition[] GetXpsPrinterDefinitions()
     {
       TXpsPrinterDefinition[] result;
@@ -94,7 +96,7 @@ namespace Contrib.System.Printing.Xps
       return result;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public virtual TXpsInputBinDefinition[] GetXpsInputBinDefinitions(TXpsPrinterDefinition xpsPrinterDefinition)
     {
       if (xpsPrinterDefinition == null)
@@ -153,10 +155,10 @@ namespace Contrib.System.Printing.Xps
     }
 
     /// <summary>
-    /// 
+    ///   Gets a plain <see cref="PrintTicket"/>, which is bound to <paramref name="inputBinXName"/>, to retrieve the print capabilities of the input bin.
     /// </summary>
-    /// <param name="featureXName" />
-    /// <param name="inputBinXName" />
+    /// <param name="featureXName"/>
+    /// <param name="inputBinXName"/>
     [NotNull]
     protected virtual PrintTicket GetPrintTicketImpl([NotNull] XName featureXName,
                                                      [NotNull] XName inputBinXName)
@@ -198,7 +200,7 @@ namespace Contrib.System.Printing.Xps
       //                  xmlns:{prefix1}="{inputBinXName.NamespaceName}"
       //                  version="1">
       //   <psf:Feature name="{prefix0}:{featureXName.LocalName}">
-      //     <psf:Option name="{prefix1}:{inputBinXName.LocalName}" />
+      //     <psf:Option name="{prefix1}:{inputBinXName.LocalName}"/>
       //   </psf:Feature>
       // </psf:PrintTicket>
       // === === === === ===

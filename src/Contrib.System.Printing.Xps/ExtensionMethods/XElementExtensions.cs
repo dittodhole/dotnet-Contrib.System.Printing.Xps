@@ -17,8 +17,6 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// </summary>
     /// <param name="xelement"/>
     /// <param name="name"/>
-    /// <seealso cref="XElement.GetPrefixOfNamespace"/>
-    /// <seealso cref="FindUnusedPrefixForNamespace"/>
     /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
     /// <exception cref="Exception"/>
@@ -53,7 +51,6 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     ///   Finds an unused prefix for namespace registration.
     /// </summary>
     /// <param name="xelement"/>
-    /// <seealso cref="XElement.GetNamespaceOfPrefix"/>
     /// <remarks>The prefix is constructed via following pattern: "ns{0000}"</remarks>
     /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/>.</exception>
     [Pure]
@@ -76,11 +73,9 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     }
 
     /// <summary>
-    ///   Gets the value from descending value-<see cref="XElement"/>.
+    ///   Gets the boxed value from descending value-<see cref="XElement"/>.
     /// </summary>
     /// <param name="xelement"/>
-    /// <seealso cref="XpsServer.ValueElementXName"/>
-    /// <seealso cref="GetValue"/>
     /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/>.</exception>
     [Pure]
     [CanBeNull]
@@ -98,14 +93,9 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     }
 
     /// <summary>
-    ///   Gets the value by taking type-<see cref="XAttribute"/> into account.
+    ///   Gets the boxed value by taking type-<see cref="XAttribute"/> into account.
     /// </summary>
     /// <param name="xelement"/>
-    /// <seealso cref="XpsServer.TypeXName"/>
-    /// <seealso cref="XpsServer.StringTypeXName"/>
-    /// <seealso cref="XpsServer.IntegerTypeXName"/>
-    /// <seealso cref="XpsServer.QNameTypeXName"/>
-    /// <seealso cref="GetXName"/>
     /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/>.</exception>
     [Pure]
     [CanBeNull]
@@ -179,7 +169,6 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// </summary>
     /// <param name="xelement"/>
     /// <param name="name"/>
-    /// <seealso cref="GetNameFromNameAttribute"/>
     /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
     [Pure]
@@ -212,7 +201,6 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     ///   Gets the <see cref="XName"/> from name-<see cref="XAttribute"/> of <paramref name="xelement"/>.
     /// </summary>
     /// <param name="xelement"/>
-    /// <seealso cref="GetXName"/>
     /// <exception cref="ArgumentNullException"><paramref name="xelement"/> is <see langword="null"/>.</exception>
     [Pure]
     [CanBeNull]

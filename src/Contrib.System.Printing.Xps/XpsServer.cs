@@ -4,26 +4,27 @@ using JetBrains.Annotations;
 namespace Contrib.System.Printing.Xps
 {
   /// <summary>
-  ///   Default implementation: <see cref="XpsServer"/>
+  ///   Provides <see cref="IXpsPrinterDefinition"/> and <see cref="IXpsInputBinDefinition"/> instances.
   /// </summary>
+  /// <seealso cref="XpsServer"/>
   [PublicAPI]
   public partial interface IXpsServer
   {
     /// <summary>
-    /// 
+    ///   Gets all <see cref="IXpsPrinterDefinition"/> instances.
     /// </summary>
-    /// <exception cref="Exception" />
+    /// <exception cref="Exception"/>
     [Pure]
     [NotNull]
     [ItemNotNull]
     IXpsPrinterDefinition[] GetXpsPrinterDefinitions();
 
     /// <summary>
-    /// 
+    ///   Gets all <see cref="IXpsInputBinDefinition"/> instances for <paramref name="xpsPrinterDefinition"/>.
     /// </summary>
-    /// <param name="xpsPrinterDefinition" />
-    /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinition" /> is <see langword="null" />.</exception>
-    /// <exception cref="Exception" />
+    /// <param name="xpsPrinterDefinition"/>
+    /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinition"/> is <see langword="null"/>.</exception>
+    /// <exception cref="Exception"/>
     [Pure]
     [NotNull]
     [ItemNotNull]
@@ -35,13 +36,20 @@ namespace Contrib.System.Printing.Xps
                                    IXpsServer
   {
     /// <summary>
-    /// 
+    ///   Initializes a new instance of the <see cref="XpsServer"/> class.
     /// </summary>
+    [PublicAPI]
     public XpsServer()
       : base(new XpsPrinterDefinitionFactory(),
              new XpsInputBinDefinitionFactory()) { }
 
-    /// <inheritdoc />
+
+    /// <summary>
+    ///   Initializes a new instance of the <see cref="XpsServer"/> class.
+    /// </summary>
+    /// <param name="xpsPrinterDefinitionFactory"/>
+    /// <param name="xpsInputBinDefinitionFactory"/>
+    [PublicAPI]
     public XpsServer([NotNull] IXpsPrinterDefinitionFactoryEx<IXpsPrinterDefinition> xpsPrinterDefinitionFactory,
                      [NotNull] IXpsInputBinDefinitionFactoryEx<IXpsInputBinDefinition> xpsInputBinDefinitionFactory)
       : base(xpsPrinterDefinitionFactory,
