@@ -7,7 +7,7 @@ using JetBrains.Annotations;
 namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
   /// <summary>
-  ///  Provides extensions to query <see cref="XElement"/> instances
+  ///   Provides extensions to query <see cref="XElement"/> instances.
   /// </summary>
   [PublicAPI]
   public static partial class XElementExtensions
@@ -180,7 +180,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     }
 
     /// <summary>
-    ///  Finds the descending <paramref name="name"/>-<see cref="XElement"/>.
+    ///   Finds the descending <paramref name="name"/>-<see cref="XElement"/>.
     /// </summary>
     /// <param name="xelement"/>
     /// <param name="name"/>
@@ -214,7 +214,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     }
 
     /// <summary>
-    ///  Gets the <see cref="XName"/> from name-<see cref="XAttribute"/> of <paramref name="xelement"/>.
+    ///   Gets the <see cref="XName"/> from name-<see cref="XAttribute"/> of <paramref name="xelement"/>.
     /// </summary>
     /// <param name="xelement"/>
     /// <seealso cref="GetXName"/>
@@ -244,7 +244,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     }
 
     /// <summary>
-    ///  Gets the <see cref="XName"/> from <paramref name="str"/>.
+    ///   Gets the <see cref="XName"/> from <paramref name="str"/>.
     /// </summary>
     /// <param name="xelement"/>
     /// <param name="str"/>

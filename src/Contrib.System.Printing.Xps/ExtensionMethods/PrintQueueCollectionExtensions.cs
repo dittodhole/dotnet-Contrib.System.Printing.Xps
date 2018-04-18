@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
   /// <summary>
-  ///  Provides extensions to query <see cref="PrintQueueCollection"/> instances
+  ///   Provides extensions to query <see cref="PrintQueueCollection"/> instances.
   /// </summary>
   [PublicAPI]
   public static partial class PrintQueueCollectionExtensions
