@@ -45,6 +45,45 @@ namespace Contrib.System.Printing.Xps
   /// </summary>
   /// <typeparam name="TXpsInputBinDefinition"/>
   /// <seealso cref="XpsInputBinDefinitionFactory"/>
+  /// <example><code>
+  /// var customXpsInputBinDefinitionFactory = new CustomXpsInputBinDefinitionFactory();
+  ///
+  /// using Contrib.System.Printing.Xps;
+  /// using System.Xml.Linq;
+  ///
+  /// public interface ICustomXpsInputBinDefinition : IXpsInputBinDefinition { }
+  ///
+  /// public class CustomXpsInputBinDefinitionFactory : IXpsInputBinDefinitionFactoryEx&lt;ICustomXpsInputBinDefinition&gt;
+  /// {
+  ///   private class CustomXpsInputBinDefinition : ICustomXpsInputBinDefinition
+  ///   {
+  ///     public XName FeatureName { get; set; }
+  ///     public string DisplayName { get; set; }
+  ///     public XName Name { get; set; }
+  ///     public XName FeedType { get; set; }
+  ///   }
+  ///
+  ///   private IXpsInputBinDefinitionFactory XpsInputBinDefinitionFactory { get; } = new XpsInputBinDefinitionFactory();
+  ///
+  ///   public ICustomXpsInputBinDefinition Create(XElement optionXElement,
+  ///                                              XElement printCapabilitiesXElement)
+  ///   {
+  ///     var xpsInputBinDefinition = this.XpsInputBinDefinitionFactory.Create(optionXElement,
+  ///                                                                          printCapabilitiesXElement);
+  ///     var customXpsInputBinDefinition = new CustomXpsInputBinDefinition
+  ///                                      {
+  ///                                        FeatureName = xpsInputBinDefinition.FeatureName,
+  ///                                        DisplayName = xpsInputBinDefinition.DisplayName,
+  ///                                        Name = xpsInputBinDefinition.Name,
+  ///                                        FeedType = xpsInputBinDefinition.FeedType
+  ///                                      };
+  ///
+  ///     // TODO use printCapabilitiesXElement with Contrib.System.Printing.Xps.ExtensionMethods.XElementExtensions to extract needed values
+  ///
+  ///     return customXpsInputBinDefinition;
+  ///   }
+  /// }
+  /// </code></example>
   public partial interface IXpsInputBinDefinitionFactory<out TXpsInputBinDefinition>
     where TXpsInputBinDefinition : IXpsInputBinDefinition
   {
