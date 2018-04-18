@@ -44,7 +44,7 @@ namespace Contrib.System.Printing.Xps
   /// </summary>
   /// <typeparam name="TXpsPrinterDefinition"/>
   /// <seealso cref="XpsPrinterDefinitionFactory"/>
-  public partial interface IXpsPrinterDefinitionFactoryEx<out TXpsPrinterDefinition>
+  public partial interface IXpsPrinterDefinitionFactory<out TXpsPrinterDefinition>
     where TXpsPrinterDefinition : IXpsPrinterDefinition
   {
     /// <summary>
@@ -63,8 +63,8 @@ namespace Contrib.System.Printing.Xps
                                  [NotNull] XElement printCapabilitiesXElement);
   }
 
-  /// <inheritdoc cref="IXpsInputBinDefinitionFactoryEx{TXpsInputBinDefinition}"/>
-  public sealed partial class XpsPrinterDefinitionFactory : IXpsPrinterDefinitionFactoryEx<IXpsPrinterDefinition>
+  /// <inheritdoc cref="IXpsInputBinDefinitionFactory{TXpsInputBinDefinition}"/>
+  public sealed partial class XpsPrinterDefinitionFactory : IXpsPrinterDefinitionFactory<IXpsPrinterDefinition>
   {
     /// <inheritdoc cref="IXpsPrinterDefinition"/>
     private partial struct XpsPrinterDefinition : IXpsPrinterDefinition

@@ -54,18 +54,18 @@ namespace Contrib.System.Printing.Xps
     /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinitionFactory"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="xpsInputBinDefinitionFactory"/> is <see langword="null"/>.</exception>
     [PublicAPI]
-    public XpsServerEx([NotNull] IXpsPrinterDefinitionFactoryEx<TXpsPrinterDefinition> xpsPrinterDefinitionFactory,
-                       [NotNull] IXpsInputBinDefinitionFactoryEx<TXpsInputBinDefinition> xpsInputBinDefinitionFactory)
+    public XpsServerEx([NotNull] IXpsPrinterDefinitionFactory<TXpsPrinterDefinition> xpsPrinterDefinitionFactory,
+                       [NotNull] IXpsInputBinDefinitionFactory<TXpsInputBinDefinition> xpsInputBinDefinitionFactory)
     {
       this.XpsPrinterDefinitionFactory = xpsPrinterDefinitionFactory ?? throw new ArgumentNullException(nameof(xpsPrinterDefinitionFactory));
       this.XpsInputBinDefinitionFactory = xpsInputBinDefinitionFactory ?? throw new ArgumentNullException(nameof(xpsInputBinDefinitionFactory));
     }
 
     [NotNull]
-    private IXpsPrinterDefinitionFactoryEx<TXpsPrinterDefinition> XpsPrinterDefinitionFactory { get; }
+    private IXpsPrinterDefinitionFactory<TXpsPrinterDefinition> XpsPrinterDefinitionFactory { get; }
 
     [NotNull]
-    private IXpsInputBinDefinitionFactoryEx<TXpsInputBinDefinition> XpsInputBinDefinitionFactory { get; }
+    private IXpsInputBinDefinitionFactory<TXpsInputBinDefinition> XpsInputBinDefinitionFactory { get; }
 
     /// <inheritdoc/>
     public virtual TXpsPrinterDefinition[] GetXpsPrinterDefinitions()

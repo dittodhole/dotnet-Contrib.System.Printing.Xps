@@ -50,8 +50,8 @@ namespace Contrib.System.Printing.Xps
     /// <param name="xpsPrinterDefinitionFactory"/>
     /// <param name="xpsInputBinDefinitionFactory"/>
     [PublicAPI]
-    public XpsServer([NotNull] IXpsPrinterDefinitionFactoryEx<IXpsPrinterDefinition> xpsPrinterDefinitionFactory,
-                     [NotNull] IXpsInputBinDefinitionFactoryEx<IXpsInputBinDefinition> xpsInputBinDefinitionFactory)
+    public XpsServer([NotNull] IXpsPrinterDefinitionFactory<IXpsPrinterDefinition> xpsPrinterDefinitionFactory,
+                     [NotNull] IXpsInputBinDefinitionFactory<IXpsInputBinDefinition> xpsInputBinDefinitionFactory)
       : base(xpsPrinterDefinitionFactory,
              xpsInputBinDefinitionFactory) { }
   }
