@@ -238,6 +238,50 @@ public class CustomXpsInputBinDefinitionFactory : IXpsInputBinDefinitionFactoryE
 }
 ```
 
+---
+
+### `Contrib.System.Printing.Xps.ExtensionMethods.PrintQueueCollectionExtensions`
+
+| Method           | Return type
+|:-----------------|:-|
+| `FindPrintQueue` | `System.Printing.PrintQueue`
+
+### `Contrib.System.Printing.Xps.ExtensionMethods.PrintQueueExtensions`
+
+| Method                            | Return type
+|:----------------------------------|:-|
+| `GetPrintCapabilitiesAsXDocument` | `System.Xml.Linq.XDocument`
+
+### `Contrib.System.Printing.Xps.ExtensionMethods.PrintServerExtensions`
+
+| Method                         | Return type
+|:-------------------------------|:-|
+| `GetLocalAndRemotePrintQueues` | `System.Printing.PrintQueueCollection`
+
+### `Contrib.System.Printing.Xps.ExtensionMethods.XElementExtensions`
+
+| Method                                | Return type
+|:--------------------------------------|:-|
+| `EnsurePrefixRegistrationOfNamespace` | `string`
+| `FindUnusedPrefixForNamespace`        | `string`
+| `GetValueFromValueElement`            | `object` (boxed)
+| `GetValue`                            | `object` (boxed)
+| `FindElementByNameAttribute`          | `System.Xml.Linq.XElement`
+| `GetNameFromNameAttribute`            | `System.Xml.Linq.XName`
+| `GetXName`                            | `System.Xml.Linq.XName`
+
+### `Contrib.System.Printing.Xps.ExtensionMethods.XpsInputBinDefinitionExtensions`
+
+| Method           | Return type
+|:-----------------|:-|
+| `GetPrintTicket` | `System.Printing.PrintTicket`
+
+### `Contrib.System.Printing.Xps.ExtensionMethods.XpsPrinterDefinitionExtensions`
+
+| Method  | Return type
+|:--------|:-|
+| `Print` | `void`
+
 ## License
 
 dotnet-Contrib.System.Printing.Xps is published under [WTFNMFPLv3](https://github.com/dittodhole/WTFNMFPLv3).
