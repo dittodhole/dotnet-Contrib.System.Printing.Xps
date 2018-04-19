@@ -87,6 +87,7 @@ namespace Contrib.System.Printing.Xps
   ///   }
   /// }
   /// </code></example>
+  [PublicAPI]
   public partial interface IXpsPrinterDefinitionFactory<out TXpsPrinterDefinition>
     where TXpsPrinterDefinition : IXpsPrinterDefinition
   {
@@ -107,6 +108,7 @@ namespace Contrib.System.Printing.Xps
   }
 
   /// <inheritdoc cref="IXpsInputBinDefinitionFactory{TXpsInputBinDefinition}"/>
+  [PublicAPI]
   public sealed partial class XpsPrinterDefinitionFactory : IXpsPrinterDefinitionFactory<IXpsPrinterDefinition>
   {
     /// <inheritdoc cref="IXpsPrinterDefinition"/>
