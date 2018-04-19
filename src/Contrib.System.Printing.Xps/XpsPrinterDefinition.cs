@@ -112,7 +112,7 @@ namespace Contrib.System.Printing.Xps
   public sealed partial class XpsPrinterDefinitionFactory : IXpsPrinterDefinitionFactory<IXpsPrinterDefinition>
   {
     /// <inheritdoc cref="IXpsPrinterDefinition"/>
-    private partial struct XpsPrinterDefinition : IXpsPrinterDefinition
+    private sealed partial class XpsPrinterDefinition : IXpsPrinterDefinition
     {
       /// <inheritdoc/>
       public string DisplayName { get; set; }

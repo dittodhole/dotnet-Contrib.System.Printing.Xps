@@ -101,7 +101,7 @@ namespace Contrib.System.Printing.Xps
   public sealed partial class XpsInputBinDefinitionFactory : IXpsInputBinDefinitionFactory<IXpsInputBinDefinition>
   {
     /// <inheritdoc cref="IXpsInputBinDefinition"/>
-    private partial struct XpsInputBinDefinition : IXpsInputBinDefinition
+    private sealed partial class XpsInputBinDefinition : IXpsInputBinDefinition
     {
       /// <inheritdoc/>
       public XName FeatureName { get; set; }
