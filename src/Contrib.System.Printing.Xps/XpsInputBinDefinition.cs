@@ -46,8 +46,6 @@ namespace Contrib.System.Printing.Xps
   /// <typeparam name="TXpsInputBinDefinition"/>
   /// <seealso cref="XpsInputBinDefinitionFactory"/>
   /// <example><code>
-  /// var customXpsInputBinDefinitionFactory = new CustomXpsInputBinDefinitionFactory();
-  ///
   /// using Contrib.System.Printing.Xps;
   /// using System.Xml.Linq;
   ///

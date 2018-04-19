@@ -45,8 +45,6 @@ namespace Contrib.System.Printing.Xps
   /// <typeparam name="TXpsPrinterDefinition"/>
   /// <seealso cref="XpsPrinterDefinitionFactory"/>
   /// <example><code>
-  /// var customXpsPrinterDefinitionFactory = new CustomXpsPrinterDefinitionFactory();
-  ///
   /// using Contrib.System.Printing.Xps;
   /// using System.Xml.Linq;
   ///
