@@ -1,0 +1,49 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "files": [ "src/Contrib.System.Printing.Xps.sln" ],
+          "src": "../"
+        }
+      ],
+      "dest": "obj/api",
+      "filter": "metadata.filter.yml"
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [ "*.yml" ],
+        "src": "obj/api",
+        "dest": "api"
+      },
+      {
+        "files": [ "index.md", "toc.yml" ]
+      },
+      {
+        "files": [ "README.md" ],
+        "src": "../"
+      }
+    ],
+    "resource": [
+      {
+        "files": [ "assets/**" ],
+        "src": "../"
+      }
+    ],
+    "globalMetadata": {
+      "_appTitle": "Contrib.System.Printing.Xps",
+      "_appFooter": " ",
+      "_appLogoPath": "assets/docs/logo.png",
+      "_appFaviconPath": "assets/docs/favicon.ico",
+      "_disableContribution": true,
+      "_enableNewTab": true
+    },
+    "template": [
+      "default"
+    ],
+    "dest": "bin",
+    "xrefService": [ "https://xref.docs.microsoft.com/query?uid={uid}" ]
+  }
+}
