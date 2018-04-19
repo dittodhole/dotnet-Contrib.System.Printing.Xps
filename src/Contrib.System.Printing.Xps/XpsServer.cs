@@ -1,5 +1,4 @@
-﻿using System;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps
 {
@@ -8,28 +7,7 @@ namespace Contrib.System.Printing.Xps
   /// </summary>
   /// <seealso cref="XpsServer"/>
   [PublicAPI]
-  public partial interface IXpsServer
-  {
-    /// <summary>
-    ///   Gets all <see cref="IXpsPrinterDefinition"/> instances.
-    /// </summary>
-    /// <exception cref="Exception"/>
-    [Pure]
-    [NotNull]
-    [ItemNotNull]
-    IXpsPrinterDefinition[] GetXpsPrinterDefinitions();
-
-    /// <summary>
-    ///   Gets all <see cref="IXpsInputBinDefinition"/> instances for <paramref name="xpsPrinterDefinition"/>.
-    /// </summary>
-    /// <param name="xpsPrinterDefinition"/>
-    /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinition"/> is <see langword="null"/>.</exception>
-    /// <exception cref="Exception"/>
-    [Pure]
-    [NotNull]
-    [ItemNotNull]
-    IXpsInputBinDefinition[] GetXpsInputBinDefinitions([NotNull] IXpsPrinterDefinition xpsPrinterDefinition);
-  }
+  public partial interface IXpsServer : IXpsServerEx<IXpsPrinterDefinition, IXpsInputBinDefinition> { }
 
   /// <inheritdoc cref="IXpsServer"/>
   public partial class XpsServer : XpsServerEx<IXpsPrinterDefinition, IXpsInputBinDefinition>,
