@@ -46,7 +46,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         document = XDocument.Load(memoryStream);
       }
 
-      var printTicket = document.Root ?? new XElement(XpsServer.PrintTicketName);
+      var printTicket = document.Root ?? XpsServer.PrintTicketElement;
 
       // === DESTINATION ===
       // <?xml version="1.0" encoding="UTF-8"?>

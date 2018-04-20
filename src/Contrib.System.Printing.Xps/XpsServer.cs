@@ -84,7 +84,7 @@ namespace Contrib.System.Printing.Xps
         result = printQueues.Select(printQueue =>
                                     {
                                       var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument()
-                                                                        .Root ?? new XElement(XpsServer.PrintCapabilitiesName);
+                                                                        .Root ?? XpsServer.PrintCapabilitiesElement;
 
                                       var xpsPrinterDefinition = this.XpsPrinterDefinitionFactory.Create(printQueue.Name,
                                                                                                          printQueue.FullName,
@@ -123,7 +123,7 @@ namespace Contrib.System.Printing.Xps
           XElement feature;
           {
             var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument()
-                                              .Root ?? new XElement(XpsServer.PrintCapabilitiesName);
+                                              .Root ?? XpsServer.PrintCapabilitiesElement;
             feature = printCapabilities.FindElementByNameAttribute(XpsServer.PageInputBinName)
                               ?? printCapabilities.FindElementByNameAttribute(XpsServer.DocumentInputBinName)
                               ?? printCapabilities.FindElementByNameAttribute(XpsServer.JobInputBinName);
@@ -141,7 +141,7 @@ namespace Contrib.System.Printing.Xps
                                       var printTicket = XpsServer.GetPrintTicket(feature.Name,
                                                                                  option.Name);
                                       var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(printTicket)
-                                                                        .Root ?? new XElement(XpsServer.PrintCapabilitiesName);
+                                                                        .Root ?? XpsServer.PrintCapabilitiesElement;
 
                                       var xpsInputBinDefinition = this.XpsInputBinDefinitionFactory.Create(option,
                                                                                                            printCapabilities);
