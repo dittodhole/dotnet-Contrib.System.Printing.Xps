@@ -16,7 +16,12 @@ namespace Contrib.System.Printing.Xps
   /// </summary>
   /// <seealso cref="MS.Internal.Printing.Configuration.UnitConverter"/>
   [PublicAPI]
-  public static partial class UnitConverter
+#if CONTRIB_SYSTEM_PRINTING_XPS
+  public
+#else
+  internal
+#endif
+  static partial class UnitConverter
   {
     /// <exception cref="Exception"/>
     [NotNull]

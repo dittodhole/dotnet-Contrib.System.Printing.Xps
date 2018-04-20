@@ -13,7 +13,12 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   ///   Provides extensions for <see cref="IXpsInputBinDefinition"/> objects.
   /// </summary>
   [PublicAPI]
-  public static partial class XpsInputBinDefinitionExtensions
+#if CONTRIB_SYSTEM_PRINTING_XPS
+  public
+#else
+  internal
+#endif
+  static partial class XpsInputBinDefinitionExtensions
   {
     /// <summary>
     ///   Gets the print ticket for <paramref name="xpsInputBinDefinition"/>.

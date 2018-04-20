@@ -14,7 +14,12 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   ///   Provides extensions for <see cref="XElement"/> objects.
   /// </summary>
   [PublicAPI]
-  public static partial class XElementExtensions
+#if CONTRIB_SYSTEM_PRINTING_XPS
+  public
+#else
+  internal
+#endif
+  static partial class XElementExtensions
   {
     /// <summary>
     ///   Ensures and gets the prefix of the namespace registration for <paramref name="name"/>.

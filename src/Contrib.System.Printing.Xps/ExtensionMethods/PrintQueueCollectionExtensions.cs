@@ -12,7 +12,12 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   ///   Provides extensions for <see cref="PrintQueueCollection"/> objects.
   /// </summary>
   [PublicAPI]
-  public static partial class PrintQueueCollectionExtensions
+#if CONTRIB_SYSTEM_PRINTING_XPS
+  public
+#else
+  internal
+#endif
+  static partial class PrintQueueCollectionExtensions
   {
     /// <summary>
     ///   Finds the matching <see cref="PrintQueue"/> object.

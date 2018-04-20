@@ -6,7 +6,12 @@ namespace Contrib.System.Printing.Xps
   using global::System.Xml.Linq;
   using global::JetBrains.Annotations;
 
-  public partial class XpsServer
+#if CONTRIB_SYSTEM_PRINTING_XPS
+  public
+#else
+  internal
+#endif
+  partial class XpsServer
   {
     /// <summary>
     ///   psf:PrintCapabilities

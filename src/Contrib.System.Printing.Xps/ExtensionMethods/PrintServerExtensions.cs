@@ -11,7 +11,12 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   ///   Provides extensions for <see cref="PrintServer"/> objects.
   /// </summary>
   [PublicAPI]
-  public static partial class PrintServerExtensions
+#if CONTRIB_SYSTEM_PRINTING_XPS
+  public
+#else
+  internal
+#endif
+  static partial class PrintServerExtensions
   {
     /// <summary>
     ///   Gets the collection of local and remote print queues that are hosted by the print server.

@@ -10,7 +10,12 @@ namespace Contrib.System.Printing.Xps
   using global::Contrib.System.Printing.Xps.ExtensionMethods;
   using global::JetBrains.Annotations;
 
-  public partial class XpsServer
+#if CONTRIB_SYSTEM_PRINTING_XPS
+  public
+#else
+  internal
+#endif
+  partial class XpsServer
   {
     /// <summary>
     ///   Gets a plain print ticket, which is bound to the specified input bin.

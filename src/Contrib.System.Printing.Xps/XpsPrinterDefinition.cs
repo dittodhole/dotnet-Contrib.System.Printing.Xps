@@ -11,7 +11,12 @@ namespace Contrib.System.Printing.Xps
   /// </summary>
   /// <seealso cref="XpsPrinterDefinitionFactory.XpsPrinterDefinition"/>
   [PublicAPI]
-  public partial interface IXpsPrinterDefinition
+#if CONTRIB_SYSTEM_PRINTING_XPS
+  public
+#else
+  internal
+#endif
+  partial interface IXpsPrinterDefinition
   {
     /// <summary>
     ///   The display name of the printer.
@@ -91,7 +96,12 @@ namespace Contrib.System.Printing.Xps
   /// }
   /// </code></example>
   [PublicAPI]
-  public partial interface IXpsPrinterDefinitionFactory<out TXpsPrinterDefinition>
+#if CONTRIB_SYSTEM_PRINTING_XPS
+  public
+#else
+  internal
+#endif
+  partial interface IXpsPrinterDefinitionFactory<out TXpsPrinterDefinition>
     where TXpsPrinterDefinition : IXpsPrinterDefinition
   {
     /// <summary>
@@ -112,10 +122,20 @@ namespace Contrib.System.Printing.Xps
 
   /// <inheritdoc cref="IXpsInputBinDefinitionFactory{TXpsInputBinDefinition}"/>
   [PublicAPI]
-  public sealed partial class XpsPrinterDefinitionFactory : IXpsPrinterDefinitionFactory<IXpsPrinterDefinition>
+#if CONTRIB_SYSTEM_PRINTING_XPS
+  public sealed
+#else
+  internal
+#endif
+  partial class XpsPrinterDefinitionFactory : IXpsPrinterDefinitionFactory<IXpsPrinterDefinition>
   {
     /// <inheritdoc cref="IXpsPrinterDefinition"/>
-    private sealed partial class XpsPrinterDefinition : IXpsPrinterDefinition
+#if CONTRIB_SYSTEM_PRINTING_XPS
+    private sealed
+#else
+    internal
+#endif
+    partial class XpsPrinterDefinition : IXpsPrinterDefinition
     {
       /// <inheritdoc/>
       public string DisplayName { get; set; }

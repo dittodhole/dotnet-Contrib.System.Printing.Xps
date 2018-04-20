@@ -13,7 +13,12 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   ///   Provides extensions for <see cref="PrintQueue"/> objects.
   /// </summary>
   [PublicAPI]
-  public static partial class PrintQueueExtensions
+#if CONTRIB_SYSTEM_PRINTING_XPS
+  public
+#else
+  internal
+#endif
+  static partial class PrintQueueExtensions
   {
     /// <summary>
     ///   Gets an <see cref="XDocument"/> object that specifies the printer's capabilities that complies with the Print Schema (see https://msdn.microsoft.com/en-us/library/windows/desktop/ms715274).

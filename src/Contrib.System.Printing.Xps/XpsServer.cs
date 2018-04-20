@@ -18,7 +18,12 @@ namespace Contrib.System.Printing.Xps
   /// <typeparam name="TXpsInputBinDefinition"/>
   /// <seealso cref="XpsServer{TXpsPrinterDefinition,TXpsInputBinDefinition}"/>
   [PublicAPI]
-  public partial interface IXpsServer<TXpsPrinterDefinition, TXpsInputBinDefinition>
+#if CONTRIB_SYSTEM_PRINTING_XPS
+  public
+#else
+  internal
+#endif
+  partial interface IXpsServer<TXpsPrinterDefinition, TXpsInputBinDefinition>
     where TXpsPrinterDefinition : IXpsPrinterDefinition
     where TXpsInputBinDefinition : IXpsInputBinDefinition
   {
@@ -46,10 +51,20 @@ namespace Contrib.System.Printing.Xps
   /// <inheritdoc />
   /// <seealso cref="XpsServer"/>
   [PublicAPI]
-  public partial interface IXpsServer : IXpsServer<IXpsPrinterDefinition, IXpsInputBinDefinition> { }
+#if CONTRIB_SYSTEM_PRINTING_XPS
+  public
+#else
+  internal
+#endif
+  partial interface IXpsServer : IXpsServer<IXpsPrinterDefinition, IXpsInputBinDefinition> { }
 
   /// <inheritdoc cref="IXpsServer{TXpsPrinterDefinition,TXpsInputBinDefinition}"/>
-  public partial class XpsServer<TXpsPrinterDefinition, TXpsInputBinDefinition> : IXpsServer<TXpsPrinterDefinition, TXpsInputBinDefinition>
+#if CONTRIB_SYSTEM_PRINTING_XPS
+  public
+#else
+  internal
+#endif
+  partial class XpsServer<TXpsPrinterDefinition, TXpsInputBinDefinition> : IXpsServer<TXpsPrinterDefinition, TXpsInputBinDefinition>
     where TXpsPrinterDefinition : IXpsPrinterDefinition
     where TXpsInputBinDefinition : IXpsInputBinDefinition
   {
@@ -158,7 +173,12 @@ namespace Contrib.System.Printing.Xps
   }
 
   /// <inheritdoc cref="IXpsServer"/>
-  public partial class XpsServer : XpsServer<IXpsPrinterDefinition, IXpsInputBinDefinition>,
+#if CONTRIB_SYSTEM_PRINTING_XPS
+  public
+#else
+  internal
+#endif
+  partial class XpsServer : XpsServer<IXpsPrinterDefinition, IXpsInputBinDefinition>,
                                    IXpsServer
   {
     /// <summary>

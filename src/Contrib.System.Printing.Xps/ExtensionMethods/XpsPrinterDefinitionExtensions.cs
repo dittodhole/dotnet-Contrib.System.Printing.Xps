@@ -13,7 +13,12 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   ///   Provides extensions for <see cref="IXpsPrinterDefinition"/> objects.
   /// </summary>
   [PublicAPI]
-  public static partial class XpsPrinterDefinitionExtensions
+#if CONTRIB_SYSTEM_PRINTING_XPS
+  public
+#else
+  internal
+#endif
+  static partial class XpsPrinterDefinitionExtensions
   {
     /// <summary>
     ///   Creates a <see cref="PrintTicket"/> object.

@@ -12,7 +12,12 @@ namespace Contrib.System.Printing.Xps
   /// </summary>
   /// <seealso cref="XpsInputBinDefinitionFactory.XpsInputBinDefinition"/>
   [PublicAPI]
-  public partial interface IXpsInputBinDefinition
+#if CONTRIB_SYSTEM_PRINTING_XPS
+  public
+#else
+  internal
+#endif
+  partial interface IXpsInputBinDefinition
   {
     /// <summary>
     ///   The name of the feature.
@@ -86,7 +91,12 @@ namespace Contrib.System.Printing.Xps
   /// }
   /// </code></example>
   [PublicAPI]
-  public partial interface IXpsInputBinDefinitionFactory<out TXpsInputBinDefinition>
+#if CONTRIB_SYSTEM_PRINTING_XPS
+  public
+#else
+  internal
+#endif
+  partial interface IXpsInputBinDefinitionFactory<out TXpsInputBinDefinition>
     where TXpsInputBinDefinition : IXpsInputBinDefinition
   {
     /// <summary>
@@ -101,10 +111,20 @@ namespace Contrib.System.Printing.Xps
 
   /// <inheritdoc cref="IXpsInputBinDefinitionFactory{TXpsInputBinDefinition}"/>
   [PublicAPI]
-  public sealed partial class XpsInputBinDefinitionFactory : IXpsInputBinDefinitionFactory<IXpsInputBinDefinition>
+#if CONTRIB_SYSTEM_PRINTING_XPS
+  public sealed
+#else
+  internal
+#endif
+  partial class XpsInputBinDefinitionFactory : IXpsInputBinDefinitionFactory<IXpsInputBinDefinition>
   {
     /// <inheritdoc cref="IXpsInputBinDefinition"/>
-    private sealed partial class XpsInputBinDefinition : IXpsInputBinDefinition
+#if CONTRIB_SYSTEM_PRINTING_XPS
+    private sealed
+#else
+    internal
+#endif
+    partial class XpsInputBinDefinition : IXpsInputBinDefinition
     {
       /// <inheritdoc/>
       public XName Feature { get; set; }
