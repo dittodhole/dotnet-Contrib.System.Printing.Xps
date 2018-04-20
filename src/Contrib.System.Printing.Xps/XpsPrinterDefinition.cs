@@ -107,10 +107,10 @@ namespace Contrib.System.Printing.Xps
     /// <summary>
     ///   Factory method for <typeparamref name="TXpsPrinterDefinition"/>.
     /// </summary>
-    /// <param name="displayName"/>
-    /// <param name="fullName"/>
-    /// <param name="portName"/>
-    /// <param name="driverName"/>
+    /// <param name="displayName">The display name of the printer.</param>
+    /// <param name="fullName">The full name of the printer.</param>
+    /// <param name="portName">The port name of the printer.</param>
+    /// <param name="driverName">The driver name of the printer.</param>
     /// <param name="printCapabilities"/>
     [NotNull]
     TXpsPrinterDefinition Create([NotNull] string displayName,
