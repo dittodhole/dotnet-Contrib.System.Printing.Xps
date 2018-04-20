@@ -41,6 +41,7 @@ namespace Contrib.System.Printing.Xps
   }
 
   /// <inheritdoc />
+  /// <seealso cref="XpsServer"/>
   [PublicAPI]
   public partial interface IXpsServer : IXpsServer<IXpsPrinterDefinition, IXpsInputBinDefinition> { }
 
