@@ -380,5 +380,31 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       element.SetAttributeValue(name,
                                 xmlQualifiedName);
     }
+
+    /// <summary>
+    ///   Sets the value of <paramref name="element"/>.
+    /// </summary>
+    /// <param name="element"/>
+    /// <param name="value"/>
+    /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="value"/> is <see langword="null"/>.</exception>
+    public static void SetValue([NotNull] this XElement element,
+                                [NotNull] XName value)
+    {
+      if (element == null)
+      {
+        throw new ArgumentNullException(nameof(element));
+      }
+      if (value == null)
+      {
+        throw new ArgumentNullException(nameof(value));
+      }
+
+      var prefix = element.EnsurePrefixRegistrationOfNamespace(value);
+      var xmlQualifiedName = new XmlQualifiedName(value.LocalName,
+                                                  prefix);
+
+      element.Value = xmlQualifiedName.ToString();
+    }
   }
 }
