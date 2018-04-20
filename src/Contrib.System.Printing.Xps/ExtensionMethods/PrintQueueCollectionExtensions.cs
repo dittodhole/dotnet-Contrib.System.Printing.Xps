@@ -20,7 +20,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   static partial class PrintQueueCollectionExtensions
   {
     /// <summary>
-    ///   Finds the matching <see cref="PrintQueue"/> object.
+    ///   Finds the matching print queue.
     /// </summary>
     /// <param name="printQueueCollection"/>
     /// <param name="xpsPrinterDefinition"/>

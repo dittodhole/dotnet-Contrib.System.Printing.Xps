@@ -53,43 +53,46 @@ namespace Contrib.System.Printing.Xps
   /// </summary>
   /// <typeparam name="TXpsInputBinDefinition"/>
   /// <seealso cref="XpsInputBinDefinitionFactory"/>
-  /// <example><code>
-  /// using Contrib.System.Printing.Xps;
-  /// using System.Xml.Linq;
+  /// <example>
+  ///   This sample shows how to implement your own <see cref="IXpsInputBinDefinition"/>.
+  ///   <code>
+  ///   using Contrib.System.Printing.Xps;
+  ///   using System.Xml.Linq;
   ///
-  /// public interface ICustomXpsInputBinDefinition : IXpsInputBinDefinition { }
+  ///   public interface ICustomXpsInputBinDefinition : IXpsInputBinDefinition { }
   ///
-  /// public class CustomXpsInputBinDefinitionFactory : IXpsInputBinDefinitionFactoryEx&lt;ICustomXpsInputBinDefinition&gt;
-  /// {
-  ///   private class CustomXpsInputBinDefinition : ICustomXpsInputBinDefinition
+  ///   public class CustomXpsInputBinDefinitionFactory : IXpsInputBinDefinitionFactoryEx&lt;ICustomXpsInputBinDefinition&gt;
   ///   {
-  ///     public XName FeatureName { get; set; }
-  ///     public string DisplayName { get; set; }
-  ///     public XName Name { get; set; }
-  ///     public XName FeedType { get; set; }
+  ///     private class CustomXpsInputBinDefinition : ICustomXpsInputBinDefinition
+  ///     {
+  ///       public XName FeatureName { get; set; }
+  ///       public string DisplayName { get; set; }
+  ///       public XName Name { get; set; }
+  ///       public XName FeedType { get; set; }
+  ///     }
+  ///
+  ///     private IXpsInputBinDefinitionFactory XpsInputBinDefinitionFactory { get; } = new XpsInputBinDefinitionFactory();
+  ///
+  ///     public ICustomXpsInputBinDefinition Create(XElement option,
+  ///                                                XElement printCapabilities)
+  ///     {
+  ///       var xpsInputBinDefinition = this.XpsInputBinDefinitionFactory.Create(option,
+  ///                                                                            printCapabilities);
+  ///       var customXpsInputBinDefinition = new CustomXpsInputBinDefinition
+  ///                                        {
+  ///                                          FeatureName = xpsInputBinDefinition.FeatureName,
+  ///                                          DisplayName = xpsInputBinDefinition.DisplayName,
+  ///                                          Name = xpsInputBinDefinition.Name,
+  ///                                          FeedType = xpsInputBinDefinition.FeedType
+  ///                                        };
+  ///
+  ///       // TODO use printCapabilities with Contrib.System.Printing.Xps.ExtensionMethods.XElementExtensions to extract needed values
+  ///
+  ///       return customXpsInputBinDefinition;
+  ///     }
   ///   }
-  ///
-  ///   private IXpsInputBinDefinitionFactory XpsInputBinDefinitionFactory { get; } = new XpsInputBinDefinitionFactory();
-  ///
-  ///   public ICustomXpsInputBinDefinition Create(XElement option,
-  ///                                              XElement printCapabilities)
-  ///   {
-  ///     var xpsInputBinDefinition = this.XpsInputBinDefinitionFactory.Create(option,
-  ///                                                                          printCapabilities);
-  ///     var customXpsInputBinDefinition = new CustomXpsInputBinDefinition
-  ///                                      {
-  ///                                        FeatureName = xpsInputBinDefinition.FeatureName,
-  ///                                        DisplayName = xpsInputBinDefinition.DisplayName,
-  ///                                        Name = xpsInputBinDefinition.Name,
-  ///                                        FeedType = xpsInputBinDefinition.FeedType
-  ///                                      };
-  ///
-  ///     // TODO use printCapabilities with Contrib.System.Printing.Xps.ExtensionMethods.XElementExtensions to extract needed values
-  ///
-  ///     return customXpsInputBinDefinition;
-  ///   }
-  /// }
-  /// </code></example>
+  ///   </code>
+  /// </example>
   [PublicAPI]
 #if CONTRIB_SYSTEM_PRINTING_XPS
   public

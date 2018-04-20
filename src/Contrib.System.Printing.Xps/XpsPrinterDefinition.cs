@@ -52,49 +52,52 @@ namespace Contrib.System.Printing.Xps
   /// </summary>
   /// <typeparam name="TXpsPrinterDefinition"/>
   /// <seealso cref="XpsPrinterDefinitionFactory"/>
-  /// <example><code>
-  /// using Contrib.System.Printing.Xps;
-  /// using System.Xml.Linq;
+  /// <example>
+  ///   This sample shows how to implement your own <see cref="IXpsPrinterDefinition"/>.
+  ///   <code>
+  ///   using Contrib.System.Printing.Xps;
+  ///   using System.Xml.Linq;
   ///
-  /// public interface ICustomXpsPrinterDefinition : IXpsPrinterDefinition { }
+  ///   public interface ICustomXpsPrinterDefinition : IXpsPrinterDefinition { }
   ///
-  /// public class CustomXpsPrinterDefinitionFactory : IXpsPrinterDefinitionFactoryEx&lt;ICustomXpsPrinterDefinition&gt;
-  /// {
-  ///   private class CustomXpsPrinterDefinition : ICustomXpsPrinterDefinition
+  ///   public class CustomXpsPrinterDefinitionFactory : IXpsPrinterDefinitionFactoryEx&lt;ICustomXpsPrinterDefinition&gt;
   ///   {
-  ///     public string DisplayName { get; set; }
-  ///     public string FullName { get; set; }
-  ///     public string PortName { get; set; }
-  ///     public string DriverName { get; set; }
+  ///     private class CustomXpsPrinterDefinition : ICustomXpsPrinterDefinition
+  ///     {
+  ///       public string DisplayName { get; set; }
+  ///       public string FullName { get; set; }
+  ///       public string PortName { get; set; }
+  ///       public string DriverName { get; set; }
+  ///     }
+  ///
+  ///     private IXpsPrinterDefinitionFactory XpsPrinterDefinitionFactory { get; } = new XpsPrinterDefinitionFactory();
+  ///
+  ///     public ICustomXpsPrinterDefinition Create(string displayName,
+  ///                                               string fullName,
+  ///                                               string portName,
+  ///                                               string driverName,
+  ///                                               XElement printCapabilities)
+  ///     {
+  ///       var xpsPrinterDefinition = this.XpsPrinterDefinitionFactory.Create(displayName,
+  ///                                                                          fullName,
+  ///                                                                          portName,
+  ///                                                                          driverName,
+  ///                                                                          printCapabilities);
+  ///       var customXpsPrinterDefinition = new CustomXpsPrinterDefinition
+  ///                                        {
+  ///                                          DisplayName = xpsPrinterDefinition.DisplayName,
+  ///                                          FullName = xpsPrinterDefinition.FullName,
+  ///                                          PortName = xpsPrinterDefinition.PortName,
+  ///                                          DriverName = xpsPrinterDefinition.DriverName
+  ///                                        };
+  ///
+  ///       // TODO use printCapabilities with Contrib.System.Printing.Xps.ExtensionMethods.XElementExtensions to extract needed values
+  ///
+  ///       return customXpsPrinterDefinition;
+  ///     }
   ///   }
-  ///
-  ///   private IXpsPrinterDefinitionFactory XpsPrinterDefinitionFactory { get; } = new XpsPrinterDefinitionFactory();
-  ///
-  ///   public ICustomXpsPrinterDefinition Create(string displayName,
-  ///                                             string fullName,
-  ///                                             string portName,
-  ///                                             string driverName,
-  ///                                             XElement printCapabilities)
-  ///   {
-  ///     var xpsPrinterDefinition = this.XpsPrinterDefinitionFactory.Create(displayName,
-  ///                                                                        fullName,
-  ///                                                                        portName,
-  ///                                                                        driverName,
-  ///                                                                        printCapabilities);
-  ///     var customXpsPrinterDefinition = new CustomXpsPrinterDefinition
-  ///                                      {
-  ///                                        DisplayName = xpsPrinterDefinition.DisplayName,
-  ///                                        FullName = xpsPrinterDefinition.FullName,
-  ///                                        PortName = xpsPrinterDefinition.PortName,
-  ///                                        DriverName = xpsPrinterDefinition.DriverName
-  ///                                      };
-  ///
-  ///     // TODO use printCapabilities with Contrib.System.Printing.Xps.ExtensionMethods.XElementExtensions to extract needed values
-  ///
-  ///     return customXpsPrinterDefinition;
-  ///   }
-  /// }
-  /// </code></example>
+  ///   </code>
+  /// </example>
   [PublicAPI]
 #if CONTRIB_SYSTEM_PRINTING_XPS
   public
