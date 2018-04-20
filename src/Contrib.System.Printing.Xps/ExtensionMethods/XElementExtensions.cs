@@ -5,6 +5,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
   using global::System;
   using global::System.Linq;
+  using global::System.Xml;
   using global::System.Xml.Linq;
   using global::Anotar.LibLog;
   using global::JetBrains.Annotations;
@@ -311,6 +312,68 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       }
 
       return result;
+    }
+
+    /// <summary>
+    ///   Adds an <see cref="XElement"/> with <see cref="XElement.Name"/> set to <paramref name="name"/> to <paramref name="element"/>, and returns it.
+    /// </summary>
+    /// <param name="element"/>
+    /// <param name="name"/>
+    /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
+    [MustUseReturnValue]
+    [NotNull]
+    public static XElement AddElement([NotNull] this XElement element,
+                                      [NotNull] XName name)
+    {
+      if (element == null)
+      {
+        throw new ArgumentNullException(nameof(element));
+      }
+      if (name == null)
+      {
+        throw new ArgumentNullException(nameof(name));
+      }
+
+      var result = new XElement(name);
+
+      element.Add(result);
+
+      return result;
+    }
+
+    /// <summary>
+    ///   Sets the value of <paramref name="name"/>-attribute, or adds the <paramref name="name"/>-attribute.
+    /// </summary>
+    /// <param name="element"/>
+    /// <param name="name"/>
+    /// <param name="value"/>
+    /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="value"/> is <see langword="null"/>.</exception>
+    public static void SetAttributeValue([NotNull] this XElement element,
+                                         [NotNull] XName name,
+                                         [NotNull] XName value)
+    {
+      if (element == null)
+      {
+        throw new ArgumentNullException(nameof(element));
+      }
+      if (name == null)
+      {
+        throw new ArgumentNullException(nameof(name));
+      }
+      if (value == null)
+      {
+        throw new ArgumentNullException(nameof(value));
+      }
+
+      var prefix = element.EnsurePrefixRegistrationOfNamespace(value);
+      var xmlQualifiedName = new XmlQualifiedName(value.LocalName,
+                                                  prefix);
+
+      element.SetAttributeValue(name,
+                                xmlQualifiedName);
     }
   }
 }
