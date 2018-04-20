@@ -130,9 +130,17 @@ namespace Contrib.System.Printing.Xps
 #else
   internal
 #endif
-  partial class XpsPrinterDefinitionFactory : IXpsPrinterDefinitionFactory<IXpsPrinterDefinition>
+  partial class XpsPrinterDefinitionFactory : IXpsPrinterDefinitionFactory<XpsPrinterDefinitionFactory.IXpsPrinterDefinition>
   {
-    /// <inheritdoc cref="IXpsPrinterDefinition"/>
+    /// <inheritdoc/>
+#if CONTRIB_SYSTEM_PRINTING_XPS
+    public
+#else
+    internal
+#endif
+    partial interface IXpsPrinterDefinition : Contrib.System.Printing.Xps.IXpsPrinterDefinition { }
+
+    /// <inheritdoc/>
 #if CONTRIB_SYSTEM_PRINTING_XPS
     private sealed
 #else
