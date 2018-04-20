@@ -1,11 +1,14 @@
-﻿using System;
-using System.Printing;
-using System.Windows.Documents;
-using Anotar.LibLog;
-using JetBrains.Annotations;
-
+﻿/** @pp
+ * rootnamespace: Contrib.System.Printing.Xps
+ */
 namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
+  using global::System;
+  using global::System.Printing;
+  using global::System.Windows.Documents;
+  using global::Anotar.LibLog;
+  using global::JetBrains.Annotations;
+
   /// <summary>
   ///   Provides extensions to query <see cref="IXpsPrinterDefinition"/> instances.
   /// </summary>

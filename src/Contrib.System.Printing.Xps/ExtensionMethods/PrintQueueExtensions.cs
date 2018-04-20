@@ -1,11 +1,14 @@
-﻿using System;
-using System.Printing;
-using System.Xml.Linq;
-using Anotar.LibLog;
-using JetBrains.Annotations;
-
+﻿/** @pp
+ * rootnamespace: Contrib.System.Printing.Xps
+ */
 namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
+  using global::System;
+  using global::System.Printing;
+  using global::System.Xml.Linq;
+  using global::Anotar.LibLog;
+  using global::JetBrains.Annotations;
+
   /// <summary>
   ///   Provides extensions to query <see cref="PrintQueue"/> instances.
   /// </summary>
@@ -27,22 +30,22 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         throw new ArgumentNullException(nameof(printQueue));
       }
 
-      XDocument printCapabilitiesXDocument;
+      XDocument result;
       try
       {
         using (var memoryStream = printQueue.GetPrintCapabilitiesAsXml())
         {
-          printCapabilitiesXDocument = XDocument.Load(memoryStream);
+          result = XDocument.Load(memoryStream);
         }
       }
       catch (Exception exception)
       {
         LogTo.WarnException($"Could not query {nameof(PrintQueue)} '{printQueue.FullName}' for {nameof(PrintCapabilities)}.",
                             exception);
-        printCapabilitiesXDocument = new XDocument();
+        result = new XDocument();
       }
 
-      return printCapabilitiesXDocument;
+      return result;
     }
 
     /// <summary>
@@ -67,22 +70,22 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         throw new ArgumentNullException(nameof(printTicket));
       }
 
-      XDocument printCapabilitiesXDocument;
+      XDocument result;
       try
       {
         using (var memoryStream = printQueue.GetPrintCapabilitiesAsXml(printTicket))
         {
-          printCapabilitiesXDocument = XDocument.Load(memoryStream);
+          result = XDocument.Load(memoryStream);
         }
       }
       catch (Exception exception)
       {
         LogTo.WarnException($"Could not query {nameof(PrintQueue)} '{printQueue.FullName}' for {nameof(PrintCapabilities)}.",
                             exception);
-        printCapabilitiesXDocument = new XDocument();
+        result = new XDocument();
       }
 
-      return printCapabilitiesXDocument;
+      return result;
     }
   }
 }

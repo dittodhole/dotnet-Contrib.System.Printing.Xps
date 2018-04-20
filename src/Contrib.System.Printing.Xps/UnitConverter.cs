@@ -1,13 +1,16 @@
-﻿using System;
-using System.Printing;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using JetBrains.Annotations;
-
-// ReSharper disable InconsistentNaming
-
+﻿/** @pp
+ * rootnamespace: Contrib.System.Printing.Xps
+ */
 namespace Contrib.System.Printing.Xps
 {
+  using global::System;
+  using global::System.Printing;
+  using global::System.Reflection;
+  using global::System.Runtime.CompilerServices;
+  using global::JetBrains.Annotations;
+
+  // ReSharper disable InconsistentNaming
+
   /// <summary>
   ///   A transparent proxy for <see cref="MS.Internal.Printing.Configuration.UnitConverter"/>.
   /// </summary>
@@ -19,8 +22,7 @@ namespace Contrib.System.Printing.Xps
     [NotNull]
     private static Type FindInternalType()
     {
-      var unitConverterType = new PrintTicket().GetType()
-                                               .Assembly.GetType("MS.Internal.Printing.Configuration.UnitConverter");
+      var unitConverterType = typeof(PrintTicket).Assembly.GetType("MS.Internal.Printing.Configuration.UnitConverter");
 
       return unitConverterType;
     }

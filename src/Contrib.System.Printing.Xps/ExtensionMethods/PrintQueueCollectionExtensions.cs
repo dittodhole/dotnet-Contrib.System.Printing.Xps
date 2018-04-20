@@ -1,10 +1,13 @@
-﻿using System;
-using System.Linq;
-using System.Printing;
-using JetBrains.Annotations;
-
+﻿/** @pp
+ * rootnamespace: Contrib.System.Printing.Xps
+ */
 namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
+  using global::System;
+  using global::System.Linq;
+  using global::System.Printing;
+  using global::JetBrains.Annotations;
+
   /// <summary>
   ///   Provides extensions to query <see cref="PrintQueueCollection"/> instances.
   /// </summary>

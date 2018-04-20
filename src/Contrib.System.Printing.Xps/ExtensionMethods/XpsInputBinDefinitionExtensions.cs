@@ -1,11 +1,14 @@
-﻿using System;
-using System.IO;
-using System.Printing;
-using System.Xml.Linq;
-using JetBrains.Annotations;
-
+﻿/** @pp
+ * rootnamespace: Contrib.System.Printing.Xps
+ */
 namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
+  using global::System;
+  using global::System.IO;
+  using global::System.Printing;
+  using global::System.Xml.Linq;
+  using global::JetBrains.Annotations;
+
   /// <summary>
   ///   Provides extensions to query <see cref="IXpsInputBinDefinition"/> instances.
   /// </summary>
@@ -37,22 +40,13 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       // </psf:PrintTicket>
       // === === === ===
 
-      XDocument xdocument;
-
+      XDocument document;
+      using (var memoryStream = new PrintTicket().GetXmlStream())
       {
-        var printTicket = new PrintTicket();
-
-        using (var memoryStream = printTicket.GetXmlStream())
-        {
-          xdocument = XDocument.Load(memoryStream);
-        }
+        document = XDocument.Load(memoryStream);
       }
 
-      var printTicketXElement = xdocument.Root;
-      if (printTicketXElement == null)
-      {
-        throw new Exception($"Could not get {nameof(XDocument.Root)}: {xdocument}");
-      }
+      var printTicket = document.Root ?? new XElement(XpsServer.PrintTicketName);
 
       // === DESTINATION ===
       // <?xml version="1.0" encoding="UTF-8"?>
@@ -62,70 +56,70 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       //                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
       //                  xmlns:{prefix0}="{featureXName.NamespaceName}"
       //                  xmlns:{prefix1}="{inputBinXName.NamespaceName}"
-      //                  xmlns:{prefix2}="{XpsServer.FeedTypeXName.NamespaceName}"
+      //                  xmlns:{prefix2}="{XpsServer.FeedTypeName.NamespaceName}"
       //                  xmlns:{prefix3}="{feedTypeXName.NamespaceName}"
-      //                  xmlns:{prefix4}="{XpsServer.QNameTypeXName.NamespaceName}"
+      //                  xmlns:{prefix4}="{XpsServer.QNameName.NamespaceName}"
       //                  version="1">
       //   <psf:Feature name="{prefix0}:{featureXName.LocalName}">
       //     <psf:Option name="{prefix1}:{inputBinXName.LocalName}">
-      //       <psf:ScoredProperty name="{prefix2}:{XpsServer.FeedTypeXName.LocalName}">
-      //         <psf:Value {xsi}:{XpsServer.TypeXName.LocalName}="{prefix4}:{XpsServer.QNameTypeXName.LocalName}">{prefix3}:{feedTypeXName.LocalName}</psf:Value>
+      //       <psf:ScoredProperty name="{prefix2}:{XpsServer.FeedTypeName.LocalName}">
+      //         <psf:Value {xsi}:{XpsServer.TypeName.LocalName}="{prefix4}:{XpsServer.QNameName.LocalName}">{prefix3}:{feedTypeXName.LocalName}</psf:Value>
       //       </psf:ScoredProperty>
       //     </psf:Option>
       //   </psf:Feature>
       // </psf:PrintTicket>
       // === === === === ===
 
-      XElement featureXElement;
+      XElement feature;
       {
-        var featureXName = xpsInputBinDefinition.FeatureName;
+        var featureName = xpsInputBinDefinition.Feature;
 
-        var prefix0 = printTicketXElement.EnsurePrefixRegistrationOfNamespace(featureXName);
+        var prefix0 = printTicket.EnsurePrefixRegistrationOfNamespace(featureName);
 
-        featureXElement = new XElement(XpsServer.FeatureElementXName);
-        featureXElement.SetAttributeValue(XpsServer.NameAttributeXName,
-                                          $"{prefix0}:{featureXName.LocalName}");
-        printTicketXElement.Add(featureXElement);
+        feature = new XElement(XpsServer.FeatureName);
+        feature.SetAttributeValue(XpsServer.NameName,
+                                  $"{prefix0}:{featureName.LocalName}");
+        printTicket.Add(feature);
       }
 
-      XElement optionXElement;
+      XElement option;
       {
-        var inputBinXName = xpsInputBinDefinition.Name;
+        var name = xpsInputBinDefinition.Name;
 
-        var prefix1 = printTicketXElement.EnsurePrefixRegistrationOfNamespace(inputBinXName);
+        var prefix1 = printTicket.EnsurePrefixRegistrationOfNamespace(name);
 
-        optionXElement = new XElement(XpsServer.OptionElementXName);
-        optionXElement.SetAttributeValue(XpsServer.NameAttributeXName,
-                                         $"{prefix1}:{inputBinXName.LocalName}");
-        featureXElement.Add(optionXElement);
+        option = new XElement(XpsServer.OptionName);
+        option.SetAttributeValue(XpsServer.NameName,
+                                 $"{prefix1}:{name.LocalName}");
+        feature.Add(option);
       }
 
       {
-        var feedTypeXName = xpsInputBinDefinition.FeedType;
-        if (feedTypeXName != null)
+        var feedType = xpsInputBinDefinition.FeedType;
+        if (feedType != null)
         {
-          var prefix2 = printTicketXElement.EnsurePrefixRegistrationOfNamespace(XpsServer.FeedTypeXName);
+          var prefix2 = printTicket.EnsurePrefixRegistrationOfNamespace(XpsServer.FeedTypeName);
 
-          var scoredPropertyXElement = new XElement(XpsServer.ScoredPropertyElementXName);
-          scoredPropertyXElement.SetAttributeValue(XpsServer.NameAttributeXName,
-                                                   $"{prefix2}:{XpsServer.FeedTypeXName.LocalName}");
-          optionXElement.Add(scoredPropertyXElement);
+          var scoredProperty = new XElement(XpsServer.ScoredPropertyName);
+          scoredProperty.SetAttributeValue(XpsServer.NameName,
+                                           $"{prefix2}:{XpsServer.FeedTypeName.LocalName}");
+          option.Add(scoredProperty);
 
-          var prefix3 = printTicketXElement.EnsurePrefixRegistrationOfNamespace(feedTypeXName);
-          var prefix4 = printTicketXElement.EnsurePrefixRegistrationOfNamespace(XpsServer.QNameTypeXName);
+          var prefix3 = printTicket.EnsurePrefixRegistrationOfNamespace(feedType);
+          var prefix4 = printTicket.EnsurePrefixRegistrationOfNamespace(XpsServer.QNameName);
 
-          var valueXElement = new XElement(XpsServer.ValueElementXName);
-          valueXElement.Value = $"{prefix3}:{feedTypeXName.LocalName}";
-          valueXElement.SetAttributeValue(XpsServer.TypeXName,
-                                          $"{prefix4}:{XpsServer.QNameTypeXName.LocalName}");
-          scoredPropertyXElement.Add(valueXElement);
+          var value = new XElement(XpsServer.ValueName);
+          value.Value = $"{prefix3}:{feedType.LocalName}";
+          value.SetAttributeValue(XpsServer.TypeName,
+                                  $"{prefix4}:{XpsServer.QNameName.LocalName}");
+          scoredProperty.Add(value);
         }
       }
 
       PrintTicket result;
       using (var memoryStream = new MemoryStream())
       {
-        xdocument.Save(memoryStream);
+        document.Save(memoryStream);
         memoryStream.Seek(0L,
                           SeekOrigin.Begin);
 

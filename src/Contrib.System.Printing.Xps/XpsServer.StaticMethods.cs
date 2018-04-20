@@ -1,34 +1,38 @@
-﻿using System;
-using System.IO;
-using System.Printing;
-using System.Xml.Linq;
-using Contrib.System.Printing.Xps.ExtensionMethods;
-using JetBrains.Annotations;
-
+﻿/** @pp
+ * rootnamespace: Contrib.System.Printing.Xps
+ */
 namespace Contrib.System.Printing.Xps
 {
+  using global::System;
+  using global::System.IO;
+  using global::System.Printing;
+  using global::System.Xml.Linq;
+  using global::Contrib.System.Printing.Xps.ExtensionMethods;
+  using global::JetBrains.Annotations;
+
   public partial class XpsServer
   {
     /// <summary>
-    ///   Gets a plain <see cref="PrintTicket"/>, which is bound to <paramref name="inputBinXName"/>, to retrieve the print capabilities of the input bin.
+    ///   Gets a plain <see cref="PrintTicket"/>, which is bound to <paramref name="inputBinName"/>, to retrieve the print capabilities of the input bin.
     /// </summary>
-    /// <param name="featureXName"/>
-    /// <param name="inputBinXName"/>
-    /// <exception cref="ArgumentNullException"><paramref name="featureXName"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="inputBinXName"/> is <see langword="null"/>.</exception>
+    /// <param name="featureName"/>
+    /// <param name="inputBinName"/>
+    /// <exception cref="ArgumentNullException"><paramref name="featureName"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="inputBinName"/> is <see langword="null"/>.</exception>
     /// <exception cref="Exception"/>
     [PublicAPI]
     [NotNull]
-    public static PrintTicket GetPrintTicket([NotNull] XName featureXName,
-                                             [NotNull] XName inputBinXName)
+    public static PrintTicket GetPrintTicket([NotNull] XName featureName,
+                                             [NotNull] XName inputBinName)
     {
-      if (featureXName == null)
+      if (featureName == null)
       {
-        throw new ArgumentNullException(nameof(featureXName));
+        throw new ArgumentNullException(nameof(featureName));
       }
-      if (inputBinXName == null)
+
+      if (inputBinName == null)
       {
-        throw new ArgumentNullException(nameof(inputBinXName));
+        throw new ArgumentNullException(nameof(inputBinName));
       }
 
       // === SOURCE ===
@@ -41,22 +45,13 @@ namespace Contrib.System.Printing.Xps
       // </psf:PrintTicket>
       // === === === ===
 
-      XDocument xdocument;
-
+      XDocument document;
+      using (var memoryStream = new PrintTicket().GetXmlStream())
       {
-        var printTicket = new PrintTicket();
-
-        using (var memoryStream = printTicket.GetXmlStream())
-        {
-          xdocument = XDocument.Load(memoryStream);
-        }
+        document = XDocument.Load(memoryStream);
       }
 
-      var printTicketXElement = xdocument.Root;
-      if (printTicketXElement == null)
-      {
-        throw new Exception($"Could not get {nameof(XDocument.Root)}: {xdocument}");
-      }
+      var printTicket = document.Root ?? new XElement(XpsServer.PrintTicketName);
 
       // === DESTINATION ===
       // <?xml version="1.0" encoding="UTF-8"?>
@@ -64,38 +59,38 @@ namespace Contrib.System.Printing.Xps
       //                  xmlns:psk="http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords"
       //                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       //                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-      //                  xmlns:{prefix0}="{featureXName.NamespaceName}"
-      //                  xmlns:{prefix1}="{inputBinXName.NamespaceName}"
+      //                  xmlns:{prefix0}="{featureName.NamespaceName}"
+      //                  xmlns:{prefix1}="{inputBinName.NamespaceName}"
       //                  version="1">
-      //   <psf:Feature name="{prefix0}:{featureXName.LocalName}">
-      //     <psf:Option name="{prefix1}:{inputBinXName.LocalName}"/>
+      //   <psf:Feature name="{prefix0}:{featureName.LocalName}">
+      //     <psf:Option name="{prefix1}:{inputBinName.LocalName}"/>
       //   </psf:Feature>
       // </psf:PrintTicket>
       // === === === === ===
 
-      XElement featureXElement;
+      XElement feature;
       {
-        var prefix0 = printTicketXElement.EnsurePrefixRegistrationOfNamespace(featureXName);
+        var prefix0 = printTicket.EnsurePrefixRegistrationOfNamespace(featureName);
 
-        featureXElement = new XElement(XpsServer.FeatureElementXName);
-        featureXElement.SetAttributeValue(XpsServer.NameAttributeXName,
-                                          $"{prefix0}:{featureXName.LocalName}");
-        printTicketXElement.Add(featureXElement);
+        feature = new XElement(XpsServer.FeatureName);
+        feature.SetAttributeValue(XpsServer.NameName,
+                                  $"{prefix0}:{featureName.LocalName}");
+        printTicket.Add(feature);
       }
 
       {
-        var prefix1 = printTicketXElement.EnsurePrefixRegistrationOfNamespace(inputBinXName);
+        var prefix1 = printTicket.EnsurePrefixRegistrationOfNamespace(inputBinName);
 
-        var optionXElement = new XElement(XpsServer.OptionElementXName);
-        optionXElement.SetAttributeValue(XpsServer.NameAttributeXName,
-                                         $"{prefix1}:{inputBinXName.LocalName}");
-        featureXElement.Add(optionXElement);
+        var option = new XElement(XpsServer.OptionName);
+        option.SetAttributeValue(XpsServer.NameName,
+                                 $"{prefix1}:{inputBinName.LocalName}");
+        feature.Add(option);
       }
 
       PrintTicket result;
       using (var memoryStream = new MemoryStream())
       {
-        xdocument.Save(memoryStream);
+        document.Save(memoryStream);
         memoryStream.Seek(0L,
                           SeekOrigin.Begin);
 

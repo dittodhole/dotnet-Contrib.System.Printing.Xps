@@ -1,13 +1,16 @@
-﻿using System;
-using System.Linq;
-using System.Printing;
-using System.Xml.Linq;
-using Anotar.LibLog;
-using Contrib.System.Printing.Xps.ExtensionMethods;
-using JetBrains.Annotations;
-
+﻿/** @pp
+ * rootnamespace: Contrib.System.Printing.Xps
+ */
 namespace Contrib.System.Printing.Xps
 {
+  using global::System;
+  using global::System.Linq;
+  using global::System.Printing;
+  using global::System.Xml.Linq;
+  using global::Anotar.LibLog;
+  using global::Contrib.System.Printing.Xps.ExtensionMethods;
+  using global::JetBrains.Annotations;
+
   /// <summary>
   ///   Provides <typeparamref name="TXpsPrinterDefinition"/> and <typeparamref name="TXpsInputBinDefinition"/> instances.
   /// </summary>
@@ -80,17 +83,14 @@ namespace Contrib.System.Printing.Xps
       {
         result = printQueues.Select(printQueue =>
                                     {
-                                      XElement printCapabilitiesXElement;
-                                      {
-                                        var printCapabilitiesXDocument = printQueue.GetPrintCapabilitiesAsXDocument();
-                                        printCapabilitiesXElement = printCapabilitiesXDocument.Root ?? new XElement(XpsServer.PrintCapabilitiesXName);
-                                      }
+                                      var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument()
+                                                                        .Root ?? new XElement(XpsServer.PrintCapabilitiesName);
 
                                       var xpsPrinterDefinition = this.XpsPrinterDefinitionFactory.Create(printQueue.Name,
                                                                                                          printQueue.FullName,
                                                                                                          printQueue.QueuePort?.Name,
                                                                                                          printQueue.QueueDriver?.Name,
-                                                                                                         printCapabilitiesXElement);
+                                                                                                         printCapabilities);
 
                                       return xpsPrinterDefinition;
                                     })
@@ -120,37 +120,35 @@ namespace Contrib.System.Printing.Xps
         }
         else
         {
-          XElement inputBinXElement;
+          XElement feature;
           {
-            var printCapabilitiesXDocument = printQueue.GetPrintCapabilitiesAsXDocument();
-            var printCapabilitiesXElement = printCapabilitiesXDocument.Root ?? new XElement(XpsServer.PrintCapabilitiesXName);
-            inputBinXElement = printCapabilitiesXElement.FindElementByNameAttribute(XpsServer.PageInputBinXName)
-                               ?? printCapabilitiesXElement.FindElementByNameAttribute(XpsServer.DocumentInputBinXName)
-                               ?? printCapabilitiesXElement.FindElementByNameAttribute(XpsServer.JobInputBinXName);
+            var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument()
+                                              .Root ?? new XElement(XpsServer.PrintCapabilitiesName);
+            feature = printCapabilities.FindElementByNameAttribute(XpsServer.PageInputBinName)
+                              ?? printCapabilities.FindElementByNameAttribute(XpsServer.DocumentInputBinName)
+                              ?? printCapabilities.FindElementByNameAttribute(XpsServer.JobInputBinName);
           }
 
-          if (inputBinXElement == null)
+          if (feature == null)
           {
             result = new TXpsInputBinDefinition[0];
           }
           else
           {
-            result = inputBinXElement.Elements(XpsServer.OptionElementXName)
-                                     .Select(optionXElement =>
-                                             {
-                                               var featureXName = inputBinXElement.Name;
-                                               var inputBinXName = optionXElement.Name;
-                                               var printTicket = XpsServer.GetPrintTicket(featureXName,
-                                                                                          inputBinXName);
-                                               var printCapabilitiesXDocument = printQueue.GetPrintCapabilitiesAsXDocument(printTicket);
-                                               var printCapabilitiesXElement = printCapabilitiesXDocument.Root ?? new XElement(XpsServer.PrintCapabilitiesXName);
+            result = feature.Elements(XpsServer.OptionName)
+                            .Select(option =>
+                                    {
+                                      var printTicket = XpsServer.GetPrintTicket(feature.Name,
+                                                                                 option.Name);
+                                      var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(printTicket)
+                                                                        .Root ?? new XElement(XpsServer.PrintCapabilitiesName);
 
-                                               var xpsInputBinDefinition = this.XpsInputBinDefinitionFactory.Create(optionXElement,
-                                                                                                                    printCapabilitiesXElement);
+                                      var xpsInputBinDefinition = this.XpsInputBinDefinitionFactory.Create(option,
+                                                                                                           printCapabilities);
 
-                                               return xpsInputBinDefinition;
-                                             })
-                                     .ToArray();
+                                      return xpsInputBinDefinition;
+                                    })
+                            .ToArray();
           }
         }
       }

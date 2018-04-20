@@ -1,8 +1,11 @@
-﻿using System.Xml.Linq;
-using JetBrains.Annotations;
-
+﻿/** @pp
+ * rootnamespace: Contrib.System.Printing.Xps
+ */
 namespace Contrib.System.Printing.Xps
 {
+  using global::System.Xml.Linq;
+  using global::JetBrains.Annotations;
+
   public partial class XpsServer
   {
     /// <summary>
@@ -10,153 +13,160 @@ namespace Contrib.System.Printing.Xps
     /// </summary>
     [PublicAPI]
     [NotNull]
-    public static XName PrintCapabilitiesXName => XpsServer.PrinterSchemaFrameworkXNamespace + "PrintCapabilities";
+    public static XName PrintCapabilitiesName => XpsServer.PrinterSchemaFrameworkNamespace + "PrintCapabilities";
+
+    /// <summary>
+    ///   psf:PrintTicket
+    /// </summary>
+    [PublicAPI]
+    [NotNull]
+    public static XName PrintTicketName => XpsServer.PrinterSchemaFrameworkNamespace + "PrintTicket";
 
     /// <summary>
     ///   psf:Feature
     /// </summary>
     [PublicAPI]
     [NotNull]
-    public static XName FeatureElementXName => XpsServer.PrinterSchemaFrameworkXNamespace + "Feature";
+    public static XName FeatureName => XpsServer.PrinterSchemaFrameworkNamespace + "Feature";
 
     /// <summary>
     ///   name
     /// </summary>
     [PublicAPI]
     [NotNull]
-    public static XName NameAttributeXName => XNamespace.None + "name";
+    public static XName NameName => XNamespace.None + "name";
 
     /// <summary>
     ///   psf:Property
     /// </summary>
     [PublicAPI]
     [NotNull]
-    public static XName PropertyElementXName => XpsServer.PrinterSchemaFrameworkXNamespace + "Property";
+    public static XName PropertyName => XpsServer.PrinterSchemaFrameworkNamespace + "Property";
 
     /// <summary>
     ///   psf:ScoredProperty
     /// </summary>
     [PublicAPI]
     [NotNull]
-    public static XName ScoredPropertyElementXName => XpsServer.PrinterSchemaFrameworkXNamespace + "ScoredProperty";
+    public static XName ScoredPropertyName => XpsServer.PrinterSchemaFrameworkNamespace + "ScoredProperty";
 
     /// <summary>
     ///   psf:Option
     /// </summary>
     [PublicAPI]
     [NotNull]
-    public static XName OptionElementXName => XpsServer.PrinterSchemaFrameworkXNamespace + "Option";
+    public static XName OptionName => XpsServer.PrinterSchemaFrameworkNamespace + "Option";
 
     /// <summary>
     ///   psf:Value
     /// </summary>
     [PublicAPI]
     [NotNull]
-    public static XName ValueElementXName => XpsServer.PrinterSchemaFrameworkXNamespace + "Value";
+    public static XName ValueName => XpsServer.PrinterSchemaFrameworkNamespace + "Value";
 
     /// <summary>
     ///   psk:DisplayName
     /// </summary>
     [PublicAPI]
     [NotNull]
-    public static XName DisplayNameXName => XpsServer.PrinterSchemaKeywordsXNamespace + "DisplayName";
+    public static XName DisplayNameName => XpsServer.PrinterSchemaKeywordsNamespace + "DisplayName";
 
     /// <summary>
     ///   psk:PageInputBin
     /// </summary>
     [PublicAPI]
     [NotNull]
-    public static XName PageInputBinXName => XpsServer.PrinterSchemaKeywordsXNamespace + "PageInputBin";
+    public static XName PageInputBinName => XpsServer.PrinterSchemaKeywordsNamespace + "PageInputBin";
 
     /// <summary>
     ///   psk:DocumentInputBin
     /// </summary>
     [PublicAPI]
     [NotNull]
-    public static XName DocumentInputBinXName => XpsServer.PrinterSchemaKeywordsXNamespace + "DocumentInputBin";
+    public static XName DocumentInputBinName => XpsServer.PrinterSchemaKeywordsNamespace + "DocumentInputBin";
 
     /// <summary>
     ///   psk:JobInputBin
     /// </summary>
     [PublicAPI]
     [NotNull]
-    public static XName JobInputBinXName => XpsServer.PrinterSchemaKeywordsXNamespace + "JobInputBin";
+    public static XName JobInputBinName => XpsServer.PrinterSchemaKeywordsNamespace + "JobInputBin";
 
     /// <summary>
     ///   psk:PageImageableSize
     /// </summary>
     [PublicAPI]
     [NotNull]
-    public static XName PageImageableSizeXName => XpsServer.PrinterSchemaKeywordsXNamespace + "PageImageableSize";
+    public static XName PageImageableSizeName => XpsServer.PrinterSchemaKeywordsNamespace + "PageImageableSize";
 
     /// <summary>
     ///   psk:ImageableSizeWidth
     /// </summary>
     [PublicAPI]
     [NotNull]
-    public static XName ImageableSizeWidthXName => XpsServer.PrinterSchemaKeywordsXNamespace + "ImageableSizeWidth";
+    public static XName ImageableSizeWidthName => XpsServer.PrinterSchemaKeywordsNamespace + "ImageableSizeWidth";
 
     /// <summary>
     ///   psk:ImageableSizeHeight
     /// </summary>
     [PublicAPI]
     [NotNull]
-    public static XName ImageableSizeHeightXName => XpsServer.PrinterSchemaKeywordsXNamespace + "ImageableSizeHeight";
+    public static XName ImageableSizeHeightName => XpsServer.PrinterSchemaKeywordsNamespace + "ImageableSizeHeight";
 
     /// <summary>
     ///   psk:PageMediaSize
     /// </summary>
     [PublicAPI]
     [NotNull]
-    public static XName PageMediaSizeXName => XpsServer.PrinterSchemaKeywordsXNamespace + "PageMediaSize";
+    public static XName PageMediaSizeName => XpsServer.PrinterSchemaKeywordsNamespace + "PageMediaSize";
 
     /// <summary>
     ///   psk:MediaSizeWidth
     /// </summary>
     [PublicAPI]
     [NotNull]
-    public static XName MediaSizeWidthXName => XpsServer.PrinterSchemaKeywordsXNamespace + "MediaSizeWidth";
+    public static XName MediaSizeWidthName => XpsServer.PrinterSchemaKeywordsNamespace + "MediaSizeWidth";
 
     /// <summary>
     ///   psk:MediaSizeHeight
     /// </summary>
     [PublicAPI]
     [NotNull]
-    public static XName MediaSizeHeightXName => XpsServer.PrinterSchemaKeywordsXNamespace + "MediaSizeHeight";
+    public static XName MediaSizeHeightName => XpsServer.PrinterSchemaKeywordsNamespace + "MediaSizeHeight";
 
     /// <summary>
     ///   psk:FeedType
     /// </summary>
     [PublicAPI]
     [NotNull]
-    public static XName FeedTypeXName => XpsServer.PrinterSchemaKeywordsXNamespace + "FeedType";
+    public static XName FeedTypeName => XpsServer.PrinterSchemaKeywordsNamespace + "FeedType";
 
     /// <summary>
     ///   xsi:type
     /// </summary>
     [PublicAPI]
     [NotNull]
-    public static XName TypeXName => XpsServer.XmlSchemaInstanceXNamespace + "type";
+    public static XName TypeName => XpsServer.XmlSchemaInstanceNamespace + "type";
 
     /// <summary>
     ///   xsd:integer
     /// </summary>
     [PublicAPI]
     [NotNull]
-    public static XName IntegerTypeXName => XpsServer.XmlSchemaXNamespace + "integer";
+    public static XName IntegerName => XpsServer.XmlSchemaNamespace + "integer";
 
     /// <summary>
     ///   xsd:string
     /// </summary>
     [PublicAPI]
     [NotNull]
-    public static XName StringTypeXName => XpsServer.XmlSchemaXNamespace + "string";
+    public static XName StringName => XpsServer.XmlSchemaNamespace + "string";
 
     /// <summary>
     ///   xsd:QName
     /// </summary>
     [PublicAPI]
     [NotNull]
-    public static XName QNameTypeXName => XpsServer.XmlSchemaXNamespace + "QName";
+    public static XName QNameName => XpsServer.XmlSchemaNamespace + "QName";
   }
 }
