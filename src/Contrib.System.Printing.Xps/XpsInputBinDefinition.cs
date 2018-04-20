@@ -24,7 +24,7 @@ namespace Contrib.System.Printing.Xps
     /// </summary>
     /// <example>{http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords}JobInputBin</example>
     [NotNull]
-    XName Feature { get; }
+    XName FeatureName { get; }
 
     /// <summary>
     ///   The name of the input bin.
@@ -36,7 +36,7 @@ namespace Contrib.System.Printing.Xps
     /// <summary>
     ///   The display name of the input bin.
     /// </summary>
-    /// <example>Automatically Select</example>
+    /// <example>"Automatically Select"</example>
     [CanBeNull]
     string DisplayName { get; }
 
@@ -63,7 +63,7 @@ namespace Contrib.System.Printing.Xps
   /// {
   ///   private class CustomXpsInputBinDefinition : ICustomXpsInputBinDefinition
   ///   {
-  ///     public XName Feature { get; set; }
+  ///     public XName FeatureName { get; set; }
   ///     public string DisplayName { get; set; }
   ///     public XName Name { get; set; }
   ///     public XName FeedType { get; set; }
@@ -78,7 +78,7 @@ namespace Contrib.System.Printing.Xps
   ///                                                                          printCapabilities);
   ///     var customXpsInputBinDefinition = new CustomXpsInputBinDefinition
   ///                                      {
-  ///                                        Feature = xpsInputBinDefinition.Feature,
+  ///                                        FeatureName = xpsInputBinDefinition.FeatureName,
   ///                                        DisplayName = xpsInputBinDefinition.DisplayName,
   ///                                        Name = xpsInputBinDefinition.Name,
   ///                                        FeedType = xpsInputBinDefinition.FeedType
@@ -127,7 +127,7 @@ namespace Contrib.System.Printing.Xps
     partial class XpsInputBinDefinition : IXpsInputBinDefinition
     {
       /// <inheritdoc/>
-      public XName Feature { get; set; }
+      public XName FeatureName { get; set; }
 
       /// <inheritdoc/>
       public XName Name { get; set; }
@@ -171,7 +171,7 @@ namespace Contrib.System.Printing.Xps
 
       var xpsInputBinDefinition = new XpsInputBinDefinition
                                   {
-                                    Feature = featureName,
+                                    FeatureName = featureName,
                                     Name = name,
                                     DisplayName = displayName,
                                     FeedType = feedType
