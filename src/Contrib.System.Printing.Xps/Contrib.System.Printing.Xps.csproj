@@ -76,6 +76,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XpsInputBinDefinition.cs" />
     <Compile Include="XpsPrinterDefinition.cs" />
+    <Compile Include="XpsServer.StaticMethods.cs" />
     <Compile Include="XpsServer.XNames.cs" />
     <Compile Include="XpsServer.XNamespaces.cs" />
   </ItemGroup>
