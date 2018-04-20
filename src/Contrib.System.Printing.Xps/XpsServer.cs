@@ -163,6 +163,7 @@ namespace Contrib.System.Printing.Xps
     /// </summary>
     /// <param name="featureXName"/>
     /// <param name="inputBinXName"/>
+    [PublicAPI]
     [NotNull]
     protected virtual PrintTicket GetPrintTicketImpl([NotNull] XName featureXName,
                                                      [NotNull] XName inputBinXName)
