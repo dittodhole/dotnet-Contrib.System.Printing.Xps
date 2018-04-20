@@ -90,10 +90,9 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         scoredProperty.SetAttributeValue(XpsServer.NameName,
                                          XpsServer.FeedTypeName);
 
-        var prefix3 = printTicket.EnsurePrefixRegistrationOfNamespace(feedType);
-
         var value = scoredProperty.AddElement(XpsServer.ValueName);
-        value.Value = $"{prefix3}:{feedType.LocalName}";
+        XElementExtensions.SetValue(value,
+                                    feedType);
         value.SetAttributeValue(XpsServer.TypeName,
                                 XpsServer.QNameName);
       }
