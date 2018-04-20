@@ -58,7 +58,7 @@ namespace Contrib.System.Printing.Xps
 #endif
   partial interface IXpsServer : IXpsServer<IXpsPrinterDefinition, IXpsInputBinDefinition> { }
 
-  /// <inheritdoc cref="IXpsServer{TXpsPrinterDefinition,TXpsInputBinDefinition}"/>
+  /// <inheritdoc/>
 #if CONTRIB_SYSTEM_PRINTING_XPS
   public
 #else
