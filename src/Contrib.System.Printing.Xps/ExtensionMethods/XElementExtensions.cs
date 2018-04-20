@@ -404,7 +404,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       var xmlQualifiedName = new XmlQualifiedName(value.LocalName,
                                                   prefix);
 
-      element.Value = xmlQualifiedName.ToString();
+      element.SetValue(xmlQualifiedName);
     }
   }
 }
