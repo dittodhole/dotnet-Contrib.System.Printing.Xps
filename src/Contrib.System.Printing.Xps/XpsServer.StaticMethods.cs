@@ -68,24 +68,13 @@ namespace Contrib.System.Printing.Xps
       // </psf:PrintTicket>
       // === === === === ===
 
-      XElement feature;
-      {
-        var prefix0 = printTicket.EnsurePrefixRegistrationOfNamespace(featureName);
+      var feature = printTicket.AddElement(XpsServer.FeatureName);
+      feature.SetAttributeValue(XpsServer.NameName,
+                                featureName);
 
-        feature = new XElement(XpsServer.FeatureName);
-        feature.SetAttributeValue(XpsServer.NameName,
-                                  $"{prefix0}:{featureName.LocalName}");
-        printTicket.Add(feature);
-      }
-
-      {
-        var prefix1 = printTicket.EnsurePrefixRegistrationOfNamespace(inputBinName);
-
-        var option = new XElement(XpsServer.OptionName);
-        option.SetAttributeValue(XpsServer.NameName,
-                                 $"{prefix1}:{inputBinName.LocalName}");
-        feature.Add(option);
-      }
+      var option = feature.AddElement(XpsServer.OptionName);
+      option.SetAttributeValue(XpsServer.NameName,
+                               inputBinName);
 
       PrintTicket result;
       using (var memoryStream = new MemoryStream())
