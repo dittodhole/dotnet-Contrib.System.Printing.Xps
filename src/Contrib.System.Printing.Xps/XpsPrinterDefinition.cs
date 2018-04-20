@@ -21,28 +21,28 @@ namespace Contrib.System.Printing.Xps
     /// <summary>
     ///   The display name of the printer.
     /// </summary>
-    /// <example>Microsoft XPS Document Writer</example>
+    /// <example>"Microsoft XPS Document Writer"</example>
     [NotNull]
     string DisplayName { get; }
 
     /// <summary>
     ///   The full name of the printer.
     /// </summary>
-    /// <example>Microsoft XPS Document Writer</example>
+    /// <example>"Microsoft XPS Document Writer"</example>
     [NotNull]
     string FullName { get; }
 
     /// <summary>
     ///   The port name of the printer.
     /// </summary>
-    /// <example>PORTPROMPT:</example>
+    /// <example>"PORTPROMPT:"</example>
     [CanBeNull]
     string PortName { get; }
 
     /// <summary>
     ///   The driver name of the printer.
     /// </summary>
-    /// <example>Microsoft XPS Document Writer v4</example>
+    /// <example>"Microsoft XPS Document Writer v4"</example>
     [CanBeNull]
     string DriverName { get; }
   }
