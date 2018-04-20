@@ -179,7 +179,7 @@ namespace Contrib.System.Printing.Xps
   internal
 #endif
   partial class XpsServer : XpsServer<IXpsPrinterDefinition, IXpsInputBinDefinition>,
-                                   IXpsServer
+                            IXpsServer
   {
     /// <summary>
     ///   Initializes a new instance of the <see cref="XpsServer"/> class.
