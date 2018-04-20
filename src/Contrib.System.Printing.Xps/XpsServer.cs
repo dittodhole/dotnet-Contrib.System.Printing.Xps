@@ -12,7 +12,7 @@ namespace Contrib.System.Printing.Xps
   using global::JetBrains.Annotations;
 
   /// <summary>
-  ///   Provides <typeparamref name="TXpsPrinterDefinition"/> and <typeparamref name="TXpsInputBinDefinition"/> instances.
+  ///   Provides <typeparamref name="TXpsPrinterDefinition"/> and <typeparamref name="TXpsInputBinDefinition"/> objects.
   /// </summary>
   /// <typeparam name="TXpsPrinterDefinition"/>
   /// <typeparam name="TXpsInputBinDefinition"/>
@@ -28,7 +28,7 @@ namespace Contrib.System.Printing.Xps
     where TXpsInputBinDefinition : IXpsInputBinDefinition
   {
     /// <summary>
-    ///   Gets all <typeparamref name="TXpsPrinterDefinition"/> instances.
+    ///   Gets the collection of printers hosted by the print server.
     /// </summary>
     /// <exception cref="Exception"/>
     [Pure]
@@ -37,7 +37,7 @@ namespace Contrib.System.Printing.Xps
     TXpsPrinterDefinition[] GetXpsPrinterDefinitions();
 
     /// <summary>
-    ///   Gets all <typeparamref name="TXpsInputBinDefinition"/> instances.
+    ///   Gets the collection of input bins for the specified printer hosted by the print server.
     /// </summary>
     /// <param name="xpsPrinterDefinition"/>
     /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinition"/> is <see langword="null"/>.</exception>
