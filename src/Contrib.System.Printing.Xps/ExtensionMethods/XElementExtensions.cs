@@ -356,9 +356,10 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="value"/> is <see langword="null"/>.</exception>
-    public static void SetAttributeValue([NotNull] this XElement element,
-                                         [NotNull] XName name,
-                                         [NotNull] XName value)
+    [NotNull]
+    public static string SetAttributeValue([NotNull] this XElement element,
+                                           [NotNull] XName name,
+                                           [NotNull] XName value)
     {
       if (element == null)
       {
@@ -374,11 +375,13 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       }
 
       var prefix = element.EnsurePrefixRegistrationOfNamespace(value);
-      var xmlQualifiedName = new XmlQualifiedName(value.LocalName,
-                                                  prefix);
+      var result = XmlQualifiedName.ToString(value.LocalName,
+                                             prefix);
 
       element.SetAttributeValue(name,
-                                xmlQualifiedName);
+                                result);
+
+      return result;
     }
 
     /// <summary>
@@ -388,8 +391,9 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <param name="value"/>
     /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="value"/> is <see langword="null"/>.</exception>
-    public static void SetValue([NotNull] this XElement element,
-                                [NotNull] XName value)
+    [NotNull]
+    public static string SetValue([NotNull] this XElement element,
+                                  [NotNull] XName value)
     {
       if (element == null)
       {
@@ -401,10 +405,12 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       }
 
       var prefix = element.EnsurePrefixRegistrationOfNamespace(value);
-      var xmlQualifiedName = new XmlQualifiedName(value.LocalName,
-                                                  prefix);
+      var result = XmlQualifiedName.ToString(value.LocalName,
+                                             prefix);
 
-      element.SetValue(xmlQualifiedName);
+      element.SetValue(result);
+
+      return result;
     }
   }
 }
