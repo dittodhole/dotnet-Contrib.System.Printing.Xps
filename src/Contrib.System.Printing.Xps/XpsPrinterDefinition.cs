@@ -123,7 +123,7 @@ namespace Contrib.System.Printing.Xps
                                  [NotNull] XElement printCapabilities);
   }
 
-  /// <inheritdoc cref="IXpsInputBinDefinitionFactory{TXpsInputBinDefinition}"/>
+  /// <inheritdoc/>
   [PublicAPI]
 #if CONTRIB_SYSTEM_PRINTING_XPS
   public sealed
