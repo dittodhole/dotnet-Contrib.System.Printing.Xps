@@ -43,7 +43,7 @@ namespace Contrib.System.Printing.Xps
   }
 
   /// <summary>
-  ///   Factory class for <typeparamref name="TXpsPrinterDefinition"/>.
+  ///   Factory for <typeparamref name="TXpsPrinterDefinition"/>.
   /// </summary>
   /// <typeparam name="TXpsPrinterDefinition"/>
   /// <seealso cref="XpsPrinterDefinitionFactory"/>

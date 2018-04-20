@@ -10,13 +10,13 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   using global::JetBrains.Annotations;
 
   /// <summary>
-  ///   Provides extensions to query <see cref="IXpsPrinterDefinition"/> instances.
+  ///   Provides extensions for <see cref="IXpsPrinterDefinition"/> objects.
   /// </summary>
   [PublicAPI]
   public static partial class XpsPrinterDefinitionExtensions
   {
     /// <summary>
-    ///   Factory for <see cref="PrintTicket"/>-instance.
+    ///   Creates a <see cref="PrintTicket"/> object.
     /// </summary>
     /// <param name="printQueue"/>
     /// <exception cref="ArgumentNullException"><paramref name="printQueue"/> is <see langword="null"/>.</exception>
@@ -24,7 +24,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     public delegate PrintTicket PrintTicketFactory([NotNull] PrintQueue printQueue);
 
     /// <summary>
-    ///   Prints <paramref name="documentPaginatorSource"/> to the printer, defined by <paramref name="xpsPrinterDefinition"/>.
+    ///   Writes <paramref name="documentPaginatorSource"/> to the printer.
     /// </summary>
     /// <param name="xpsPrinterDefinition"/>
     /// <param name="documentPaginatorSource"/>

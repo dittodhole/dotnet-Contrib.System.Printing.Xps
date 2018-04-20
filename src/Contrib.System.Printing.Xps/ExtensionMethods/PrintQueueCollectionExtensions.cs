@@ -9,13 +9,13 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   using global::JetBrains.Annotations;
 
   /// <summary>
-  ///   Provides extensions to query <see cref="PrintQueueCollection"/> instances.
+  ///   Provides extensions for <see cref="PrintQueueCollection"/> objects.
   /// </summary>
   [PublicAPI]
   public static partial class PrintQueueCollectionExtensions
   {
     /// <summary>
-    ///   Finds the <see cref="PrintQueue"/> instance with matching <seealso cref="PrintQueue.FullName"/> for <paramref name="xpsPrinterDefinition"/>.
+    ///   Finds the matching <see cref="PrintQueue"/> object.
     /// </summary>
     /// <param name="printQueueCollection"/>
     /// <param name="xpsPrinterDefinition"/>

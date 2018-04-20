@@ -8,13 +8,13 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   using global::JetBrains.Annotations;
 
   /// <summary>
-  ///   Provides extensions to query <see cref="PrintServer"/> instances.
+  ///   Provides extensions for <see cref="PrintServer"/> objects.
   /// </summary>
   [PublicAPI]
   public static partial class PrintServerExtensions
   {
     /// <summary>
-    ///   Gets local and remote <see cref="PrintQueue"/>-instances, wrapped in <see cref="PrintQueueCollection"/>.
+    ///   Gets the collection of local and remote print queues that are hosted by the print server.
     /// </summary>
     /// <param name="printServer"/>
     /// <exception cref="ArgumentNullException"><paramref name="printServer"/> is <see langword="null"/>.</exception>

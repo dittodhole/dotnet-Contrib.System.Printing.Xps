@@ -11,13 +11,13 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   using global::JetBrains.Annotations;
 
   /// <summary>
-  ///   Provides extensions to query <see cref="XElement"/> instances.
+  ///   Provides extensions for <see cref="XElement"/> objects.
   /// </summary>
   [PublicAPI]
   public static partial class XElementExtensions
   {
     /// <summary>
-    ///   Ensures and gets the prefix of the namespace registration of <paramref name="name"/>.
+    ///   Ensures and gets the prefix of the namespace registration for <paramref name="name"/>.
     /// </summary>
     /// <param name="element"/>
     /// <param name="name"/>
@@ -78,7 +78,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     }
 
     /// <summary>
-    ///   Gets the boxed value from descending value-<see cref="XElement"/>.
+    ///   Gets the boxed value from "psf:Value" child element.
     /// </summary>
     /// <param name="element"/>
     /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
@@ -99,7 +99,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     }
 
     /// <summary>
-    ///   Gets the boxed value by taking type-<see cref="XAttribute"/> into account.
+    ///   Gets the boxed value by taking "xsi:Type" attribute into account.
     /// </summary>
     /// <param name="element"/>
     /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
@@ -171,7 +171,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     }
 
     /// <summary>
-    ///   Finds the descending <paramref name="name"/>-<see cref="XElement"/>.
+    ///   Finds the matching child element.
     /// </summary>
     /// <param name="element"/>
     /// <param name="name"/>
@@ -204,7 +204,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     }
 
     /// <summary>
-    ///   Gets the <see cref="XName"/> from name-<see cref="XAttribute"/> of <paramref name="element"/>.
+    ///   Gets the value from "name" attribute as <see cref="XName"/>.
     /// </summary>
     /// <param name="element"/>
     /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
@@ -315,7 +315,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     }
 
     /// <summary>
-    ///   Adds an <see cref="XElement"/> with <see cref="XElement.Name"/> set to <paramref name="name"/> to <paramref name="element"/>, and returns it.
+    ///   Adds a <paramref name="name"/> named child element to <paramref name="element"/>, and returns it.
     /// </summary>
     /// <param name="element"/>
     /// <param name="name"/>
@@ -343,7 +343,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     }
 
     /// <summary>
-    ///   Sets the value of <paramref name="name"/>-attribute, or adds the <paramref name="name"/>-attribute.
+    ///   Sets the value of <paramref name="name"/> named attribute, or adds the <paramref name="name"/> named attribute.
     /// </summary>
     /// <param name="element"/>
     /// <param name="name"/>

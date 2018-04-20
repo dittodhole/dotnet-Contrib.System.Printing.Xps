@@ -10,13 +10,13 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   using global::JetBrains.Annotations;
 
   /// <summary>
-  ///   Provides extensions to query <see cref="PrintQueue"/> instances.
+  ///   Provides extensions for <see cref="PrintQueue"/> objects.
   /// </summary>
   [PublicAPI]
   public static partial class PrintQueueExtensions
   {
     /// <summary>
-    ///   Gets the print capabilities (see https://msdn.microsoft.com/en-us/library/windows/desktop/ms715274).
+    ///   Gets an <see cref="XDocument"/> object that specifies the printer's capabilities that complies with the Print Schema (see https://msdn.microsoft.com/en-us/library/windows/desktop/ms715274).
     /// </summary>
     /// <param name="printQueue"/>
     /// <seealso cref="PrintQueue.GetPrintCapabilitiesAsXml()"/>
@@ -49,7 +49,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     }
 
     /// <summary>
-    ///   Gets the print capabilities (see https://msdn.microsoft.com/en-us/library/windows/desktop/ms715274).
+    ///   Gets an <see cref="XDocument"/> object that specifies the printer's capabilities that complies with the Print Schema (see https://msdn.microsoft.com/en-us/library/windows/desktop/ms715274).
     /// </summary>
     /// <param name="printQueue"/>
     /// <param name="printTicket"/>

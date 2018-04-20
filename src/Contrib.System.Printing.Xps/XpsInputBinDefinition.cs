@@ -15,14 +15,14 @@ namespace Contrib.System.Printing.Xps
   public partial interface IXpsInputBinDefinition
   {
     /// <summary>
-    ///   The <see cref="XName"/> of the feature for the input bin.
+    ///   The name of the feature.
     /// </summary>
     /// <example>{http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords}JobInputBin</example>
     [NotNull]
     XName Feature { get; }
 
     /// <summary>
-    ///   The <see cref="XName"/> of the input bin.
+    ///   The name of the input bin.
     /// </summary>
     /// <example>{http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords}AutoSelect</example>
     [NotNull]
@@ -36,7 +36,7 @@ namespace Contrib.System.Printing.Xps
     string DisplayName { get; }
 
     /// <summary>
-    ///   The <see cref="XName"/> of the feed of the input bin.
+    ///   The feed type of the input bin.
     /// </summary>
     /// <example>{http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords}Automatic</example>
     [CanBeNull]
@@ -44,7 +44,7 @@ namespace Contrib.System.Printing.Xps
   }
 
   /// <summary>
-  ///   Factory class for <typeparamref name="TXpsInputBinDefinition"/>.
+  ///   Factory for <typeparamref name="TXpsInputBinDefinition"/>.
   /// </summary>
   /// <typeparam name="TXpsInputBinDefinition"/>
   /// <seealso cref="XpsInputBinDefinitionFactory"/>

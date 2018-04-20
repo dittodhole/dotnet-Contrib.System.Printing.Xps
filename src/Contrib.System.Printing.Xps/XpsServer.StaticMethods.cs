@@ -13,7 +13,7 @@ namespace Contrib.System.Printing.Xps
   public partial class XpsServer
   {
     /// <summary>
-    ///   Gets a plain <see cref="PrintTicket"/>, which is bound to <paramref name="inputBinName"/>, to retrieve the print capabilities of the input bin.
+    ///   Gets a plain print ticket, which is bound to the specified input bin.
     /// </summary>
     /// <param name="featureName"/>
     /// <param name="inputBinName"/>

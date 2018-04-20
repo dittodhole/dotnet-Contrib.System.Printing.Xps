@@ -10,13 +10,13 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   using global::JetBrains.Annotations;
 
   /// <summary>
-  ///   Provides extensions to query <see cref="IXpsInputBinDefinition"/> instances.
+  ///   Provides extensions for <see cref="IXpsInputBinDefinition"/> objects.
   /// </summary>
   [PublicAPI]
   public static partial class XpsInputBinDefinitionExtensions
   {
     /// <summary>
-    ///   Gets the <see cref="PrintTicket"/> for <paramref name="xpsInputBinDefinition"/>.
+    ///   Gets the print ticket for <paramref name="xpsInputBinDefinition"/>.
     /// </summary>
     /// <param name="xpsInputBinDefinition"/>
     /// <exception cref="ArgumentNullException"><paramref name="xpsInputBinDefinition"/> is <see langword="null"/>.</exception>
