@@ -133,6 +133,7 @@ namespace Contrib.System.Printing.Xps
   partial class XpsPrinterDefinitionFactory : IXpsPrinterDefinitionFactory<XpsPrinterDefinitionFactory.IXpsPrinterDefinition>
   {
     /// <inheritdoc/>
+    [PublicAPI]
 #if CONTRIB_SYSTEM_PRINTING_XPS
     public
 #else
