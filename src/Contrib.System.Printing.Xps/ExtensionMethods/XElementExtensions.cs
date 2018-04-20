@@ -353,6 +353,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <param name="element"/>
     /// <param name="name"/>
     /// <param name="value"/>
+    /// <returns>Returns <paramref name="value"/> as qualified name, following the pattern "prefix:name".</returns>
     /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="value"/> is <see langword="null"/>.</exception>
@@ -389,6 +390,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// </summary>
     /// <param name="element"/>
     /// <param name="value"/>
+    /// <returns>Returns <paramref name="value"/> as qualified name, following the pattern "prefix:name".</returns>
     /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="value"/> is <see langword="null"/>.</exception>
     [NotNull]
