@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Printing;
 using System.Xml.Linq;
@@ -140,8 +139,8 @@ namespace Contrib.System.Printing.Xps
                                              {
                                                var featureXName = inputBinXElement.Name;
                                                var inputBinXName = optionXElement.Name;
-                                               var printTicket = this.GetPrintTicketImpl(featureXName,
-                                                                                         inputBinXName);
+                                               var printTicket = XpsServer.GetPrintTicket(featureXName,
+                                                                                          inputBinXName);
                                                var printCapabilitiesXDocument = printQueue.GetPrintCapabilitiesAsXDocument(printTicket);
                                                var printCapabilitiesXElement = printCapabilitiesXDocument.Root ?? new XElement(XpsServer.PrintCapabilitiesXName);
 
