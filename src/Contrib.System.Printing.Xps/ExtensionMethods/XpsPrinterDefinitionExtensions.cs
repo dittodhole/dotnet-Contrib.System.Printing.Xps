@@ -1,24 +1,46 @@
-﻿using System;
-using System.Printing;
-using System.Windows.Documents;
-using Anotar.LibLog;
-using JetBrains.Annotations;
-
+﻿/** @pp
+ * rootnamespace: Contrib.System.Printing.Xps
+ */
 namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
-  public static partial class XpsPrinterDefinitionExtensions
+  using global::System;
+  using global::System.Printing;
+  using global::System.Windows.Documents;
+  using global::Anotar.LibLog;
+  using global::JetBrains.Annotations;
+
+  /// <summary>
+  ///   Provides extensions for <see cref="IXpsPrinterDefinition"/> objects.
+  /// </summary>
+  [PublicAPI]
+#if CONTRIB_SYSTEM_PRINTING_XPS
+  public
+#else
+  internal
+#endif
+  static partial class XpsPrinterDefinitionExtensions
   {
-    /// <exception cref="ArgumentNullException"><paramref name="printQueue" /> is <see langword="null" />.</exception>
+    /// <summary>
+    ///   Creates a <see cref="PrintTicket"/> object.
+    /// </summary>
+    /// <param name="printQueue"/>
+    /// <exception cref="ArgumentNullException"><paramref name="printQueue"/> is <see langword="null"/>.</exception>
     [CanBeNull]
     public delegate PrintTicket PrintTicketFactory([NotNull] PrintQueue printQueue);
 
-    /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinition" /> is <see langword="null" />.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="documentPaginatorSource" /> is <see langword="null" />.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="printTicketFactory" /> is <see langword="null" />.</exception>
-    /// <exception cref="Exception" />
+    /// <summary>
+    ///   Writes <paramref name="documentPaginatorSource"/> to the printer.
+    /// </summary>
+    /// <param name="xpsPrinterDefinition"/>
+    /// <param name="documentPaginatorSource"/>
+    /// <param name="printTicketFactory"/>
+    /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinition"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="documentPaginatorSource"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="printTicketFactory"/> is <see langword="null"/>.</exception>
+    /// <exception cref="Exception"/>
     public static void Print([NotNull] this IXpsPrinterDefinition xpsPrinterDefinition,
                              [NotNull] IDocumentPaginatorSource documentPaginatorSource,
-                             [NotNull] PrintTicketFactory printTicketFactory)
+                             [NotNull] [InstantHandle] PrintTicketFactory printTicketFactory)
     {
       if (xpsPrinterDefinition == null)
       {
@@ -36,7 +58,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       using (var printServer = new PrintServer())
       using (var printQueues = printServer.GetLocalAndRemotePrintQueues())
       {
-        var printQueue = printQueues.GetPrintQueue(xpsPrinterDefinition);
+        var printQueue = printQueues.FindPrintQueue(xpsPrinterDefinition);
         if (printQueue == null)
         {
           LogTo.Error($"Could not get {nameof(PrintQueue)} '{xpsPrinterDefinition.FullName}'.");

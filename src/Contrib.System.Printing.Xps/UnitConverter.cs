@@ -1,24 +1,38 @@
-﻿using System;
-using System.Printing;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using JetBrains.Annotations;
-
+﻿/** @pp
+ * rootnamespace: Contrib.System.Printing.Xps
+ */
 namespace Contrib.System.Printing.Xps
 {
-  public static partial class UnitConverter
+  using global::System;
+  using global::System.Printing;
+  using global::System.Reflection;
+  using global::System.Runtime.CompilerServices;
+  using global::JetBrains.Annotations;
+
+  // ReSharper disable InconsistentNaming
+
+  /// <summary>
+  ///   A transparent proxy for <see cref="MS.Internal.Printing.Configuration.UnitConverter"/>.
+  /// </summary>
+  /// <seealso cref="MS.Internal.Printing.Configuration.UnitConverter"/>
+  [PublicAPI]
+#if CONTRIB_SYSTEM_PRINTING_XPS
+  public
+#else
+  internal
+#endif
+  static partial class UnitConverter
   {
-    /// <exception cref="Exception" />
+    /// <exception cref="Exception"/>
     [NotNull]
     private static Type FindInternalType()
     {
-      var unitConverterType = new PrintTicket().GetType()
-                                               .Assembly.GetType("MS.Internal.Printing.Configuration.UnitConverter");
+      var unitConverterType = typeof(PrintTicket).Assembly.GetType("MS.Internal.Printing.Configuration.UnitConverter");
 
       return unitConverterType;
     }
 
-    /// <exception cref="Exception" />
+    /// <exception cref="Exception"/>
     [NotNull]
     private static MethodInfo FindInternalMethod([CallerMemberName] string callerMemberName = "")
     {
@@ -28,7 +42,12 @@ namespace Contrib.System.Printing.Xps
       return methodInfo;
     }
 
-    /// <exception cref="Exception" />
+    /// <summary>
+    ///   Converts micron to device-independent pixels.
+    /// </summary>
+    /// <param name="micronValue"/>
+    /// <seealso cref="MS.Internal.Printing.Configuration.UnitConverter.LengthValueFromMicronToDIP"/>
+    /// <exception cref="Exception"/>
     public static double LengthValueFromMicronToDIP(int micronValue)
     {
       var methodInfo = UnitConverter.FindInternalMethod();
@@ -41,7 +60,12 @@ namespace Contrib.System.Printing.Xps
       return (double) result;
     }
 
-    /// <exception cref="Exception" />
+    /// <summary>
+    ///   Converts device-independent pixels to micron.
+    /// </summary>
+    /// <param name="dipValue"/>
+    /// <seealso cref="MS.Internal.Printing.Configuration.UnitConverter.LengthValueFromDIPToMicron"/>
+    /// <exception cref="Exception"/>
     public static int LengthValueFromDIPToMicron(double dipValue)
     {
       var methodInfo = UnitConverter.FindInternalMethod();

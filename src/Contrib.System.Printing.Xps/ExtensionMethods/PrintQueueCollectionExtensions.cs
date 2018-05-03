@@ -1,19 +1,36 @@
-﻿using System;
-using System.Linq;
-using System.Printing;
-using JetBrains.Annotations;
-
+﻿/** @pp
+ * rootnamespace: Contrib.System.Printing.Xps
+ */
 namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
-  public static partial class PrintQueueCollectionExtensions
+  using global::System;
+  using global::System.Linq;
+  using global::System.Printing;
+  using global::JetBrains.Annotations;
+
+  /// <summary>
+  ///   Provides extensions for <see cref="PrintQueueCollection"/> objects.
+  /// </summary>
+  [PublicAPI]
+#if CONTRIB_SYSTEM_PRINTING_XPS
+  public
+#else
+  internal
+#endif
+  static partial class PrintQueueCollectionExtensions
   {
-    /// <exception cref="ArgumentNullException"><paramref name="printQueueCollection" /> is <see langword="null" />.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinition" /> is <see langword="null" />.</exception>
-    /// <exception cref="Exception" />
+    /// <summary>
+    ///   Finds the matching print queue.
+    /// </summary>
+    /// <param name="printQueueCollection"/>
+    /// <param name="xpsPrinterDefinition"/>
+    /// <exception cref="ArgumentNullException"><paramref name="printQueueCollection"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinition"/> is <see langword="null"/>.</exception>
+    /// <exception cref="Exception"/>
     [Pure]
     [CanBeNull]
-    public static PrintQueue GetPrintQueue([NotNull] this PrintQueueCollection printQueueCollection,
-                                           [NotNull] IXpsPrinterDefinition xpsPrinterDefinition)
+    public static PrintQueue FindPrintQueue([NotNull] this PrintQueueCollection printQueueCollection,
+                                            [NotNull] IXpsPrinterDefinition xpsPrinterDefinition)
     {
       if (printQueueCollection == null)
       {

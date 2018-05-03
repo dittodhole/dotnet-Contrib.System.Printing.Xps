@@ -1,106 +1,195 @@
-﻿using System.Xml.Linq;
-using Contrib.System.Printing.Xps.ExtensionMethods;
-using JetBrains.Annotations;
-
+﻿/** @pp
+ * rootnamespace: Contrib.System.Printing.Xps
+ */
 namespace Contrib.System.Printing.Xps
 {
-  public partial interface IXpsInputBinDefinition
+  using global::System.Xml.Linq;
+  using global::Contrib.System.Printing.Xps.ExtensionMethods;
+  using global::JetBrains.Annotations;
+
+  /// <summary>
+  ///   Holds information of an input bin.
+  /// </summary>
+  /// <seealso cref="XpsInputBinDefinitionFactory.XpsInputBinDefinition"/>
+  [PublicAPI]
+#if CONTRIB_SYSTEM_PRINTING_XPS
+  public
+#else
+  internal
+#endif
+  partial interface IXpsInputBinDefinition
   {
+    /// <summary>
+    ///   The name of the feature.
+    /// </summary>
+    /// <example>{http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords}JobInputBin</example>
     [NotNull]
     XName FeatureName { get; }
 
+    /// <summary>
+    ///   The name of the input bin.
+    /// </summary>
+    /// <example>{http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords}AutoSelect</example>
     [NotNull]
     XName Name { get; }
 
+    /// <summary>
+    ///   The display name of the input bin.
+    /// </summary>
+    /// <example>"Automatically Select"</example>
     [CanBeNull]
     string DisplayName { get; }
 
+    /// <summary>
+    ///   The feed type of the input bin.
+    /// </summary>
+    /// <example>{http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords}Automatic</example>
     [CanBeNull]
     XName FeedType { get; }
   }
 
-  public partial interface IXpsInputBinDefinitionFactory
-  {
-    [NotNull]
-    IXpsInputBinDefinition Create([NotNull] XElement optionXElement,
-                                  [NotNull] XElement printCapabilitiesXElement);
-  }
-
-  public partial interface IXpsInputBinDefinitionFactoryEx<TXpsInputBinDefinition>
+  /// <summary>
+  ///   Factory for <typeparamref name="TXpsInputBinDefinition"/>.
+  /// </summary>
+  /// <typeparam name="TXpsInputBinDefinition"/>
+  /// <seealso cref="XpsInputBinDefinitionFactory"/>
+  /// <example>
+  ///   This sample shows how to implement your own <see cref="IXpsInputBinDefinition"/>.
+  ///   <code>
+  ///   using Contrib.System.Printing.Xps;
+  ///   using System.Xml.Linq;
+  ///
+  ///   public interface ICustomXpsInputBinDefinition : IXpsInputBinDefinition { }
+  ///
+  ///   public class CustomXpsInputBinDefinitionFactory : IXpsInputBinDefinitionFactoryEx&lt;ICustomXpsInputBinDefinition&gt;
+  ///   {
+  ///     private class CustomXpsInputBinDefinition : ICustomXpsInputBinDefinition
+  ///     {
+  ///       public XName FeatureName { get; set; }
+  ///       public string DisplayName { get; set; }
+  ///       public XName Name { get; set; }
+  ///       public XName FeedType { get; set; }
+  ///     }
+  ///
+  ///     private IXpsInputBinDefinitionFactory XpsInputBinDefinitionFactory { get; } = new XpsInputBinDefinitionFactory();
+  ///
+  ///     public ICustomXpsInputBinDefinition Create(XElement option,
+  ///                                                XElement printCapabilities)
+  ///     {
+  ///       var xpsInputBinDefinition = this.XpsInputBinDefinitionFactory.Create(option,
+  ///                                                                            printCapabilities);
+  ///       var customXpsInputBinDefinition = new CustomXpsInputBinDefinition
+  ///                                        {
+  ///                                          FeatureName = xpsInputBinDefinition.FeatureName,
+  ///                                          DisplayName = xpsInputBinDefinition.DisplayName,
+  ///                                          Name = xpsInputBinDefinition.Name,
+  ///                                          FeedType = xpsInputBinDefinition.FeedType
+  ///                                        };
+  ///
+  ///       // TODO use printCapabilities with Contrib.System.Printing.Xps.ExtensionMethods.XElementExtensions to extract needed values
+  ///
+  ///       return customXpsInputBinDefinition;
+  ///     }
+  ///   }
+  ///   </code>
+  /// </example>
+  [PublicAPI]
+#if CONTRIB_SYSTEM_PRINTING_XPS
+  public
+#else
+  internal
+#endif
+  partial interface IXpsInputBinDefinitionFactory<out TXpsInputBinDefinition>
     where TXpsInputBinDefinition : IXpsInputBinDefinition
   {
+    /// <summary>
+    ///   Factory method for <typeparamref name="TXpsInputBinDefinition"/>.
+    /// </summary>
+    /// <param name="option"/>
+    /// <param name="printCapabilities"/>
     [NotNull]
-    TXpsInputBinDefinition Create([NotNull] XElement optionXElement,
-                                  [NotNull] XElement printCapabilitiesXElement);
+    TXpsInputBinDefinition Create([NotNull] XElement option,
+                                  [NotNull] XElement printCapabilities);
   }
 
-  public sealed partial class XpsInputBinDefinitionFactory : IXpsInputBinDefinitionFactoryEx<IXpsInputBinDefinition>,
-                                                             IXpsInputBinDefinitionFactory
+  /// <inheritdoc/>
+  [PublicAPI]
+#if CONTRIB_SYSTEM_PRINTING_XPS
+  public sealed
+#else
+  internal
+#endif
+  partial class XpsInputBinDefinitionFactory : IXpsInputBinDefinitionFactory<XpsInputBinDefinitionFactory.IXpsInputBinDefinition>
   {
-    private sealed partial class XpsInputBinDefinition : IXpsInputBinDefinition
+    /// <inheritdoc/>
+    [PublicAPI]
+#if CONTRIB_SYSTEM_PRINTING_XPS
+    public
+#else
+    internal
+#endif
+    partial interface IXpsInputBinDefinition : Contrib.System.Printing.Xps.IXpsInputBinDefinition { }
+
+    /// <inheritdoc/>
+#if CONTRIB_SYSTEM_PRINTING_XPS
+    private sealed
+#else
+    internal
+#endif
+    partial class XpsInputBinDefinition : IXpsInputBinDefinition
     {
-      public XpsInputBinDefinition([NotNull] XName featureName,
-                                   [NotNull] XName name,
-                                   [CanBeNull] string displayName,
-                                   [CanBeNull] XName feedType)
-      {
-        this.FeatureName = featureName;
-        this.Name = name;
-        this.DisplayName = displayName;
-        this.FeedType = feedType;
-      }
+      /// <inheritdoc/>
+      public XName FeatureName { get; set; }
 
-      /// <inheritdoc />
-      public XName FeatureName { get; }
+      /// <inheritdoc/>
+      public XName Name { get; set; }
 
-      /// <inheritdoc />
-      public XName Name { get; }
+      /// <inheritdoc/>
+      public string DisplayName { get; set; }
 
-      /// <inheritdoc />
-      public string DisplayName { get; }
-
-      /// <inheritdoc />
-      public XName FeedType { get; }
+      /// <inheritdoc/>
+      public XName FeedType { get; set; }
     }
 
-    /// <inheritdoc />
-    public IXpsInputBinDefinition Create(XElement optionXElement,
-                                         XElement printCapabilitiesXElement)
+    /// <summary>
+    ///   Initializes a new instance of the <see cref="XpsInputBinDefinitionFactory"/> class.
+    /// </summary>
+    [PublicAPI]
+    public XpsInputBinDefinitionFactory() { }
+
+    /// <inheritdoc/>
+    public IXpsInputBinDefinition Create(XElement option,
+                                         XElement printCapabilities)
     {
       XName featureName;
 
-      var featureXElement = optionXElement.Parent;
-      if (featureXElement == null)
+      var feature = option.Parent;
+      if (feature == null)
       {
         featureName = null;
       }
       else
       {
-        featureName = featureXElement.GetNameFromNameAttribute();
+        featureName = feature.GetNameFromNameAttribute();
       }
 
-      var name = optionXElement.GetNameFromNameAttribute();
+      var name = option.GetNameFromNameAttribute();
 
-      var displayName = optionXElement.FindElementByNameAttribute(XpsServer.DisplayNameXName)
-                                      ?.GetValueFromValueElement() as string;
+      var displayName = option.FindElementByNameAttribute(XpsServer.DisplayNameName)
+                              ?.GetValueFromValueElement() as string;
 
-      var feedType = optionXElement.FindElementByNameAttribute(XpsServer.FeedTypeXName)
-                                   ?.GetValueFromValueElement() as XName;
+      var feedType = option.FindElementByNameAttribute(XpsServer.FeedTypeName)
+                           ?.GetValueFromValueElement() as XName;
 
-      var xpsInputBinDefinition = new XpsInputBinDefinition(featureName,
-                                                            name,
-                                                            displayName,
-                                                            feedType);
+      var xpsInputBinDefinition = new XpsInputBinDefinition
+                                  {
+                                    FeatureName = featureName,
+                                    Name = name,
+                                    DisplayName = displayName,
+                                    FeedType = feedType
+                                  };
 
       return xpsInputBinDefinition;
-    }
-
-    /// <inheritdoc />
-    IXpsInputBinDefinition IXpsInputBinDefinitionFactory.Create(XElement optionXElement,
-                                                                XElement printCapabilitiesXElement)
-    {
-      return this.Create(optionXElement,
-                         printCapabilitiesXElement);
     }
   }
 }

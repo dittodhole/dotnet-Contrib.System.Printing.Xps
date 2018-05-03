@@ -1,0 +1,22 @@
+apiRules:
+- include:
+    hasAttribute:
+      uid: JetBrains.Annotations.PublicAPIAttribute
+    type: Type
+- include:
+    hasAttribute:
+      uid: JetBrains.Annotations.PublicAPIAttribute
+    type: Member
+- exclude:
+    uidRegex: ^JetBrains\.Annotations
+    type: Namespace
+- exclude:
+    uidRegex: ^Contrib\.System\.Printing\.Xps\.Logging
+    type: Namespace
+- exclude:
+    uidRegex: ^Contrib\.System\.Printing\.Xps\.Tests
+    type: Namespace
+attributeRules:
+- include:
+  uidRegex: ^JetBrains\.Annotations
+  type: Namespace
