@@ -98,7 +98,7 @@ namespace Contrib.System.Printing.Xps
       {
         result = printQueues.Select(printQueue =>
                                     {
-                                      var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument()
+                                      var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(new PrintTicket())
                                                                         .Root ?? XpsServer.PrintCapabilitiesElement;
 
                                       var xpsPrinterDefinition = this.XpsPrinterDefinitionFactory.Create(printQueue.Name,
@@ -137,7 +137,7 @@ namespace Contrib.System.Printing.Xps
         {
           XElement feature;
           {
-            var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument()
+            var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(new PrintTicket())
                                               .Root ?? XpsServer.PrintCapabilitiesElement;
             feature = printCapabilities.FindElementByNameAttribute(XpsServer.PageInputBinName)
                               ?? printCapabilities.FindElementByNameAttribute(XpsServer.DocumentInputBinName)
