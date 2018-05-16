@@ -43,14 +43,16 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         throw new ArgumentNullException(nameof(name));
       }
 
-      var result = element.GetPrefixOfNamespace(name.Namespace);
+      var xdocument = element.Document;
+      var rootXElement = xdocument?.Root ?? element;
+      var result = rootXElement.GetPrefixOfNamespace(name.Namespace);
       if (result == null)
       {
-        result = element.FindUnusedPrefixForNamespace();
+        result = rootXElement.FindUnusedPrefixForNamespace();
 
         var @namespace = XNamespace.Xmlns + result;
-        element.SetAttributeValue(@namespace,
-                                  name.NamespaceName);
+        rootXElement.SetAttributeValue(@namespace,
+                                       name.NamespaceName);
       }
 
       return result;
