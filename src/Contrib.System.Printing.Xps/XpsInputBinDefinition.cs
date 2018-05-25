@@ -3,6 +3,7 @@
  */
 namespace Contrib.System.Printing.Xps
 {
+  using global::System;
   using global::System.Xml.Linq;
   using global::Contrib.System.Printing.Xps.ExtensionMethods;
   using global::JetBrains.Annotations;
@@ -105,10 +106,18 @@ namespace Contrib.System.Printing.Xps
     /// <summary>
     ///   Factory method for <typeparamref name="TXpsInputBinDefinition"/>.
     /// </summary>
+    /// <param name="feature"/>
+    /// <param name="name"/>
     /// <param name="option"/>
     /// <param name="printCapabilities"/>
+    /// <exception cref="ArgumentNullException"><paramref name="feature"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="option"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="printCapabilities"/> is <see langword="null"/>.</exception>
     [NotNull]
-    TXpsInputBinDefinition Create([NotNull] XElement option,
+    TXpsInputBinDefinition Create([NotNull] XName feature,
+                                  [NotNull] XName name,
+                                  [NotNull] XElement option,
                                   [NotNull] XElement printCapabilities);
   }
 
@@ -158,23 +167,11 @@ namespace Contrib.System.Printing.Xps
     public XpsInputBinDefinitionFactory() { }
 
     /// <inheritdoc/>
-    public IXpsInputBinDefinition Create(XElement option,
+    public IXpsInputBinDefinition Create(XName feature,
+                                         XName name,
+                                         XElement option,
                                          XElement printCapabilities)
     {
-      XName featureName;
-
-      var feature = option.Parent;
-      if (feature == null)
-      {
-        featureName = null;
-      }
-      else
-      {
-        featureName = feature.GetNameFromNameAttribute();
-      }
-
-      var name = option.GetNameFromNameAttribute();
-
       var displayName = option.FindElementByNameAttribute(XpsServer.DisplayNameName)
                               ?.GetValueFromValueElement() as string;
 
@@ -183,7 +180,7 @@ namespace Contrib.System.Printing.Xps
 
       var xpsInputBinDefinition = new XpsInputBinDefinition
                                   {
-                                    Feature = featureName,
+                                    Feature = feature,
                                     Name = name,
                                     DisplayName = displayName,
                                     FeedType = feedType

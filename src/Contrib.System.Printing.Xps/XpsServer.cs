@@ -151,16 +151,25 @@ namespace Contrib.System.Printing.Xps
           else
           {
             result = feature.Elements(XpsServer.OptionName)
-                            .Select(option =>
+                            .Select(option => new
+                                              {
+                                                Option = option,
+                                                InputBinName = option.GetNameFromNameAttribute(),
+                                                Feature = feature,
+                                                FeatureName = feature.GetNameFromNameAttribute()
+                                              })
+                            .Where(arg => arg.InputBinName != null)
+                            .Where(arg => arg.FeatureName != null)
+                            .Select(arg =>
                                     {
-                                      var featureName = feature.GetNameFromNameAttribute();
-                                      var inputBinName = option.GetNameFromNameAttribute();
-                                      var printTicket = XpsServer.GetPrintTicket(featureName,
-                                                                                 inputBinName);
-                                      var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(printTicket ?? new PrintTicket())
+                                      var printTicket = XpsServer.GetPrintTicket(arg.FeatureName,
+                                                                                 arg.InputBinName);
+                                      var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(printTicket)
                                                                         .Root ?? XpsServer.PrintCapabilitiesElement;
 
-                                      var xpsInputBinDefinition = this.XpsInputBinDefinitionFactory.Create(option,
+                                      var xpsInputBinDefinition = this.XpsInputBinDefinitionFactory.Create(arg.FeatureName,
+                                                                                                           arg.InputBinName,
+                                                                                                           arg.Option,
                                                                                                            printCapabilities);
 
                                       return xpsInputBinDefinition;
