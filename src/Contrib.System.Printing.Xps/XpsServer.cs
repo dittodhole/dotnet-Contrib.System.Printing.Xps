@@ -157,7 +157,7 @@ namespace Contrib.System.Printing.Xps
                                       var inputBinName = option.GetNameFromNameAttribute();
                                       var printTicket = XpsServer.GetPrintTicket(featureName,
                                                                                  inputBinName);
-                                      var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(printTicket)
+                                      var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(printTicket ?? new PrintTicket())
                                                                         .Root ?? XpsServer.PrintCapabilitiesElement;
 
                                       var xpsInputBinDefinition = this.XpsInputBinDefinitionFactory.Create(option,
