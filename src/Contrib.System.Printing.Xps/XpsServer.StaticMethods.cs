@@ -3,7 +3,6 @@
  */
 namespace Contrib.System.Printing.Xps
 {
-  using global::System;
   using global::System.IO;
   using global::System.Printing;
   using global::System.Xml.Linq;
@@ -22,21 +21,18 @@ namespace Contrib.System.Printing.Xps
     /// </summary>
     /// <param name="featureName"/>
     /// <param name="inputBinName"/>
-    /// <exception cref="ArgumentNullException"><paramref name="featureName"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="inputBinName"/> is <see langword="null"/>.</exception>
-    /// <exception cref="Exception"/>
     [PublicAPI]
-    [NotNull]
-    public static PrintTicket GetPrintTicket([NotNull] XName featureName,
-                                             [NotNull] XName inputBinName)
+    [CanBeNull]
+    public static PrintTicket GetPrintTicket([CanBeNull] XName featureName,
+                                             [CanBeNull] XName inputBinName)
     {
       if (featureName == null)
       {
-        throw new ArgumentNullException(nameof(featureName));
+        return null;
       }
       if (inputBinName == null)
       {
-        throw new ArgumentNullException(nameof(inputBinName));
+        return null;
       }
 
       // === SOURCE ===
