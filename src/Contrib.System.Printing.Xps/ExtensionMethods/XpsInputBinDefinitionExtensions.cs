@@ -78,7 +78,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       var feature = printTicket.AddElement(XpsServer.FeatureName);
       XElementExtensions.SetAttributeValue(feature,
                                            XpsServer.NameName,
-                                           xpsInputBinDefinition.FeatureName);
+                                           xpsInputBinDefinition.Feature);
 
       var option = feature.AddElement(XpsServer.OptionName);
       XElementExtensions.SetAttributeValue(option,
