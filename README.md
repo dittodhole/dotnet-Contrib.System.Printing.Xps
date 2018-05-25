@@ -18,7 +18,7 @@ IDocumentPaginatorSource documentPaginatorSource;
 var xpsServer = new XpsServer();
 var xpsPrinterDefinitions = xpsServer.GetXpsPrinterDefinitions();
 
-foreach (var xpsPrinterDefinition in xpsPrinterDefinition)
+foreach (var xpsPrinterDefinition in xpsPrinterDefinitions)
 {
   xpsPrinterDefinition.Print(documentPaginatorSource,
                              printQueue =>
