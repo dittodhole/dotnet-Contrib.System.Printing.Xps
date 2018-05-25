@@ -153,8 +153,10 @@ namespace Contrib.System.Printing.Xps
             result = feature.Elements(XpsServer.OptionName)
                             .Select(option =>
                                     {
-                                      var printTicket = XpsServer.GetPrintTicket(feature.Name,
-                                                                                 option.Name);
+                                      var featureName = feature.GetNameFromNameAttribute();
+                                      var inputBinName = option.GetNameFromNameAttribute();
+                                      var printTicket = XpsServer.GetPrintTicket(featureName,
+                                                                                 inputBinName);
                                       var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(printTicket)
                                                                         .Root ?? XpsServer.PrintCapabilitiesElement;
 
