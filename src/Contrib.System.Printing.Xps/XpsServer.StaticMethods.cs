@@ -34,7 +34,6 @@ namespace Contrib.System.Printing.Xps
       {
         throw new ArgumentNullException(nameof(featureName));
       }
-
       if (inputBinName == null)
       {
         throw new ArgumentNullException(nameof(inputBinName));
