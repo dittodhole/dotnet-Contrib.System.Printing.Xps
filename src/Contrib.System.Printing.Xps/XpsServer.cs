@@ -154,9 +154,9 @@ namespace Contrib.System.Printing.Xps
                             .Select(option => new
                                               {
                                                 Option = option,
-                                                InputBinName = option.GetNameFromNameAttribute(),
+                                                InputBinName = option.GetNameFromNameAttributeAsXName(),
                                                 Feature = feature,
-                                                FeatureName = feature.GetNameFromNameAttribute()
+                                                FeatureName = feature.GetNameFromNameAttributeAsXName()
                                               })
                             .Where(arg => arg.InputBinName != null)
                             .Where(arg => arg.FeatureName != null)

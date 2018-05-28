@@ -199,7 +199,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
 
       foreach (var child in element.Elements())
       {
-        var xname = child.GetNameFromNameAttribute();
+        var xname = child.GetNameFromNameAttributeAsXName();
         if (xname == name)
         {
           return child;
@@ -216,7 +216,27 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
     [Pure]
     [CanBeNull]
-    public static XName GetNameFromNameAttribute([NotNull] this XElement element)
+    public static XName GetNameFromNameAttributeAsXName([NotNull] this XElement element)
+    {
+      if (element == null)
+      {
+        throw new ArgumentNullException(nameof(element));
+      }
+
+      var name = element.GetNameFromNameAttribute();
+      var result = element.GetXName(name);
+
+      return result;
+    }
+
+    /// <summary>
+    ///   Gets the value from "name" attribute.
+    /// </summary>
+    /// <param name="element"/>
+    /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
+    [Pure]
+    [CanBeNull]
+    public static string GetNameFromNameAttribute([NotNull] this XElement element)
     {
       if (element == null)
       {
@@ -224,7 +244,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       }
 
       var attribute = element.Attribute(XpsServer.NameName);
-      var result = element.GetXName(attribute?.Value);
+      var result = attribute?.Value;
 
       return result;
     }
