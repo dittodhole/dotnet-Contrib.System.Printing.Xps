@@ -22,6 +22,44 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   static partial class XElementExtensions
   {
     /// <summary>
+    ///   Registers a prefix for the namespace of <paramref name="name"/> if needed, and shortens it.
+    /// </summary>
+    /// <param name="element"/>
+    /// <param name="name"/>
+    /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
+    [MustUseReturnValue]
+    [NotNull]
+    public static string ShortenName([NotNull] this XElement element,
+                                     [NotNull] XName name)
+    {
+      if (element == null)
+      {
+        throw new ArgumentNullException(nameof(element));
+      }
+      if (name == null)
+      {
+        throw new ArgumentNullException(nameof(name));
+      }
+
+      string result;
+      {
+        var prefix = element.EnsurePrefixRegistrationOfNamespace(name);
+        if (prefix == null)
+        {
+          result = name.LocalName;
+        }
+        else
+        {
+          result = XmlQualifiedName.ToString(name.LocalName,
+                                              prefix);
+        }
+      }
+
+      return result;
+    }
+
+    /// <summary>
     ///   Ensures and gets the prefix of the namespace registration for <paramref name="name"/>.
     /// </summary>
     /// <param name="element"/>
