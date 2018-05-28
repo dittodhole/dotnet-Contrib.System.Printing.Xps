@@ -225,7 +225,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     }
 
     /// <summary>
-    ///   Finds the matching child element.
+    ///   Reduces <paramref name="name"/>, and tries to find the matching child element.
     /// </summary>
     /// <param name="element"/>
     /// <param name="name"/>
@@ -245,10 +245,39 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         throw new ArgumentNullException(nameof(name));
       }
 
+      var reducedName = element.ReduceName(name);
+      var result = element.FindElementByNameAttribute(reducedName);
+
+      return result;
+    }
+
+    /// <summary>
+    ///   Finds the matching child element.
+    /// </summary>
+    /// <param name="element"/>
+    /// <param name="name"/>
+    /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
+    [Pure]
+    [CanBeNull]
+    public static XElement FindElementByNameAttribute([NotNull] this XElement element,
+                                                      [NotNull] string name)
+    {
+      if (element == null)
+      {
+        throw new ArgumentNullException(nameof(element));
+      }
+      if (name == null)
+      {
+        throw new ArgumentNullException(nameof(name));
+      }
+
       foreach (var child in element.Elements())
       {
-        var xname = child.GetNameFromNameAttributeAsXName();
-        if (xname == name)
+        var childName = child.GetValueFromNameAttribute();
+        if (string.Equals(name,
+                          childName,
+                          StringComparison.Ordinal))
         {
           return child;
         }

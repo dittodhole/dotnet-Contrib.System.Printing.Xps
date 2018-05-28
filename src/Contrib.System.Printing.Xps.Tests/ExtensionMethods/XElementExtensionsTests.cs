@@ -20,14 +20,27 @@ namespace Contrib.System.Printing.Xps.Tests.ExtensionMethods
                       actualReducedName);
     }
 
-    [Test]
-    public void EnsurePrefixRegistrationOfNamespace_Should_Succeed()
     {
       var element = new XElement("foo");
       var name = XName.Get("bar");
       var prefix = element.EnsurePrefixRegistrationOfNamespace(name);
+    [TestCase("child1")]
+    [TestCase("16bpcSupport")]
+    public void FindElementByNameAttribute_Should_Succeed(string name)
+    {
+      var root = new XElement("root");
+      var child1 = new XElement("child1");
+      child1.SetAttributeValue(XpsServer.NameName,
+                               "child1");
+      root.Add(child1);
+      var child2 = new XElement("child2");
+      child2.SetAttributeValue(XpsServer.NameName,
+                               "16bpcSupport");
+      root.Add(child2);
 
-      Assert.IsNull(prefix);
+      var result = root.FindElementByNameAttribute(name);
+
+      Assert.IsNotNull(result);
     }
   }
 }
