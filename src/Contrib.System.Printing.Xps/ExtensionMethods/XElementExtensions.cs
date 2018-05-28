@@ -22,7 +22,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   static partial class XElementExtensions
   {
     /// <summary>
-    ///   Registers a prefix for the namespace of <paramref name="name"/> if needed, and shortens it.
+    ///   Registers a prefix for the namespace of <paramref name="name"/> if needed, and reduces it accordingly.
     /// </summary>
     /// <param name="element"/>
     /// <param name="name"/>
@@ -30,7 +30,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
     [MustUseReturnValue]
     [NotNull]
-    public static string ShortenName([NotNull] this XElement element,
+    public static string ReduceName([NotNull] this XElement element,
                                      [NotNull] XName name)
     {
       if (element == null)
@@ -43,17 +43,16 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       }
 
       string result;
+
+      var prefix = element.EnsurePrefixRegistrationOfNamespace(name);
+      if (prefix == null)
       {
-        var prefix = element.EnsurePrefixRegistrationOfNamespace(name);
-        if (prefix == null)
-        {
-          result = name.LocalName;
-        }
-        else
-        {
-          result = XmlQualifiedName.ToString(name.LocalName,
-                                              prefix);
-        }
+        result = name.LocalName;
+      }
+      else
+      {
+        result = XmlQualifiedName.ToString(name.LocalName,
+                                           prefix);
       }
 
       return result;

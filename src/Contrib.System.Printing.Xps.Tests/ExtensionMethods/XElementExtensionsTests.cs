@@ -9,15 +9,15 @@ namespace Contrib.System.Printing.Xps.Tests.ExtensionMethods
   {
     [TestCase("name", "name")]
     [TestCase("{http://my.scheme.com}name", "ns0000:name")]
-    public void ShortenName_Should_Succeed(string expandedName,
-                                           string expectedShortName)
+    public void ReduceName_Should_Succeed(string expandedName,
+                                          string expectedShortName)
     {
       var element = new XElement("element");
       var name = XName.Get(expandedName);
-      var actualShortName = element.ShortenName(name);
+      var actualReducedName = element.ReduceName(name);
 
       Assert.AreEqual(expectedShortName,
-                      actualShortName);
+                      actualReducedName);
     }
 
     [Test]
