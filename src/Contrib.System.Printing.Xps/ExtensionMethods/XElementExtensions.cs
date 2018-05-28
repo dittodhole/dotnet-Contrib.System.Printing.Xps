@@ -80,7 +80,9 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       }
 
       string result;
-      if (name.Namespace == XNamespace.None)
+
+      var @namespace = name.Namespace;
+      if (@namespace == XNamespace.None)
       {
         result = null;
       }
@@ -89,15 +91,14 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         var document = element.Document;
         var root = document?.Root ?? element;
 
-        result = root.GetPrefixOfNamespace(name.Namespace);
+        result = root.GetPrefixOfNamespace(@namespace);
 
         if (result == null)
         {
           result = root.FindUnusedPrefixForNamespace();
 
-          var @namespace = XNamespace.Xmlns + result;
-          root.SetAttributeValue(@namespace,
-                                 name.NamespaceName);
+          root.SetAttributeValue(XNamespace.Xmlns + result,
+                                 @namespace);
         }
       }
 
