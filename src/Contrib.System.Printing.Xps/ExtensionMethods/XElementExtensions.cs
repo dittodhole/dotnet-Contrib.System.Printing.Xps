@@ -132,27 +132,6 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     }
 
     /// <summary>
-    ///   Gets the boxed value from "psf:Value" child element.
-    /// </summary>
-    /// <param name="element"/>
-    /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
-    [Pure]
-    [CanBeNull]
-    public static object GetValueFromValueElement([NotNull] this XElement element)
-    {
-      if (element == null)
-      {
-        throw new ArgumentNullException(nameof(element));
-      }
-
-      element = element.Element(XpsServer.ValueName);
-
-      var result = element?.GetValue();
-
-      return result;
-    }
-
-    /// <summary>
     ///   Gets the boxed value by taking "xsi:Type" attribute into account.
     /// </summary>
     /// <param name="element"/>
@@ -225,33 +204,6 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     }
 
     /// <summary>
-    ///   Reduces <paramref name="name"/>, and tries to find the matching child element.
-    /// </summary>
-    /// <param name="element"/>
-    /// <param name="name"/>
-    /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
-    [Pure]
-    [CanBeNull]
-    public static XElement FindElementByNameAttribute([NotNull] this XElement element,
-                                                      [NotNull] XName name)
-    {
-      if (element == null)
-      {
-        throw new ArgumentNullException(nameof(element));
-      }
-      if (name == null)
-      {
-        throw new ArgumentNullException(nameof(name));
-      }
-
-      var reducedName = element.ReduceName(name);
-      var result = element.FindElementByNameAttribute(reducedName);
-
-      return result;
-    }
-
-    /// <summary>
     ///   Finds the matching child element.
     /// </summary>
     /// <param name="element"/>
@@ -274,7 +226,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
 
       foreach (var child in element.Elements())
       {
-        var childName = child.GetValueFromNameAttribute();
+        var childName = child.Attribute(XpsServer.NameName)
+                             ?.Value;
         if (string.Equals(name,
                           childName,
                           StringComparison.Ordinal))
@@ -284,46 +237,6 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       }
 
       return null;
-    }
-
-    /// <summary>
-    ///   Gets the value from "name" attribute as <see cref="XName"/>.
-    /// </summary>
-    /// <param name="element"/>
-    /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
-    [Pure]
-    [CanBeNull]
-    public static XName GetNameFromNameAttributeAsXName([NotNull] this XElement element)
-    {
-      if (element == null)
-      {
-        throw new ArgumentNullException(nameof(element));
-      }
-
-      var name = element.GetNameFromNameAttribute();
-      var result = element.GetXName(name);
-
-      return result;
-    }
-
-    /// <summary>
-    ///   Gets the value from "name" attribute.
-    /// </summary>
-    /// <param name="element"/>
-    /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
-    [Pure]
-    [CanBeNull]
-    public static string GetNameFromNameAttribute([NotNull] this XElement element)
-    {
-      if (element == null)
-      {
-        throw new ArgumentNullException(nameof(element));
-      }
-
-      var attribute = element.Attribute(XpsServer.NameName);
-      var result = attribute?.Value;
-
-      return result;
     }
 
     /// <summary>
@@ -441,74 +354,6 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       var result = new XElement(name);
 
       element.Add(result);
-
-      return result;
-    }
-
-    /// <summary>
-    ///   Sets the value of <paramref name="name"/> named attribute, or adds the <paramref name="name"/> named attribute.
-    /// </summary>
-    /// <param name="element"/>
-    /// <param name="name"/>
-    /// <param name="value"/>
-    /// <returns>Returns <paramref name="value"/> as qualified name, following the pattern "prefix:name".</returns>
-    /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="value"/> is <see langword="null"/>.</exception>
-    [NotNull]
-    public static string SetAttributeValue([NotNull] this XElement element,
-                                           [NotNull] XName name,
-                                           [NotNull] XName value)
-    {
-      if (element == null)
-      {
-        throw new ArgumentNullException(nameof(element));
-      }
-      if (name == null)
-      {
-        throw new ArgumentNullException(nameof(name));
-      }
-      if (value == null)
-      {
-        throw new ArgumentNullException(nameof(value));
-      }
-
-      var result = element.ReduceName(value);
-
-      element.SetAttributeValue(name,
-                                result);
-
-      return result;
-    }
-
-    /// <summary>
-    ///   Sets the value of <paramref name="element"/>, and sets the "type" attribute accordingly.
-    /// </summary>
-    /// <param name="element"/>
-    /// <param name="value"/>
-    /// <returns>Returns <paramref name="value"/> as qualified name, following the pattern "prefix:name".</returns>
-    /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="value"/> is <see langword="null"/>.</exception>
-    [NotNull]
-    public static string SetValue([NotNull] this XElement element,
-                                  [NotNull] XName value)
-    {
-      if (element == null)
-      {
-        throw new ArgumentNullException(nameof(element));
-      }
-      if (value == null)
-      {
-        throw new ArgumentNullException(nameof(value));
-      }
-
-      var result = element.ReduceName(value);
-
-      element.SetValue(result);
-
-      XElementExtensions.SetAttributeValue(element,
-                                           XpsServer.TypeName,
-                                           XpsServer.QNameName);
 
       return result;
     }

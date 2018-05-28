@@ -73,14 +73,12 @@ namespace Contrib.System.Printing.Xps
       // === === === === ===
 
       var feature = printTicket.AddElement(XpsServer.FeatureName);
-      XElementExtensions.SetAttributeValue(feature,
-                                           XpsServer.NameName,
-                                           featureName);
+      feature.SetAttributeValue(XpsServer.NameName,
+                                feature.ReduceName(featureName));
 
       var option = feature.AddElement(XpsServer.OptionName);
-      XElementExtensions.SetAttributeValue(option,
-                                           XpsServer.NameName,
-                                           inputBinName);
+      option.SetAttributeValue(XpsServer.NameName,
+                               option.ReduceName(inputBinName));
 
       PrintTicket result;
       using (var memoryStream = new MemoryStream())

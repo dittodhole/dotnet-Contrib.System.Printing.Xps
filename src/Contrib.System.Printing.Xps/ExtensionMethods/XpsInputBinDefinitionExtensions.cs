@@ -76,26 +76,24 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       // === === === === ===
 
       var feature = printTicket.AddElement(XpsServer.FeatureName);
-      XElementExtensions.SetAttributeValue(feature,
-                                           XpsServer.NameName,
-                                           xpsInputBinDefinition.Feature);
+      feature.SetAttributeValue(XpsServer.NameName,
+                                feature.ReduceName(xpsInputBinDefinition.Feature));
 
       var option = feature.AddElement(XpsServer.OptionName);
-      XElementExtensions.SetAttributeValue(option,
-                                           XpsServer.NameName,
-                                           xpsInputBinDefinition.Name);
+      option.SetAttributeValue(XpsServer.NameName,
+                               option.ReduceName(xpsInputBinDefinition.Name));
 
       var feedType = xpsInputBinDefinition.FeedType;
       if (feedType != null)
       {
         var scoredProperty = option.AddElement(XpsServer.ScoredPropertyName);
-        XElementExtensions.SetAttributeValue(scoredProperty,
-                                             XpsServer.NameName,
-                                             XpsServer.FeedTypeName);
+        scoredProperty.SetAttributeValue(XpsServer.NameName,
+                                         scoredProperty.ReduceName(XpsServer.FeedTypeName));
 
         var value = scoredProperty.AddElement(XpsServer.ValueName);
-        XElementExtensions.SetValue(value,
-                                    feedType);
+        value.SetValue(value.ReduceName(feedType));
+        value.SetAttributeValue(XpsServer.TypeName,
+                                value.ReduceName(XpsServer.QNameName));
       }
 
       PrintTicket result;

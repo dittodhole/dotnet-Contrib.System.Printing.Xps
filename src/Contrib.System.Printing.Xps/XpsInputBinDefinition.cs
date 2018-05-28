@@ -172,11 +172,13 @@ namespace Contrib.System.Printing.Xps
                                          XElement option,
                                          XElement printCapabilities)
     {
-      var displayName = option.FindElementByNameAttribute(XpsServer.DisplayNameName)
-                              ?.GetValueFromValueElement() as string;
+      var displayName = option.FindElementByNameAttribute(option.ReduceName(XpsServer.DisplayNameName))
+                              ?.Element(XpsServer.ValueName)
+                              ?.GetValue() as string;
 
-      var feedType = option.FindElementByNameAttribute(XpsServer.FeedTypeName)
-                           ?.GetValueFromValueElement() as XName;
+      var feedType = option.FindElementByNameAttribute(option.ReduceName(XpsServer.FeedTypeName))
+                           ?.Element(XpsServer.ValueName)
+                           ?.GetValue() as XName;
 
       var xpsInputBinDefinition = new XpsInputBinDefinition
                                   {

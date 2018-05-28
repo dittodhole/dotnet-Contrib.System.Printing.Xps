@@ -139,9 +139,9 @@ namespace Contrib.System.Printing.Xps
           {
             var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(new PrintTicket())
                                               ?.Root ?? XpsServer.PrintCapabilitiesElement;
-            feature = printCapabilities.FindElementByNameAttribute(XpsServer.PageInputBinName)
-                              ?? printCapabilities.FindElementByNameAttribute(XpsServer.DocumentInputBinName)
-                              ?? printCapabilities.FindElementByNameAttribute(XpsServer.JobInputBinName);
+            feature = printCapabilities.FindElementByNameAttribute(printCapabilities.ReduceName(XpsServer.PageInputBinName))
+                              ?? printCapabilities.FindElementByNameAttribute(printCapabilities.ReduceName(XpsServer.DocumentInputBinName))
+                              ?? printCapabilities.FindElementByNameAttribute(printCapabilities.ReduceName(XpsServer.JobInputBinName));
           }
 
           if (feature == null)
@@ -154,9 +154,11 @@ namespace Contrib.System.Printing.Xps
                             .Select(option => new
                                               {
                                                 Option = option,
-                                                InputBinName = option.GetNameFromNameAttributeAsXName(),
+                                                InputBinName = option.GetXName(option.Attribute(XpsServer.NameName)
+                                                                                     ?.Value),
                                                 Feature = feature,
-                                                FeatureName = feature.GetNameFromNameAttributeAsXName()
+                                                FeatureName = feature.GetXName(feature.Attribute(XpsServer.NameName)
+                                                                                      ?.Value)
                                               })
                             .Where(arg => arg.InputBinName != null)
                             .Where(arg => arg.FeatureName != null)
