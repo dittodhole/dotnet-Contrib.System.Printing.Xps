@@ -473,9 +473,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         throw new ArgumentNullException(nameof(value));
       }
 
-      var prefix = element.EnsurePrefixRegistrationOfNamespace(value);
-      var result = XmlQualifiedName.ToString(value.LocalName,
-                                             prefix);
+      var result = element.ReduceName(value);
 
       element.SetAttributeValue(name,
                                 result);
@@ -504,9 +502,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         throw new ArgumentNullException(nameof(value));
       }
 
-      var prefix = element.EnsurePrefixRegistrationOfNamespace(value);
-      var result = XmlQualifiedName.ToString(value.LocalName,
-                                             prefix);
+      var result = element.ReduceName(value);
 
       element.SetValue(result);
 
