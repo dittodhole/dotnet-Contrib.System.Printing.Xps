@@ -96,9 +96,6 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         var value = scoredProperty.AddElement(XpsServer.ValueName);
         XElementExtensions.SetValue(value,
                                     feedType);
-        XElementExtensions.SetAttributeValue(value,
-                                             XpsServer.TypeName,
-                                             XpsServer.QNameName);
       }
 
       PrintTicket result;

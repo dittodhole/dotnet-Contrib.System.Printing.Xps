@@ -482,7 +482,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     }
 
     /// <summary>
-    ///   Sets the value of <paramref name="element"/>.
+    ///   Sets the value of <paramref name="element"/>, and sets the "type" attribute accordingly.
     /// </summary>
     /// <param name="element"/>
     /// <param name="value"/>
@@ -505,6 +505,10 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       var result = element.ReduceName(value);
 
       element.SetValue(result);
+
+      XElementExtensions.SetAttributeValue(element,
+                                           XpsServer.TypeName,
+                                           XpsServer.QNameName);
 
       return result;
     }
