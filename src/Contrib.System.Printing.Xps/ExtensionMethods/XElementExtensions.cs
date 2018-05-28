@@ -28,7 +28,6 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <param name="name"/>
     /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
-    /// <exception cref="Exception"/>
     [MustUseReturnValue]
     [NotNull]
     public static string EnsurePrefixRegistrationOfNamespace([NotNull] this XElement element,
