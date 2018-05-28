@@ -20,10 +20,19 @@ namespace Contrib.System.Printing.Xps.Tests.ExtensionMethods
                       actualReducedName);
     }
 
+    [TestCase("name", null)]
+    [TestCase("{http://my.scheme.com}name", "ns0000")]
+    public void EnsurePrefixRegistrationOfNamespace_Should_Succeed(string expandedName,
+                                                                   string expectedPrefix)
     {
-      var element = new XElement("foo");
-      var name = XName.Get("bar");
-      var prefix = element.EnsurePrefixRegistrationOfNamespace(name);
+      var element = new XElement("element");
+      var name = XName.Get(expandedName);
+      var actualPrefix = element.EnsurePrefixRegistrationOfNamespace(name);
+
+      Assert.AreEqual(expectedPrefix,
+                      actualPrefix);
+    }
+
     [TestCase("child1")]
     [TestCase("16bpcSupport")]
     public void FindElementByNameAttribute_Should_Succeed(string name)
