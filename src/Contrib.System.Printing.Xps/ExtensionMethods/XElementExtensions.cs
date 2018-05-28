@@ -31,7 +31,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     [MustUseReturnValue]
     [NotNull]
     public static string ReduceName([NotNull] this XElement element,
-                                     [NotNull] XName name)
+                                    [NotNull] XName name)
     {
       if (element == null)
       {
