@@ -29,7 +29,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
     [MustUseReturnValue]
-    [NotNull]
+    [CanBeNull]
     public static string EnsurePrefixRegistrationOfNamespace([NotNull] this XElement element,
                                                              [NotNull] XName name)
     {
@@ -42,16 +42,26 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         throw new ArgumentNullException(nameof(name));
       }
 
-      var xdocument = element.Document;
-      var rootXElement = xdocument?.Root ?? element;
-      var result = rootXElement.GetPrefixOfNamespace(name.Namespace);
-      if (result == null)
+      string result;
+      if (name.Namespace == XNamespace.None)
       {
-        result = rootXElement.FindUnusedPrefixForNamespace();
+        result = null;
+      }
+      else
+      {
+        var document = element.Document;
+        var root = document?.Root ?? element;
 
-        var @namespace = XNamespace.Xmlns + result;
-        rootXElement.SetAttributeValue(@namespace,
-                                       name.NamespaceName);
+        result = root.GetPrefixOfNamespace(name.Namespace);
+
+        if (result == null)
+        {
+          result = root.FindUnusedPrefixForNamespace();
+
+          var @namespace = XNamespace.Xmlns + result;
+          root.SetAttributeValue(@namespace,
+                                 name.NamespaceName);
+        }
       }
 
       return result;
