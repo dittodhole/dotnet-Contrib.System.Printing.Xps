@@ -69,6 +69,8 @@ dotnet-Contrib.System.Printing.Xps> cd build
 dotnet-Contrib.System.Printing.Xps/build> build.bat
 ```
 
+This will create `dotnet-Contrib.System.Printing.Xps/artifacts/Contrib.System.Printing.Xps.{version}.nupkg`.
+
 ## License
 
 dotnet-Contrib.System.Printing.Xps is published under [WTFNMFPLv3](https://github.com/dittodhole/WTFNMFPLv3).
