@@ -1,5 +1,5 @@
 artifacts/*.nupkg
-build/build.cake
+build/build.ps1
 src/.vs/
 src/packages/
 src/**/*.user
