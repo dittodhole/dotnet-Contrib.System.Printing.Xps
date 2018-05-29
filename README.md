@@ -6,19 +6,19 @@
 
 ## Installing
 
-### [myget.org](https://www.myget.org/feed/dittodhole/package/nuget/Contrib.System.Printing.Xps)
+### [myget.org][1]
 
-[![](https://img.shields.io/appveyor/ci/dittodhole/dotnet-contrib-system-printing-xps/develop.svg)](https://ci.appveyor.com/project/dittodhole/dotnet-contrib-system-printing-xps/branch/develop)
-[![](https://img.shields.io/myget/dittodhole/vpre/Contrib.System.Printing.Xps.svg)](https://www.myget.org/feed/dittodhole/package/nuget/Contrib.System.Printing.Xps)
+[![](https://img.shields.io/appveyor/ci/dittodhole/dotnet-contrib-system-printing-xps/develop.svg)][2]
+[![](https://img.shields.io/myget/dittodhole/vpre/Contrib.System.Printing.Xps.svg)][1]
 
 ```powershell
 PM> Install-Package -Id Contrib.System.Printing.Xps -pre --source https://www.myget.org/F/dittodhole/api/v2
 ```
 
-### [nuget.org](https://www.nuget.org/packages/Contrib.System.Printing.Xps)
+### [nuget.org][3]
 
-[![](https://img.shields.io/appveyor/ci/dittodhole/dotnet-contrib-system-printing-xps/master.svg)](https://ci.appveyor.com/project/dittodhole/dotnet-contrib-system-printing-xps/branch/master)
-[![](https://img.shields.io/nuget/v/Contrib.System.Printing.Xps.svg)](https://www.nuget.org/packages/Contrib.System.Printing.Xps)
+[![](https://img.shields.io/appveyor/ci/dittodhole/dotnet-contrib-system-printing-xps/master.svg)][4]
+[![](https://img.shields.io/nuget/v/Contrib.System.Printing.Xps.svg)][3]
 
 ```powershell
 PM> Install-Package -Id Contrib.System.Printing.Xps
@@ -78,3 +78,9 @@ dotnet-Contrib.System.Printing.Xps is published under [WTFNMFPLv3](https://githu
 ## Icon
 
 [Printer](https://thenounproject.com/term/printer/1230289/) by [Wira](https://thenounproject.com/wirawizinda097) from the Noun Project.
+
+
+[1]: https://www.myget.org/feed/dittodhole/package/nuget/Contrib.System.Printing.Xps
+[2]: https://ci.appveyor.com/project/dittodhole/dotnet-contrib-system-printing-xps/branch/develop
+[3]: https://www.nuget.org/packages/Contrib.System.Printing.Xps
+[4]: https://ci.appveyor.com/project/dittodhole/dotnet-contrib-system-printing-xps/branch/master
