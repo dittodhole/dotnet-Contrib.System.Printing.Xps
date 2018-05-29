@@ -1,6 +1,6 @@
-.vs/
-bin/
-obj/
-packages/
-*.user
-*.suo
+src/.vs/
+src/packages/
+src/**/*.user
+src/**/*.suo
+src/*/bin/
+src/*/obj/
