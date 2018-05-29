@@ -7,3 +7,4 @@ src/**/*.user
 src/**/*.suo
 src/*/bin/
 src/*/obj/
+src/*/*.temp.nuspec
