@@ -4,9 +4,9 @@
     <id>$id$</id>
     <version>$version$</version>
     <authors>dittodhole</authors>
-    <licenseUrl>https://raw.githubusercontent.com/dittodhole/WTFNMFPLv3/master/LICENSE</licenseUrl>
+    <licenseUrl>https://github.com/dittodhole/WTFNMFPLv3</licenseUrl>
     <projectUrl>https://github.com/dittodhole/dotnet-Contrib.System.Printing.Xps</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/dittodhole/dotnet-Contrib.System.Printing.Xps/develop/assets/noun_1230289_cc.png</iconUrl>
+    <iconUrl>https://cdn.rawgit.com/dittodhole/dotnet-Contrib.System.Printing.Xps/$branch$/assets/noun_1230289_cc.png</iconUrl>
     <description>$description$</description>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="ReachFramework"/>
