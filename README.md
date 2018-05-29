@@ -4,7 +4,7 @@
 
 > Easily access and use [XPS](https://en.wikipedia.org/wiki/Open_XML_Paper_Specification) printers.
 
-## Installation
+## Installing
 
 ### [myget.org](https://www.myget.org/feed/dittodhole/package/nuget/Contrib.System.Printing.Xps)
 
