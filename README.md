@@ -51,8 +51,7 @@ foreach (var xpsPrinterDefinition in xpsPrinterDefinitions)
 > git clone https://github.com/dittodhole/dotnet-Contrib.System.Printing.Xps.git
 > cd dotnet-Contrib.System.Printing.Xps/
 dotnet-Contrib.System.Printing.Xps> cd build
-dotnet-Contrib.System.Printing.Xps/build> npm install
-dotnet-Contrib.System.Printing.Xps/build> npm run-script build
+dotnet-Contrib.System.Printing.Xps/build> build.bat
 ```
 
 ## License
