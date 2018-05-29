@@ -1,3 +1,5 @@
+artifacts/*.nupkg
+build/build.cake
 src/.vs/
 src/packages/
 src/**/*.user
