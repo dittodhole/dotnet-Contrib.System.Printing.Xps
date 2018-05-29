@@ -2,10 +2,13 @@
 
 # dotnet-Contrib.System.Printing.Xps
 
-| [![Build status](https://img.shields.io/appveyor/ci/dittodhole/dotnet-contrib-system-printing-xps.svg)](https://ci.appveyor.com/project/dittodhole/dotnet-contrib-system-printing-xps) | [![Test status](https://img.shields.io/appveyor/tests/dittodhole/dotnet-contrib-system-printing-xps.svg)](https://ci.appveyor.com/project/dittodhole/dotnet-contrib-system-printing-xps) | [![NuGet Status](https://img.shields.io/nuget/v/Contrib.System.Printing.Xps.svg)](https://www.nuget.org/packages/Contrib.System.Printing.Xps) | [![MyGet Pre Release](https://img.shields.io/myget/dittodhole/vpre/Contrib.System.Printing.Xps.svg)](https://www.myget.org/feed/dittodhole/package/nuget/Contrib.System.Printing.Xps)
-|:-|:-|:-|:-|
-
 > Easily access and use [XPS](https://en.wikipedia.org/wiki/Open_XML_Paper_Specification) printers.
+
+| Hosting                                                                                      | Build                                                                                                                                                                                             | Version                                                                                                                                                              | Installation                                                                                                  |
+|:---------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------------------|
+| [myget.org](https://www.myget.org/feed/dittodhole/package/nuget/Contrib.System.Printing.Xps) | [![](https://img.shields.io/appveyor/ci/dittodhole/dotnet-contrib-system-printing-xps/develop.svg)](https://ci.appveyor.com/project/dittodhole/dotnet-contrib-system-printing-xps/branch/develop) | [![](https://img.shields.io/myget/dittodhole/vpre/Contrib.System.Printing.Xps.svg)](https://www.myget.org/feed/dittodhole/package/nuget/Contrib.System.Printing.Xps) | `PM> Install-Package -Id Contrib.System.Printing.Xps -pre --source https://www.myget.org/F/dittodhole/api/v2` |
+| [nuget.org](https://www.nuget.org/packages/Contrib.System.Printing.Xps)                      | [![](https://img.shields.io/appveyor/ci/dittodhole/dotnet-contrib-system-printing-xps/master.svg)](https://ci.appveyor.com/project/dittodhole/dotnet-contrib-system-printing-xps/branch/master)   | [![](https://img.shields.io/nuget/v/Contrib.System.Printing.Xps.svg)](https://www.nuget.org/packages/Contrib.System.Printing.Xps)                                    | `PM> Install-Package -Id Contrib.System.Printing.Xps`                                                         |
+
 
 ## Example
 
@@ -42,18 +45,14 @@ foreach (var xpsPrinterDefinition in xpsPrinterDefinitions)
 }
 ```
 
-## Installing
+## Developing & Building
 
-### [Releases](https://www.nuget.org/packages/Contrib.System.Printing.Xps)
-
-```powershell
-PM> Install-Package -Id Contrib.System.Printing.Xps
-```
-
-### [Pre Releases](https://www.myget.org/feed/dittodhole/package/nuget/Contrib.System.Printing.Xps)
-
-```powershell
-PM> Install-Package -Id Contrib.System.Printing.Xps -Source https://www.myget.org/F/dittodhole/api/v3/index.json -IncludePrerelease
+```cmd
+> git clone https://github.com/dittodhole/dotnet-Contrib.System.Printing.Xps.git
+> cd dotnet-Contrib.System.Printing.Xps/
+dotnet-Contrib.System.Printing.Xps> cd build
+dotnet-Contrib.System.Printing.Xps/build> npm install
+dotnet-Contrib.System.Printing.Xps/build> npm run-script build
 ```
 
 ## License
