@@ -4,7 +4,9 @@
 
 > Easily access and use [XPS](https://en.wikipedia.org/wiki/Open_XML_Paper_Specification) printers.
 
-## [myget.org](https://www.myget.org/feed/dittodhole/package/nuget/Contrib.System.Printing.Xps)
+## Installation
+
+### [myget.org](https://www.myget.org/feed/dittodhole/package/nuget/Contrib.System.Printing.Xps)
 
 [![](https://img.shields.io/appveyor/ci/dittodhole/dotnet-contrib-system-printing-xps/develop.svg)](https://ci.appveyor.com/project/dittodhole/dotnet-contrib-system-printing-xps/branch/develop)
 [![](https://img.shields.io/myget/dittodhole/vpre/Contrib.System.Printing.Xps.svg)](https://www.myget.org/feed/dittodhole/package/nuget/Contrib.System.Printing.Xps)
@@ -13,7 +15,7 @@
 PM> Install-Package -Id Contrib.System.Printing.Xps -pre --source https://www.myget.org/F/dittodhole/api/v2
 ```
 
-## [nuget.org](https://www.nuget.org/packages/Contrib.System.Printing.Xps)
+### [nuget.org](https://www.nuget.org/packages/Contrib.System.Printing.Xps)
 
 [![](https://img.shields.io/appveyor/ci/dittodhole/dotnet-contrib-system-printing-xps/master.svg)](https://ci.appveyor.com/project/dittodhole/dotnet-contrib-system-printing-xps/branch/master)
 [![](https://img.shields.io/nuget/v/Contrib.System.Printing.Xps.svg)](https://www.nuget.org/packages/Contrib.System.Printing.Xps)
