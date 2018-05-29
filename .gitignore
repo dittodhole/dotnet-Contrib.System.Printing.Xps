@@ -1,5 +1,6 @@
 artifacts/*.nupkg
 build/build.ps1
+build/tools/
 src/.vs/
 src/packages/
 src/**/*.user
