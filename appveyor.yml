@@ -8,7 +8,7 @@ skip_commits:
 before_build:
 - cmd: cd build
 build_script:
-- ps1: .\build.ps1
+- cmd: build.bat
 artifacts:  
 - path: artifacts/*.nupkg
   name: nupkg
