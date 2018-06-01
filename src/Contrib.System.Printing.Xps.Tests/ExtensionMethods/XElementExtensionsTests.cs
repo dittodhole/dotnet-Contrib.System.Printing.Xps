@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml.Linq;
 using Contrib.System.Printing.Xps.ExtensionMethods;
 using NUnit.Framework;
@@ -46,7 +45,7 @@ namespace Contrib.System.Printing.Xps.Tests.ExtensionMethods
     }
 
     [TestCaseSource(nameof(XElementExtensionsTests.FindElementByNameAttribute_Should_Succeed_TestCases))]
-    public void FindElementByNameAttribute_Should_Succeed(Func<XElement, string> getNameFn)
+    public void FindElementByNameAttribute_Should_Succeed(XpsName name)
     {
       const string content = @"
 <root xmlns:ns0000=""http://my.scheme.com"">
@@ -58,8 +57,8 @@ namespace Contrib.System.Printing.Xps.Tests.ExtensionMethods
       var document = XDocument.Parse(content);
       var root = document.Root;
 
-      var name = getNameFn.Invoke(root);
-      var result = root.FindElementByNameAttribute(name);
+      var prefix = root.GetPrefixOfNamespace(name.Namespace);
+      var result = root.FindElementByNameAttribute(name.ToString(prefix));
 
       Assert.IsNotNull(result);
     }
@@ -68,9 +67,9 @@ namespace Contrib.System.Printing.Xps.Tests.ExtensionMethods
     {
       get
       {
-        yield return new TestCaseData(new Func<XElement, string>(element => "child1"));
-        yield return new TestCaseData(new Func<XElement, string>(element => "16bpcSupport"));
-        yield return new TestCaseData(new Func<XElement, string>(element => element.ReduceName("{http://my.scheme.com}foo")));
+        yield return new TestCaseData(XNamespace.None.GetXpsName("child1"));
+        yield return new TestCaseData(XNamespace.None.GetXpsName("16bpcSupport"));
+        yield return new TestCaseData(XNamespace.Get("http://my.scheme.com").GetXpsName("foo"));
       }
     }
   }
