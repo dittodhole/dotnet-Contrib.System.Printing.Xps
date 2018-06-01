@@ -26,9 +26,16 @@ namespace Contrib.System.Printing.Xps
       this.LocalName = localName ?? throw new ArgumentNullException(nameof(localName));
     }
 
+    /// <summary>
+    ///   Gets the namespace of the current instance.
+    /// </summary>
     [NotNull]
     public XNamespace Namespace { get; }
 
+    /// <summary>
+    ///   Gets the local name of the current instance.
+    /// </summary>
+    /// <remarks>The local name may start with a digit (eg "16bpcSupport" - this behavior differs from <see cref="XName"/> validation.</remarks>
     [NotNull]
     public string LocalName { get; }
 
