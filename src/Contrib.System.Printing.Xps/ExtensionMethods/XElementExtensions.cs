@@ -44,7 +44,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
 
       string result;
 
-      var prefix = element.EnsurePrefixRegistrationOfNamespace(name);
+      var prefix = element.EnsurePrefixRegistrationOfNamespace(name.Namespace);
       if (prefix == null)
       {
         result = name.LocalName;
@@ -62,26 +62,25 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     ///   Ensures and gets the prefix of the namespace registration for <paramref name="name"/>.
     /// </summary>
     /// <param name="element"/>
-    /// <param name="name"/>
+    /// <param name="namespace"></param>
     /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="namespace"/> is <see langword="null"/>.</exception>
     [MustUseReturnValue]
     [CanBeNull]
     public static string EnsurePrefixRegistrationOfNamespace([NotNull] this XElement element,
-                                                             [NotNull] XName name)
+                                                             [NotNull] XNamespace @namespace)
     {
       if (element == null)
       {
         throw new ArgumentNullException(nameof(element));
       }
-      if (name == null)
+      if (@namespace == null)
       {
-        throw new ArgumentNullException(nameof(name));
+        throw new ArgumentNullException(nameof(@namespace));
       }
 
       string result;
 
-      var @namespace = name.Namespace;
       if (@namespace == XNamespace.None)
       {
         result = null;

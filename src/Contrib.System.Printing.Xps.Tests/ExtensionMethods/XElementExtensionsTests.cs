@@ -28,10 +28,10 @@ namespace Contrib.System.Printing.Xps.Tests.ExtensionMethods
     }
 
     [TestCaseSource(nameof(XElementExtensionsTests.EnsurePrefixRegistrationOfNamespace_Should_Succeed_TestCases))]
-    public string EnsurePrefixRegistrationOfNamespace_Should_Succeed(XName name)
+    public string EnsurePrefixRegistrationOfNamespace_Should_Succeed(XNamespace @namespace)
     {
       var element = new XElement("element");
-      var prefix = element.EnsurePrefixRegistrationOfNamespace(name);
+      var prefix = element.EnsurePrefixRegistrationOfNamespace(@namespace);
 
       return prefix;
     }
@@ -40,8 +40,8 @@ namespace Contrib.System.Printing.Xps.Tests.ExtensionMethods
     {
       get
       {
-        yield return new TestCaseData(XName.Get("name")).Returns(null);
-        yield return new TestCaseData(XName.Get("{http://my.scheme.com}name")).Returns("ns0000");
+        yield return new TestCaseData(XNamespace.None).Returns(null);
+        yield return new TestCaseData(XNamespace.Get("http://my.scheme.com")).Returns("ns0000");
       }
     }
 
