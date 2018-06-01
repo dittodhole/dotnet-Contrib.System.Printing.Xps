@@ -128,17 +128,8 @@ namespace Contrib.System.Printing.Xps
 #else
   internal
 #endif
-  partial class XpsInputBinDefinitionFactory : IXpsInputBinDefinitionFactory<XpsInputBinDefinitionFactory.IXpsInputBinDefinition>
+  partial class XpsInputBinDefinitionFactory : IXpsInputBinDefinitionFactory<IXpsInputBinDefinition>
   {
-    /// <inheritdoc/>
-    [PublicAPI]
-#if CONTRIB_SYSTEM_PRINTING_XPS
-    public
-#else
-    internal
-#endif
-    partial interface IXpsInputBinDefinition : Contrib.System.Printing.Xps.IXpsInputBinDefinition { }
-
     /// <inheritdoc/>
 #if CONTRIB_SYSTEM_PRINTING_XPS
     private sealed
