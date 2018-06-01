@@ -42,15 +42,8 @@ namespace Contrib.System.Printing.Xps
     [NotNull]
     public string ToString([CanBeNull] string prefix)
     {
-      string result;
-      if (string.IsNullOrEmpty(prefix))
-      {
-        result = this.LocalName;
-      }
-      else
-      {
-        result = $"{prefix}:{this.LocalName}";
-      }
+      var result = XmlQualifiedName.ToString(this.LocalName,
+                                             prefix);
 
       return result;
     }
