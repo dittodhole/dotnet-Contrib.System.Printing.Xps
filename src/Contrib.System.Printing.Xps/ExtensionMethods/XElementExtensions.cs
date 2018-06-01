@@ -181,15 +181,15 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         }
         else if (typeXName == XpsServer.QNameName)
         {
-          var xnameValue = element.GetXName(rawValue);
-          if (xnameValue == null)
+          var xpsNameValue = element.GetXpsName(rawValue);
+          if (xpsNameValue == null)
           {
-            LogTo.Warn($"Could not get {nameof(XName)} from {nameof(XElement)}: {element}");
+            LogTo.Warn($"Could not get {nameof(XpsName)} from {nameof(XElement)}: {element}");
             result = null;
           }
           else
           {
-            result = xnameValue;
+            result = xpsNameValue;
           }
         }
         else

@@ -48,22 +48,5 @@ namespace Contrib.System.Printing.Xps
 
       return result;
     }
-
-    [CanBeNull]
-    public static implicit operator XpsName([CanBeNull] XName name)
-    {
-      XpsName result;
-      if (name == null)
-      {
-        result = null;
-      }
-      else
-      {
-        result = new XpsName(name.Namespace,
-                             name.LocalName);
-      }
-
-      return result;
-    }
   }
 }

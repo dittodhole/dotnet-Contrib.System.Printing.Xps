@@ -171,7 +171,7 @@ namespace Contrib.System.Printing.Xps
       prefix = option.GetPrefixOfNamespace(XpsServer.FeedTypeName.Namespace);
       var feedType = option.FindElementByNameAttribute(XpsServer.FeedTypeName.ToString(prefix))
                            ?.Element(XpsServer.ValueName)
-                           ?.GetValue() as XName;
+                           ?.GetValue() as XpsName;
 
       var xpsInputBinDefinition = new XpsInputBinDefinition
                                   {
