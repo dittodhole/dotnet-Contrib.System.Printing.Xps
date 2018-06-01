@@ -139,9 +139,21 @@ namespace Contrib.System.Printing.Xps
           {
             var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(new PrintTicket())
                                               ?.Root ?? XpsServer.PrintCapabilitiesElement;
-            feature = printCapabilities.FindElementByNameAttribute(printCapabilities.ReduceName(XpsServer.PageInputBinName))
-                              ?? printCapabilities.FindElementByNameAttribute(printCapabilities.ReduceName(XpsServer.DocumentInputBinName))
-                              ?? printCapabilities.FindElementByNameAttribute(printCapabilities.ReduceName(XpsServer.JobInputBinName));
+
+            var prefix = printCapabilities.GetPrefixOfNamespace(XpsServer.PageInputBinName.Namespace);
+            feature = printCapabilities.FindElementByNameAttribute(XpsServer.PageInputBinName.ToString(prefix));
+
+            if (feature == null)
+            {
+              prefix = printCapabilities.GetPrefixOfNamespace(XpsServer.DocumentInputBinName.Namespace);
+              feature = printCapabilities.FindElementByNameAttribute(XpsServer.DocumentInputBinName.ToString(prefix));
+            }
+
+            if (feature == null)
+            {
+              prefix = printCapabilities.GetPrefixOfNamespace(XpsServer.JobInputBinName.Namespace);
+              feature = printCapabilities.FindElementByNameAttribute(XpsServer.JobInputBinName.ToString(prefix));
+            }
           }
 
           if (feature == null)
@@ -154,11 +166,11 @@ namespace Contrib.System.Printing.Xps
                             .Select(option => new
                                               {
                                                 Option = option,
-                                                InputBinName = option.GetXName(option.Attribute(XpsServer.NameName)
-                                                                                     ?.Value),
+                                                InputBinName = option.GetXpsName(option.Attribute(XpsServer.NameName)
+                                                                                       ?.Value),
                                                 Feature = feature,
-                                                FeatureName = feature.GetXName(feature.Attribute(XpsServer.NameName)
-                                                                                      ?.Value)
+                                                FeatureName = feature.GetXpsName(feature.Attribute(XpsServer.NameName)
+                                                                                        ?.Value)
                                               })
                             .Where(arg => arg.InputBinName != null)
                             .Where(arg => arg.FeatureName != null)

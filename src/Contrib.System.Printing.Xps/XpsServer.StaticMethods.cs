@@ -27,8 +27,8 @@ namespace Contrib.System.Printing.Xps
     /// <exception cref="Exception"/>
     [PublicAPI]
     [NotNull]
-    public static PrintTicket GetPrintTicket([NotNull] XName featureName,
-                                             [NotNull] XName inputBinName)
+    public static PrintTicket GetPrintTicket([NotNull] XpsName featureName,
+                                             [NotNull] XpsName inputBinName)
     {
       if (featureName == null)
       {
@@ -73,12 +73,14 @@ namespace Contrib.System.Printing.Xps
       // === === === === ===
 
       var feature = printTicket.AddElement(XpsServer.FeatureName);
+      var prefix = feature.GetPrefixOfNamespace(featureName.Namespace);
       feature.SetAttributeValue(XpsServer.NameName,
-                                feature.ReduceName(featureName));
+                                featureName.ToString(prefix));
 
       var option = feature.AddElement(XpsServer.OptionName);
+      prefix = option.GetPrefixOfNamespace(inputBinName.Namespace);
       option.SetAttributeValue(XpsServer.NameName,
-                               option.ReduceName(inputBinName));
+                               inputBinName.ToString(prefix));
 
       PrintTicket result;
       using (var memoryStream = new MemoryStream())

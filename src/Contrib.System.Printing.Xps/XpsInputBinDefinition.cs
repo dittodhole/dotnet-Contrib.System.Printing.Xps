@@ -25,14 +25,14 @@ namespace Contrib.System.Printing.Xps
     /// </summary>
     /// <example>{http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords}JobInputBin</example>
     [NotNull]
-    XName Feature { get; }
+    XpsName Feature { get; }
 
     /// <summary>
     ///   The name of the input bin.
     /// </summary>
     /// <example>{http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords}AutoSelect</example>
     [NotNull]
-    XName Name { get; }
+    XpsName Name { get; }
 
     /// <summary>
     ///   The display name of the input bin.
@@ -46,7 +46,7 @@ namespace Contrib.System.Printing.Xps
     /// </summary>
     /// <example>{http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords}Automatic</example>
     [CanBeNull]
-    XName FeedType { get; }
+    XpsName FeedType { get; }
   }
 
   /// <summary>
@@ -115,8 +115,8 @@ namespace Contrib.System.Printing.Xps
     /// <exception cref="ArgumentNullException"><paramref name="option"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="printCapabilities"/> is <see langword="null"/>.</exception>
     [NotNull]
-    TXpsInputBinDefinition Create([NotNull] XName feature,
-                                  [NotNull] XName name,
+    TXpsInputBinDefinition Create([NotNull] XpsName feature,
+                                  [NotNull] XpsName name,
                                   [NotNull] XElement option,
                                   [NotNull] XElement printCapabilities);
   }
@@ -139,16 +139,16 @@ namespace Contrib.System.Printing.Xps
     partial class XpsInputBinDefinition : IXpsInputBinDefinition
     {
       /// <inheritdoc/>
-      public XName Feature { get; set; }
+      public XpsName Feature { get; set; }
 
       /// <inheritdoc/>
-      public XName Name { get; set; }
+      public XpsName Name { get; set; }
 
       /// <inheritdoc/>
       public string DisplayName { get; set; }
 
       /// <inheritdoc/>
-      public XName FeedType { get; set; }
+      public XpsName FeedType { get; set; }
     }
 
     /// <summary>
@@ -158,16 +158,18 @@ namespace Contrib.System.Printing.Xps
     public XpsInputBinDefinitionFactory() { }
 
     /// <inheritdoc/>
-    public IXpsInputBinDefinition Create(XName feature,
-                                         XName name,
+    public IXpsInputBinDefinition Create(XpsName feature,
+                                         XpsName name,
                                          XElement option,
                                          XElement printCapabilities)
     {
-      var displayName = option.FindElementByNameAttribute(option.ReduceName(XpsServer.DisplayNameName))
+      var prefix = option.GetPrefixOfNamespace(XpsServer.DisplayNameName.Namespace);
+      var displayName = option.FindElementByNameAttribute(XpsServer.DisplayNameName.ToString(prefix))
                               ?.Element(XpsServer.ValueName)
                               ?.GetValue() as string;
 
-      var feedType = option.FindElementByNameAttribute(option.ReduceName(XpsServer.FeedTypeName))
+      prefix = option.GetPrefixOfNamespace(XpsServer.FeedTypeName.Namespace);
+      var feedType = option.FindElementByNameAttribute(XpsServer.FeedTypeName.ToString(prefix))
                            ?.Element(XpsServer.ValueName)
                            ?.GetValue() as XName;
 

@@ -62,7 +62,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     ///   Ensures and gets the prefix of the namespace registration for <paramref name="name"/>.
     /// </summary>
     /// <param name="element"/>
-    /// <param name="namespace"></param>
+    /// <param name="namespace"/>
     /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="namespace"/> is <see langword="null"/>.</exception>
     [MustUseReturnValue]
@@ -353,6 +353,70 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       var result = new XElement(name);
 
       element.Add(result);
+
+      return result;
+    }
+
+    /// <summary>
+    ///   Gets the <see cref="XpsName"/> from <paramref name="str"/>.
+    /// </summary>
+    /// <param name="element"/>
+    /// <param name="str"/>
+    /// <remarks><paramref name="element"/> is used to find the namespace for the prefix, contained in <paramref name="str"/>.</remarks>
+    /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
+    [Pure]
+    [CanBeNull]
+    public static XpsName GetXpsName([NotNull] this XElement element,
+                                     [CanBeNull] string str)
+    {
+      if (element == null)
+      {
+        throw new ArgumentNullException(nameof(element));
+      }
+
+      XpsName result;
+      if (str == null)
+      {
+        result = null;
+      }
+      else
+      {
+        string prefix;
+        string localName;
+        if (str.Contains(':'))
+        {
+          var parts = str.Split(':');
+          prefix = parts.ElementAtOrDefault(0);
+          localName = parts.ElementAtOrDefault(1);
+        }
+        else
+        {
+          prefix = null;
+          localName = null;
+        }
+
+        if (prefix == null)
+        {
+          result = XNamespace.None.GetXpsName(str);
+        }
+        else if (localName == null)
+        {
+          result = XNamespace.None.GetXpsName(str);
+        }
+        else
+        {
+          var xnamespace = element.GetNamespaceOfPrefix(prefix);
+          if (xnamespace == null)
+          {
+            LogTo.Warn($"Could not get {nameof(XNamespace)} from '{str}': {element}");
+            result = null;
+          }
+          else
+          {
+            result = xnamespace.GetXpsName(localName);
+          }
+        }
+      }
 
       return result;
     }
