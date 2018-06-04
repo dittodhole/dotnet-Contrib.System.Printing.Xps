@@ -22,17 +22,16 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   static partial class XElementExtensions
   {
     /// <summary>
-    ///   Ensures and gets the prefix of the namespace registration for <paramref name="name"/>.
+    ///   Registers a prefix for the namespace of <paramref name="name"/> if needed, and reduces it accordingly.
     /// </summary>
     /// <param name="element"/>
     /// <param name="name"/>
     /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
-    /// <exception cref="Exception"/>
     [MustUseReturnValue]
     [NotNull]
-    public static string EnsurePrefixRegistrationOfNamespace([NotNull] this XElement element,
-                                                             [NotNull] XName name)
+    public static string ReduceName([NotNull] this XElement element,
+                                    [NotNull] XName name)
     {
       if (element == null)
       {
@@ -43,16 +42,63 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         throw new ArgumentNullException(nameof(name));
       }
 
-      var xdocument = element.Document;
-      var rootXElement = xdocument?.Root ?? element;
-      var result = rootXElement.GetPrefixOfNamespace(name.Namespace);
-      if (result == null)
-      {
-        result = rootXElement.FindUnusedPrefixForNamespace();
+      string result;
 
-        var @namespace = XNamespace.Xmlns + result;
-        rootXElement.SetAttributeValue(@namespace,
-                                       name.NamespaceName);
+      var prefix = element.EnsurePrefixRegistrationOfNamespace(name.Namespace);
+      if (prefix == null)
+      {
+        result = name.LocalName;
+      }
+      else
+      {
+        result = XmlQualifiedName.ToString(name.LocalName,
+                                           prefix);
+      }
+
+      return result;
+    }
+
+    /// <summary>
+    ///   Ensures and gets the prefix of the namespace registration for <paramref name="name"/>.
+    /// </summary>
+    /// <param name="element"/>
+    /// <param name="namespace"/>
+    /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="namespace"/> is <see langword="null"/>.</exception>
+    [MustUseReturnValue]
+    [CanBeNull]
+    public static string EnsurePrefixRegistrationOfNamespace([NotNull] this XElement element,
+                                                             [NotNull] XNamespace @namespace)
+    {
+      if (element == null)
+      {
+        throw new ArgumentNullException(nameof(element));
+      }
+      if (@namespace == null)
+      {
+        throw new ArgumentNullException(nameof(@namespace));
+      }
+
+      string result;
+
+      if (@namespace == XNamespace.None)
+      {
+        result = null;
+      }
+      else
+      {
+        var document = element.Document;
+        var root = document?.Root ?? element;
+
+        result = root.GetPrefixOfNamespace(@namespace);
+
+        if (result == null)
+        {
+          result = root.FindUnusedPrefixForNamespace();
+
+          root.SetAttributeValue(XNamespace.Xmlns + result,
+                                 @namespace);
+        }
       }
 
       return result;
@@ -80,27 +126,6 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       {
         result = $"ns{counter++:0000}";
       } while (element.GetNamespaceOfPrefix(result) != null);
-
-      return result;
-    }
-
-    /// <summary>
-    ///   Gets the boxed value from "psf:Value" child element.
-    /// </summary>
-    /// <param name="element"/>
-    /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
-    [Pure]
-    [CanBeNull]
-    public static object GetValueFromValueElement([NotNull] this XElement element)
-    {
-      if (element == null)
-      {
-        throw new ArgumentNullException(nameof(element));
-      }
-
-      element = element.Element(XpsServer.ValueName);
-
-      var result = element?.GetValue();
 
       return result;
     }
@@ -156,15 +181,15 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         }
         else if (typeXName == XpsServer.QNameName)
         {
-          var xnameValue = element.GetXName(rawValue);
-          if (xnameValue == null)
+          var xpsNameValue = element.GetXpsName(rawValue);
+          if (xpsNameValue == null)
           {
-            LogTo.Warn($"Could not get {nameof(XName)} from {nameof(XElement)}: {element}");
+            LogTo.Warn($"Could not get {nameof(XpsName)} from {nameof(XElement)}: {element}");
             result = null;
           }
           else
           {
-            result = xnameValue;
+            result = xpsNameValue;
           }
         }
         else
@@ -187,7 +212,35 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     [Pure]
     [CanBeNull]
     public static XElement FindElementByNameAttribute([NotNull] this XElement element,
-                                                      [NotNull] XName name)
+                                                      [NotNull] XpsName name)
+    {
+      if (element == null)
+      {
+        throw new ArgumentNullException(nameof(element));
+      }
+      if (name == null)
+      {
+        throw new ArgumentNullException(nameof(name));
+      }
+
+      var prefix = element.GetPrefixOfNamespace(name.Namespace);
+      var result = element.FindElementByNameAttribute(name.ToString(prefix));
+
+      return result;
+    }
+
+
+    /// <summary>
+    ///   Finds the matching child element.
+    /// </summary>
+    /// <param name="element"/>
+    /// <param name="name"/>
+    /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
+    [Pure]
+    [CanBeNull]
+    public static XElement FindElementByNameAttribute([NotNull] this XElement element,
+                                                      [NotNull] string name)
     {
       if (element == null)
       {
@@ -200,34 +253,17 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
 
       foreach (var child in element.Elements())
       {
-        var xname = child.GetNameFromNameAttribute();
-        if (xname == name)
+        var childName = child.Attribute(XpsServer.NameName)
+                             ?.Value;
+        if (string.Equals(name,
+                          childName,
+                          StringComparison.Ordinal))
         {
           return child;
         }
       }
 
       return null;
-    }
-
-    /// <summary>
-    ///   Gets the value from "name" attribute as <see cref="XName"/>.
-    /// </summary>
-    /// <param name="element"/>
-    /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
-    [Pure]
-    [CanBeNull]
-    public static XName GetNameFromNameAttribute([NotNull] this XElement element)
-    {
-      if (element == null)
-      {
-        throw new ArgumentNullException(nameof(element));
-      }
-
-      var attribute = element.Attribute(XpsServer.NameName);
-      var result = element.GetXName(attribute?.Value);
-
-      return result;
     }
 
     /// <summary>
@@ -276,7 +312,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
           }
           catch (Exception exception)
           {
-            LogTo.WarnException($"Could not get {nameof(XName)} from '{str}'.",
+            LogTo.WarnException($"Could not get {nameof(XName)} from '{str}': {element}",
                                 exception);
             result = null;
           }
@@ -289,7 +325,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
           }
           catch (Exception exception)
           {
-            LogTo.WarnException($"Could not get {nameof(XName)} from '{str}'.",
+            LogTo.WarnException($"Could not get {nameof(XName)} from '{str}': {element}",
                                 exception);
             result = null;
           }
@@ -299,7 +335,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
           var xnamespace = element.GetNamespaceOfPrefix(prefix);
           if (xnamespace == null)
           {
-            LogTo.Warn($"Could not get {nameof(XNamespace)} for {nameof(prefix)} '{prefix}'.");
+            LogTo.Warn($"Could not get {nameof(XNamespace)} from '{str}': {element}");
             result = null;
           }
           else
@@ -310,7 +346,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
             }
             catch (Exception exception)
             {
-              LogTo.WarnException($"Could not get {nameof(XName)} from '{localName}'.",
+              LogTo.WarnException($"Could not get {nameof(XName)} from '{str}': {element}",
                                   exception);
               result = null;
             }
@@ -350,69 +386,65 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     }
 
     /// <summary>
-    ///   Sets the value of <paramref name="name"/> named attribute, or adds the <paramref name="name"/> named attribute.
+    ///   Gets the <see cref="XpsName"/> from <paramref name="str"/>.
     /// </summary>
     /// <param name="element"/>
-    /// <param name="name"/>
-    /// <param name="value"/>
-    /// <returns>Returns <paramref name="value"/> as qualified name, following the pattern "prefix:name".</returns>
+    /// <param name="str"/>
+    /// <remarks><paramref name="element"/> is used to find the namespace for the prefix, contained in <paramref name="str"/>.</remarks>
     /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="value"/> is <see langword="null"/>.</exception>
-    [NotNull]
-    public static string SetAttributeValue([NotNull] this XElement element,
-                                           [NotNull] XName name,
-                                           [NotNull] XName value)
+    [Pure]
+    [CanBeNull]
+    public static XpsName GetXpsName([NotNull] this XElement element,
+                                     [CanBeNull] string str)
     {
       if (element == null)
       {
         throw new ArgumentNullException(nameof(element));
       }
-      if (name == null)
+
+      XpsName result;
+      if (str == null)
       {
-        throw new ArgumentNullException(nameof(name));
+        result = null;
       }
-      if (value == null)
+      else
       {
-        throw new ArgumentNullException(nameof(value));
+        string prefix;
+        string localName;
+        if (str.Contains(':'))
+        {
+          var parts = str.Split(':');
+          prefix = parts.ElementAtOrDefault(0);
+          localName = parts.ElementAtOrDefault(1);
+        }
+        else
+        {
+          prefix = null;
+          localName = null;
+        }
+
+        if (prefix == null)
+        {
+          result = XNamespace.None.GetXpsName(str);
+        }
+        else if (localName == null)
+        {
+          result = XNamespace.None.GetXpsName(str);
+        }
+        else
+        {
+          var xnamespace = element.GetNamespaceOfPrefix(prefix);
+          if (xnamespace == null)
+          {
+            LogTo.Warn($"Could not get {nameof(XNamespace)} from '{str}': {element}");
+            result = null;
+          }
+          else
+          {
+            result = xnamespace.GetXpsName(localName);
+          }
+        }
       }
-
-      var prefix = element.EnsurePrefixRegistrationOfNamespace(value);
-      var result = XmlQualifiedName.ToString(value.LocalName,
-                                             prefix);
-
-      element.SetAttributeValue(name,
-                                result);
-
-      return result;
-    }
-
-    /// <summary>
-    ///   Sets the value of <paramref name="element"/>.
-    /// </summary>
-    /// <param name="element"/>
-    /// <param name="value"/>
-    /// <returns>Returns <paramref name="value"/> as qualified name, following the pattern "prefix:name".</returns>
-    /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="value"/> is <see langword="null"/>.</exception>
-    [NotNull]
-    public static string SetValue([NotNull] this XElement element,
-                                  [NotNull] XName value)
-    {
-      if (element == null)
-      {
-        throw new ArgumentNullException(nameof(element));
-      }
-      if (value == null)
-      {
-        throw new ArgumentNullException(nameof(value));
-      }
-
-      var prefix = element.EnsurePrefixRegistrationOfNamespace(value);
-      var result = XmlQualifiedName.ToString(value.LocalName,
-                                             prefix);
-
-      element.SetValue(result);
 
       return result;
     }

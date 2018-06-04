@@ -76,29 +76,28 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       // === === === === ===
 
       var feature = printTicket.AddElement(XpsServer.FeatureName);
-      XElementExtensions.SetAttributeValue(feature,
-                                           XpsServer.NameName,
-                                           xpsInputBinDefinition.FeatureName);
+      var prefix = feature.EnsurePrefixRegistrationOfNamespace(xpsInputBinDefinition.Feature.Namespace);
+      feature.SetAttributeValue(XpsServer.NameName,
+                                xpsInputBinDefinition.Feature.ToString(prefix));
 
       var option = feature.AddElement(XpsServer.OptionName);
-      XElementExtensions.SetAttributeValue(option,
-                                           XpsServer.NameName,
-                                           xpsInputBinDefinition.Name);
+      prefix = option.EnsurePrefixRegistrationOfNamespace(xpsInputBinDefinition.Name.Namespace);
+      option.SetAttributeValue(XpsServer.NameName,
+                               xpsInputBinDefinition.Name.ToString(prefix));
 
       var feedType = xpsInputBinDefinition.FeedType;
       if (feedType != null)
       {
         var scoredProperty = option.AddElement(XpsServer.ScoredPropertyName);
-        XElementExtensions.SetAttributeValue(scoredProperty,
-                                             XpsServer.NameName,
-                                             XpsServer.FeedTypeName);
+        prefix = scoredProperty.EnsurePrefixRegistrationOfNamespace(XpsServer.FeedTypeName.Namespace);
+        scoredProperty.SetAttributeValue(XpsServer.NameName,
+                                         XpsServer.FeedTypeName.ToString(prefix));
 
         var value = scoredProperty.AddElement(XpsServer.ValueName);
-        XElementExtensions.SetValue(value,
-                                    feedType);
-        XElementExtensions.SetAttributeValue(value,
-                                             XpsServer.TypeName,
-                                             XpsServer.QNameName);
+        prefix = value.EnsurePrefixRegistrationOfNamespace(feedType.Namespace);
+        value.SetValue(feedType.ToString(prefix));
+        value.SetAttributeValue(XpsServer.TypeName,
+                                value.ReduceName(XpsServer.QNameName));
       }
 
       PrintTicket result;

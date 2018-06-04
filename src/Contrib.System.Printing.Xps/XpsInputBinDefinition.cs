@@ -3,6 +3,7 @@
  */
 namespace Contrib.System.Printing.Xps
 {
+  using global::System;
   using global::System.Xml.Linq;
   using global::Contrib.System.Printing.Xps.ExtensionMethods;
   using global::JetBrains.Annotations;
@@ -24,14 +25,14 @@ namespace Contrib.System.Printing.Xps
     /// </summary>
     /// <example>{http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords}JobInputBin</example>
     [NotNull]
-    XName FeatureName { get; }
+    XpsName Feature { get; }
 
     /// <summary>
     ///   The name of the input bin.
     /// </summary>
     /// <example>{http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords}AutoSelect</example>
     [NotNull]
-    XName Name { get; }
+    XpsName Name { get; }
 
     /// <summary>
     ///   The display name of the input bin.
@@ -45,7 +46,7 @@ namespace Contrib.System.Printing.Xps
     /// </summary>
     /// <example>{http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords}Automatic</example>
     [CanBeNull]
-    XName FeedType { get; }
+    XpsName FeedType { get; }
   }
 
   /// <summary>
@@ -65,7 +66,7 @@ namespace Contrib.System.Printing.Xps
   ///   {
   ///     private class CustomXpsInputBinDefinition : ICustomXpsInputBinDefinition
   ///     {
-  ///       public XName FeatureName { get; set; }
+  ///       public XName Feature { get; set; }
   ///       public string DisplayName { get; set; }
   ///       public XName Name { get; set; }
   ///       public XName FeedType { get; set; }
@@ -80,7 +81,7 @@ namespace Contrib.System.Printing.Xps
   ///                                                                            printCapabilities);
   ///       var customXpsInputBinDefinition = new CustomXpsInputBinDefinition
   ///                                        {
-  ///                                          FeatureName = xpsInputBinDefinition.FeatureName,
+  ///                                          Feature = xpsInputBinDefinition.Feature,
   ///                                          DisplayName = xpsInputBinDefinition.DisplayName,
   ///                                          Name = xpsInputBinDefinition.Name,
   ///                                          FeedType = xpsInputBinDefinition.FeedType
@@ -105,10 +106,18 @@ namespace Contrib.System.Printing.Xps
     /// <summary>
     ///   Factory method for <typeparamref name="TXpsInputBinDefinition"/>.
     /// </summary>
+    /// <param name="feature"/>
+    /// <param name="name"/>
     /// <param name="option"/>
     /// <param name="printCapabilities"/>
+    /// <exception cref="ArgumentNullException"><paramref name="feature"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="option"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="printCapabilities"/> is <see langword="null"/>.</exception>
     [NotNull]
-    TXpsInputBinDefinition Create([NotNull] XElement option,
+    TXpsInputBinDefinition Create([NotNull] XpsName feature,
+                                  [NotNull] XpsName name,
+                                  [NotNull] XElement option,
                                   [NotNull] XElement printCapabilities);
   }
 
@@ -119,17 +128,8 @@ namespace Contrib.System.Printing.Xps
 #else
   internal
 #endif
-  partial class XpsInputBinDefinitionFactory : IXpsInputBinDefinitionFactory<XpsInputBinDefinitionFactory.IXpsInputBinDefinition>
+  partial class XpsInputBinDefinitionFactory : IXpsInputBinDefinitionFactory<IXpsInputBinDefinition>
   {
-    /// <inheritdoc/>
-    [PublicAPI]
-#if CONTRIB_SYSTEM_PRINTING_XPS
-    public
-#else
-    internal
-#endif
-    partial interface IXpsInputBinDefinition : Contrib.System.Printing.Xps.IXpsInputBinDefinition { }
-
     /// <inheritdoc/>
 #if CONTRIB_SYSTEM_PRINTING_XPS
     private sealed
@@ -139,16 +139,16 @@ namespace Contrib.System.Printing.Xps
     partial class XpsInputBinDefinition : IXpsInputBinDefinition
     {
       /// <inheritdoc/>
-      public XName FeatureName { get; set; }
+      public XpsName Feature { get; set; }
 
       /// <inheritdoc/>
-      public XName Name { get; set; }
+      public XpsName Name { get; set; }
 
       /// <inheritdoc/>
       public string DisplayName { get; set; }
 
       /// <inheritdoc/>
-      public XName FeedType { get; set; }
+      public XpsName FeedType { get; set; }
     }
 
     /// <summary>
@@ -158,32 +158,22 @@ namespace Contrib.System.Printing.Xps
     public XpsInputBinDefinitionFactory() { }
 
     /// <inheritdoc/>
-    public IXpsInputBinDefinition Create(XElement option,
+    public IXpsInputBinDefinition Create(XpsName feature,
+                                         XpsName name,
+                                         XElement option,
                                          XElement printCapabilities)
     {
-      XName featureName;
-
-      var feature = option.Parent;
-      if (feature == null)
-      {
-        featureName = null;
-      }
-      else
-      {
-        featureName = feature.GetNameFromNameAttribute();
-      }
-
-      var name = option.GetNameFromNameAttribute();
-
       var displayName = option.FindElementByNameAttribute(XpsServer.DisplayNameName)
-                              ?.GetValueFromValueElement() as string;
+                              ?.Element(XpsServer.ValueName)
+                              ?.GetValue() as string;
 
       var feedType = option.FindElementByNameAttribute(XpsServer.FeedTypeName)
-                           ?.GetValueFromValueElement() as XName;
+                           ?.Element(XpsServer.ValueName)
+                           ?.GetValue() as XpsName;
 
       var xpsInputBinDefinition = new XpsInputBinDefinition
                                   {
-                                    FeatureName = featureName,
+                                    Feature = feature,
                                     Name = name,
                                     DisplayName = displayName,
                                     FeedType = feedType

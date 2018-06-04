@@ -99,7 +99,7 @@ namespace Contrib.System.Printing.Xps
         result = printQueues.Select(printQueue =>
                                     {
                                       var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(new PrintTicket())
-                                                                        .Root ?? XpsServer.PrintCapabilitiesElement;
+                                                                        ?.Root ?? XpsServer.PrintCapabilitiesElement;
 
                                       var xpsPrinterDefinition = this.XpsPrinterDefinitionFactory.Create(printQueue.Name,
                                                                                                          printQueue.FullName,
@@ -138,10 +138,11 @@ namespace Contrib.System.Printing.Xps
           XElement feature;
           {
             var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(new PrintTicket())
-                                              .Root ?? XpsServer.PrintCapabilitiesElement;
+                                              ?.Root ?? XpsServer.PrintCapabilitiesElement;
+
             feature = printCapabilities.FindElementByNameAttribute(XpsServer.PageInputBinName)
-                              ?? printCapabilities.FindElementByNameAttribute(XpsServer.DocumentInputBinName)
-                              ?? printCapabilities.FindElementByNameAttribute(XpsServer.JobInputBinName);
+                      ?? printCapabilities.FindElementByNameAttribute(XpsServer.DocumentInputBinName)
+                      ??  printCapabilities.FindElementByNameAttribute(XpsServer.JobInputBinName);
           }
 
           if (feature == null)
@@ -151,14 +152,27 @@ namespace Contrib.System.Printing.Xps
           else
           {
             result = feature.Elements(XpsServer.OptionName)
-                            .Select(option =>
+                            .Select(option => new
+                                              {
+                                                Option = option,
+                                                InputBinName = option.GetXpsName(option.Attribute(XpsServer.NameName)
+                                                                                       ?.Value),
+                                                Feature = feature,
+                                                FeatureName = feature.GetXpsName(feature.Attribute(XpsServer.NameName)
+                                                                                        ?.Value)
+                                              })
+                            .Where(arg => arg.InputBinName != null)
+                            .Where(arg => arg.FeatureName != null)
+                            .Select(arg =>
                                     {
-                                      var printTicket = XpsServer.GetPrintTicket(feature.Name,
-                                                                                 option.Name);
+                                      var printTicket = XpsServer.GetPrintTicket(arg.FeatureName,
+                                                                                 arg.InputBinName);
                                       var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(printTicket)
-                                                                        .Root ?? XpsServer.PrintCapabilitiesElement;
+                                                                        ?.Root ?? XpsServer.PrintCapabilitiesElement;
 
-                                      var xpsInputBinDefinition = this.XpsInputBinDefinitionFactory.Create(option,
+                                      var xpsInputBinDefinition = this.XpsInputBinDefinitionFactory.Create(arg.FeatureName,
+                                                                                                           arg.InputBinName,
+                                                                                                           arg.Option,
                                                                                                            printCapabilities);
 
                                       return xpsInputBinDefinition;

@@ -27,7 +27,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <seealso cref="PrintQueue.GetPrintCapabilitiesAsXml()"/>
     /// <exception cref="ArgumentNullException"><paramref name="printQueue"/> is <see langword="null"/>.</exception>
     [Pure]
-    [NotNull]
+    [CanBeNull]
     public static XDocument GetPrintCapabilitiesAsXDocument([NotNull] this PrintQueue printQueue)
     {
       if (printQueue == null)
@@ -47,7 +47,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       {
         LogTo.WarnException($"Could not query {nameof(PrintQueue)} '{printQueue.FullName}' for {nameof(PrintCapabilities)}.",
                             exception);
-        result = new XDocument();
+        result = null;
       }
 
       return result;
@@ -62,7 +62,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <exception cref="ArgumentNullException"><paramref name="printQueue"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="printTicket"/> is <see langword="null"/>.</exception>
     [Pure]
-    [NotNull]
+    [CanBeNull]
     public static XDocument GetPrintCapabilitiesAsXDocument([NotNull] this PrintQueue printQueue,
                                                             [NotNull] PrintTicket printTicket)
     {
@@ -87,7 +87,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       {
         LogTo.WarnException($"Could not query {nameof(PrintQueue)} '{printQueue.FullName}' for {nameof(PrintCapabilities)}.",
                             exception);
-        result = new XDocument();
+        result = null;
       }
 
       return result;

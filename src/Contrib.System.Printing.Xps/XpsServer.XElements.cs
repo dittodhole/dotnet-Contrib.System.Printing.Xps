@@ -14,14 +14,14 @@ namespace Contrib.System.Printing.Xps
   partial class XpsServer
   {
     /// <summary>
-    ///   <psf:PrintCapabilities/>
+    ///   &lt;psf:PrintCapabilities/&gt;
     /// </summary>
     [PublicAPI]
     [NotNull]
     public static XElement PrintCapabilitiesElement => new XElement(XpsServer.PrintCapabilitiesName);
 
     /// <summary>
-    ///   <psf:PrintTicket/>
+    ///   &lt;psf:PrintTicket/&gt;
     /// </summary>
     [PublicAPI]
     [NotNull]
