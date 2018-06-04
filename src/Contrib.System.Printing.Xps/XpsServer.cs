@@ -140,20 +140,9 @@ namespace Contrib.System.Printing.Xps
             var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(new PrintTicket())
                                               ?.Root ?? XpsServer.PrintCapabilitiesElement;
 
-            var prefix = printCapabilities.GetPrefixOfNamespace(XpsServer.PageInputBinName.Namespace);
-            feature = printCapabilities.FindElementByNameAttribute(XpsServer.PageInputBinName.ToString(prefix));
-
-            if (feature == null)
-            {
-              prefix = printCapabilities.GetPrefixOfNamespace(XpsServer.DocumentInputBinName.Namespace);
-              feature = printCapabilities.FindElementByNameAttribute(XpsServer.DocumentInputBinName.ToString(prefix));
-            }
-
-            if (feature == null)
-            {
-              prefix = printCapabilities.GetPrefixOfNamespace(XpsServer.JobInputBinName.Namespace);
-              feature = printCapabilities.FindElementByNameAttribute(XpsServer.JobInputBinName.ToString(prefix));
-            }
+            feature = printCapabilities.FindElementByNameAttribute(XpsServer.PageInputBinName)
+                      ?? printCapabilities.FindElementByNameAttribute(XpsServer.DocumentInputBinName)
+                      ??  printCapabilities.FindElementByNameAttribute(XpsServer.JobInputBinName);
           }
 
           if (feature == null)

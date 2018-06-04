@@ -212,6 +212,34 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     [Pure]
     [CanBeNull]
     public static XElement FindElementByNameAttribute([NotNull] this XElement element,
+                                                      [NotNull] XpsName name)
+    {
+      if (element == null)
+      {
+        throw new ArgumentNullException(nameof(element));
+      }
+      if (name == null)
+      {
+        throw new ArgumentNullException(nameof(name));
+      }
+
+      var prefix = element.GetPrefixOfNamespace(name.Namespace);
+      var result = element.FindElementByNameAttribute(name.ToString(prefix));
+
+      return result;
+    }
+
+
+    /// <summary>
+    ///   Finds the matching child element.
+    /// </summary>
+    /// <param name="element"/>
+    /// <param name="name"/>
+    /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
+    [Pure]
+    [CanBeNull]
+    public static XElement FindElementByNameAttribute([NotNull] this XElement element,
                                                       [NotNull] string name)
     {
       if (element == null)

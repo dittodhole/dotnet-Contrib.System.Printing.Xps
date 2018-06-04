@@ -57,8 +57,7 @@ namespace Contrib.System.Printing.Xps.Tests.ExtensionMethods
       var document = XDocument.Parse(content);
       var root = document.Root;
 
-      var prefix = root.GetPrefixOfNamespace(name.Namespace);
-      var result = root.FindElementByNameAttribute(name.ToString(prefix));
+      var result = root.FindElementByNameAttribute(name);
 
       Assert.IsNotNull(result);
     }

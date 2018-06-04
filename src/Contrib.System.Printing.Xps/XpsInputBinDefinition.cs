@@ -163,13 +163,11 @@ namespace Contrib.System.Printing.Xps
                                          XElement option,
                                          XElement printCapabilities)
     {
-      var prefix = option.GetPrefixOfNamespace(XpsServer.DisplayNameName.Namespace);
-      var displayName = option.FindElementByNameAttribute(XpsServer.DisplayNameName.ToString(prefix))
+      var displayName = option.FindElementByNameAttribute(XpsServer.DisplayNameName)
                               ?.Element(XpsServer.ValueName)
                               ?.GetValue() as string;
 
-      prefix = option.GetPrefixOfNamespace(XpsServer.FeedTypeName.Namespace);
-      var feedType = option.FindElementByNameAttribute(XpsServer.FeedTypeName.ToString(prefix))
+      var feedType = option.FindElementByNameAttribute(XpsServer.FeedTypeName)
                            ?.Element(XpsServer.ValueName)
                            ?.GetValue() as XpsName;
 
