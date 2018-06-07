@@ -1,10 +1,13 @@
-﻿using System;
-using System.Xml;
-using System.Xml.Linq;
-using JetBrains.Annotations;
-
+﻿/** @pp
+ * rootnamespace: Contrib.System.Printing.Xps
+ */
 namespace Contrib.System.Printing.Xps
 {
+  using global::System;
+  using global::System.Xml;
+  using global::System.Xml.Linq;
+  using global::JetBrains.Annotations;
+
   /// <summary>
   ///
   /// </summary>

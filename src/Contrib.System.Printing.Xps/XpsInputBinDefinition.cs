@@ -57,8 +57,8 @@ namespace Contrib.System.Printing.Xps
   /// <example>
   ///   This sample shows how to implement your own <see cref="IXpsInputBinDefinition"/>.
   ///   <code>
-  ///   using Contrib.System.Printing.Xps;
-  ///   using System.Xml.Linq;
+  ///   using global::Contrib.System.Printing.Xps;
+  ///   using global::System.Xml.Linq;
   ///
   ///   public interface ICustomXpsInputBinDefinition : IXpsInputBinDefinition { }
   ///

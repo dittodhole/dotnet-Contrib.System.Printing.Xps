@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Xml.Linq;
-using Contrib.System.Printing.Xps.ExtensionMethods;
-using NUnit.Framework;
-
-namespace Contrib.System.Printing.Xps.Tests.ExtensionMethods
+﻿namespace Contrib.System.Printing.Xps.Tests.ExtensionMethods
 {
+  using global::System.Collections.Generic;
+  using global::System.Xml.Linq;
+  using global::Contrib.System.Printing.Xps.ExtensionMethods;
+  using global::NUnit.Framework;
+
   [TestFixture]
   public class XElementExtensionsTests
   {

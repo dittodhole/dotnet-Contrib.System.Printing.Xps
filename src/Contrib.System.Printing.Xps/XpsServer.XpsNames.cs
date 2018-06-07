@@ -4,7 +4,7 @@
 namespace Contrib.System.Printing.Xps
 {
   using global::JetBrains.Annotations;
-  using Contrib.System.Printing.Xps.ExtensionMethods;
+  using global::Contrib.System.Printing.Xps.ExtensionMethods;
 
 #if CONTRIB_SYSTEM_PRINTING_XPS
   public
