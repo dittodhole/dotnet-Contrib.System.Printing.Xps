@@ -28,8 +28,8 @@ PM> Install-Package -Id Contrib.System.Printing.Xps
 ## Example
 
 ```csharp
-using Contrib.System.Printing.Xps;
-using System.Windows.Documents;
+using global::Contrib.System.Printing.Xps;
+using global::System.Windows.Documents;
 
 IDocumentPaginatorSource documentPaginatorSource;
 
