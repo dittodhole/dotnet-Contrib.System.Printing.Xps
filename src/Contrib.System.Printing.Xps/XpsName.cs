@@ -5,6 +5,9 @@ using JetBrains.Annotations;
 
 namespace Contrib.System.Printing.Xps
 {
+  /// <summary>
+  ///
+  /// </summary>
   [PublicAPI]
 #if CONTRIB_SYSTEM_PRINTING_XPS
   public sealed
@@ -40,6 +43,11 @@ namespace Contrib.System.Printing.Xps
     [NotNull]
     public string LocalName { get; }
 
+    /// <summary>
+    ///   Returns the prefixed <see cref="XpsName.LocalName"/>.
+    /// </summary>
+    /// <param name="prefix"/>
+    /// <remarks>The string representation follows the pattern "<paramref name="prefix"/>:<see cref="XpsName.LocalName"/>"</remarks>
     [NotNull]
     public string ToString([CanBeNull] string prefix)
     {
