@@ -59,7 +59,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     }
 
     /// <summary>
-    ///   Ensures and gets the prefix of the namespace registration for <paramref name="name"/>.
+    ///   Ensures and gets the prefix of the registration for <paramref name="namespace"/>.
     /// </summary>
     /// <param name="element"/>
     /// <param name="namespace"/>
