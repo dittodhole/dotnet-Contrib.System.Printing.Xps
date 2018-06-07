@@ -5,7 +5,7 @@
     <title>$title$</title>
     <version>$version$</version>
     <authors>$author$</authors>
-    <owner>dittodhole</owner>
+    <owners>dittodhole</owners>
     <licenseUrl>https://github.com/dittodhole/WTFNMFPLv3</licenseUrl>
     <projectUrl>https://github.com/dittodhole/dotnet-Contrib.System.Printing.Xps</projectUrl>
     <iconUrl>https://cdn.rawgit.com/dittodhole/dotnet-Contrib.System.Printing.Xps/$branch$/assets/noun_1230289_cc.png</iconUrl>
