@@ -1,5 +1,5 @@
 ﻿/** @pp
- * rootnamespace: Contrib.System.Printing.Xps
+ * rootnamespace: Contrib.System
  */
 namespace Contrib.System.Printing.Xps
 {
