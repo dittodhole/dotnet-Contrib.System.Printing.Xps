@@ -11,6 +11,7 @@ namespace Contrib.System.Printing.Xps
   using global::JetBrains.Annotations;
 
   [KnownType(typeof(XpsNameSerializer))]
+  [Serializable]
   [PublicAPI]
 #if CONTRIB_SYSTEM_PRINTING_XPS
   public sealed
