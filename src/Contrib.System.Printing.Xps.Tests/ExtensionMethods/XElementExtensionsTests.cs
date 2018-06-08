@@ -8,8 +8,8 @@
   [TestFixture]
   public class XElementExtensionsTests
   {
-    [TestCaseSource(nameof(XElementExtensionsTests.ReduceName_Should_Succeed_TestCases))]
-    public string ReduceName_Should_Succeed(XName name)
+    [TestCaseSource(nameof(XElementExtensionsTests.ReduceName_TestCases))]
+    public string ReduceName(XName name)
     {
       var element = new XElement("element");
       var reducedName = element.ReduceName(name);
@@ -17,7 +17,7 @@
       return reducedName;
     }
 
-    private static IEnumerable<TestCaseData> ReduceName_Should_Succeed_TestCases
+    private static IEnumerable<TestCaseData> ReduceName_TestCases
     {
       get
       {
@@ -26,8 +26,8 @@
       }
     }
 
-    [TestCaseSource(nameof(XElementExtensionsTests.EnsurePrefixRegistrationOfNamespace_Should_Succeed_TestCases))]
-    public string EnsurePrefixRegistrationOfNamespace_Should_Succeed(XNamespace @namespace)
+    [TestCaseSource(nameof(XElementExtensionsTests.EnsurePrefixRegistrationOfNamespace_TestCases))]
+    public string EnsurePrefixRegistrationOfNamespace(XNamespace @namespace)
     {
       var element = new XElement("element");
       var prefix = element.EnsurePrefixRegistrationOfNamespace(@namespace);
@@ -35,7 +35,7 @@
       return prefix;
     }
 
-    private static IEnumerable<TestCaseData> EnsurePrefixRegistrationOfNamespace_Should_Succeed_TestCases
+    private static IEnumerable<TestCaseData> EnsurePrefixRegistrationOfNamespace_TestCases
     {
       get
       {
