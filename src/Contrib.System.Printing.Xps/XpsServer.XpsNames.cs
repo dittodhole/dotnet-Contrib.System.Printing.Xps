@@ -89,5 +89,26 @@ namespace Contrib.System.Printing.Xps
     [PublicAPI]
     [NotNull]
     public static XpsName FeedTypeName => XpsServer.PrinterSchemaKeywordsNamespace.GetXpsName("FeedType");
+
+    /// <summary>
+    ///   psk:PageResolution
+    /// </summary>
+    [PublicAPI]
+    [NotNull]
+    public static XpsName PageResolutionName => XpsServer.PrinterSchemaKeywordsNamespace.GetXpsName("PageResolution");
+
+    /// <summary>
+    ///   psk:ResolutionX
+    /// </summary>
+    [PublicAPI]
+    [NotNull]
+    public static XpsName ResolutionXName => XpsServer.PrinterSchemaKeywordsNamespace.GetXpsName("ResolutionX");
+
+    /// <summary>
+    ///   psk:ResolutionY
+    /// </summary>
+    [PublicAPI]
+    [NotNull]
+    public static XpsName ResolutionYName => XpsServer.PrinterSchemaKeywordsNamespace.GetXpsName("ResolutionY");
   }
 }
