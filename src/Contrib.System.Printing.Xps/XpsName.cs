@@ -76,5 +76,39 @@ namespace Contrib.System.Printing.Xps
 
       return result;
     }
+
+    /// <param name="expandedName"/>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="expandedName"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.Exception"/>
+    [NotNull]
+    public static XpsName Get([NotNull] string expandedName)
+    {
+      if (expandedName == null)
+      {
+        throw new ArgumentNullException(nameof(expandedName));
+      }
+
+      XNamespace @namespace;
+      string localName;
+      if (expandedName.StartsWith("{",
+                                  StringComparison.Ordinal))
+      {
+        var index = expandedName.LastIndexOf("}",
+                                             StringComparison.Ordinal);
+        @namespace = XNamespace.Get(expandedName.Substring(1,
+                                                           index - 1));
+        localName = expandedName.Substring(index + 1);
+      }
+      else
+      {
+        @namespace = XNamespace.None;
+        localName = expandedName;
+      }
+
+      var result = new XpsName(@namespace,
+                               localName);
+
+      return result;
+    }
   }
 }
