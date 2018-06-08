@@ -43,8 +43,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     [NotNull]
     [ItemNotNull]
     public static MemoryStream[] Render([NotNull] this DocumentPaginator documentPaginator,
-                                        int resolutionX,
-                                        int resolutionY,
+                                        long resolutionX,
+                                        long resolutionY,
                                         [NotNull] [InstantHandle] BitmapEncoderFactory bitmapEncoderFactory)
     {
       var pageCount = documentPaginator.PageCount;
