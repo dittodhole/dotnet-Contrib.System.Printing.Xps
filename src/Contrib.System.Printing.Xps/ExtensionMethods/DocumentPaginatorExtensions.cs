@@ -31,6 +31,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     ///   Renders the <paramref name="documentPaginator"/> with the supplied <see cref="T:System.Windows.Media.Imaging.BitmapEncoder"/>.
     /// </summary>
     /// <param name="documentPaginator"/>
+    /// <param name="resolutionX"/>
+    /// <param name="resolutionY"/>
     /// <param name="bitmapEncoderFactory"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="documentPaginator"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="bitmapEncoderFactory"/> is <see langword="null"/>.</exception>
@@ -41,6 +43,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     [NotNull]
     [ItemNotNull]
     public static MemoryStream[] Render([NotNull] this DocumentPaginator documentPaginator,
+                                        int resolutionX,
+                                        int resolutionY,
                                         [NotNull] [InstantHandle] BitmapEncoderFactory bitmapEncoderFactory)
     {
       var pageCount = documentPaginator.PageCount;
@@ -62,10 +66,12 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         var bitmapEncoder = bitmapEncoderFactory.Invoke();
 
         {
-          var renderTargetBitmap = new RenderTargetBitmap((int) documentPage.Size.Width,
-                                                          (int) documentPage.Size.Height,
-                                                          96d,
-                                                          96d,
+          var width = documentPage.Size.Width / 96d * resolutionX;
+          var height = documentPage.Size.Height / 96d * resolutionY;
+          var renderTargetBitmap = new RenderTargetBitmap((int) width,
+                                                          (int) height,
+                                                          resolutionX,
+                                                          resolutionY,
                                                           PixelFormats.Default);
           renderTargetBitmap.Render(visual);
 
