@@ -15,6 +15,7 @@
       <frameworkAssembly assemblyName="System.Printing"/>
       <frameworkAssembly assemblyName="System.Xml.Linq"/>
       <frameworkAssembly assemblyName="PresentationCore"/>
+      <frameworkAssembly assemblyName="System.Drawing"/>
     </frameworkAssemblies>
   </metadata>
 </package>

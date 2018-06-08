@@ -44,6 +44,7 @@
     <Reference Include="ReachFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.IO, Version=2.6.10.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.1.1.10\lib\net40\System.IO.dll</HintPath>
     </Reference>
@@ -64,6 +65,7 @@
   <ItemGroup>
     <Compile Include="App_Packages\LibLog.4.2\LibLog.cs" />
     <Compile Include="App_Packages\Source.JetBrains.Annotations_11.1.1\JetBrains.Annotations.cs" />
+    <Compile Include="ExtensionMethods\PrinterSettingsExtensions.cs" />
     <Compile Include="ExtensionMethods\PrintQueueCollectionExtensions.cs" />
     <Compile Include="ExtensionMethods\PrintQueueExtensions.cs" />
     <Compile Include="ExtensionMethods\PrintServerExtensions.cs" />
