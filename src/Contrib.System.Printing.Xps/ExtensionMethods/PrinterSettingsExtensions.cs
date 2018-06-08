@@ -8,7 +8,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   using global::JetBrains.Annotations;
 
   /// <summary>
-  ///   Provides extensions for <see cref="PrinterSettings"/> objects.
+  ///   Provides extensions for <see cref="T:System.Drawing.Printing.PrinterSettings"/> objects.
   /// </summary>
   [PublicAPI]
 #if CONTRIB_SYSTEM_PRINTING_XPS
@@ -24,9 +24,9 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <param name="printerSettings"/>
     /// <param name="xpsPrinterDefinition"/>
     /// <param name="xpsInputBinDefinition"/>
-    /// <exception cref="ArgumentNullException"><paramref name="printerSettings"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinition"/> is <see langword="null"/>.</exception>
-    /// <exception cref="Exception"/>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="printerSettings"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="xpsPrinterDefinition"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.Exception"/>
     [MustUseReturnValue]
     public static bool Set([NotNull] this PrinterSettings printerSettings,
                            [NotNull] IXpsPrinterDefinition xpsPrinterDefinition,

@@ -9,7 +9,7 @@ namespace Contrib.System.Printing.Xps
   /// <summary>
   ///   Holds information of a printer.
   /// </summary>
-  /// <seealso cref="XpsPrinterDefinitionFactory.XpsPrinterDefinition"/>
+  /// <seealso cref="T:Contrib.System.Printing.Xps.XpsPrinterDefinitionFactory.XpsPrinterDefinition"/>
   [PublicAPI]
 #if CONTRIB_SYSTEM_PRINTING_XPS
   public
@@ -51,9 +51,9 @@ namespace Contrib.System.Printing.Xps
   ///   Factory for <typeparamref name="TXpsPrinterDefinition"/>.
   /// </summary>
   /// <typeparam name="TXpsPrinterDefinition"/>
-  /// <seealso cref="XpsPrinterDefinitionFactory"/>
+  /// <seealso cref="T:Contrib.System.Printing.Xps.XpsPrinterDefinitionFactory"/>
   /// <example>
-  ///   This sample shows how to implement your own <see cref="IXpsPrinterDefinition"/>.
+  ///   This sample shows how to implement your own <see cref="T:Contrib.System.Printing.Xps.IXpsPrinterDefinition"/>.
   ///   <code>
   ///   using global::Contrib.System.Printing.Xps;
   ///   using global::System.Xml.Linq;
@@ -154,7 +154,7 @@ namespace Contrib.System.Printing.Xps
     }
 
     /// <summary>
-    ///   Initializes a new instance of the <see cref="XpsPrinterDefinitionFactory"/> class.
+    ///   Initializes a new instance of the <see cref="T:Contrib.System.Printing.Xps.XpsPrinterDefinitionFactory"/> class.
     /// </summary>
     [PublicAPI]
     public XpsPrinterDefinitionFactory() { }

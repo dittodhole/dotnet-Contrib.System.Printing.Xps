@@ -12,9 +12,9 @@ namespace Contrib.System.Printing.Xps
   // ReSharper disable InconsistentNaming
 
   /// <summary>
-  ///   A transparent proxy for <see cref="MS.Internal.Printing.Configuration.UnitConverter"/>.
+  ///   A transparent proxy for <see cref="T:MS.Internal.Printing.Configuration.UnitConverter"/>.
   /// </summary>
-  /// <seealso cref="MS.Internal.Printing.Configuration.UnitConverter"/>
+  /// <seealso cref="T:MS.Internal.Printing.Configuration.UnitConverter"/>
   [PublicAPI]
 #if CONTRIB_SYSTEM_PRINTING_XPS
   public
@@ -23,7 +23,7 @@ namespace Contrib.System.Printing.Xps
 #endif
   static partial class UnitConverter
   {
-    /// <exception cref="Exception"/>
+    /// <exception cref="T:System.Exception"/>
     [NotNull]
     private static Type FindInternalType()
     {
@@ -32,7 +32,7 @@ namespace Contrib.System.Printing.Xps
       return unitConverterType;
     }
 
-    /// <exception cref="Exception"/>
+    /// <exception cref="T:System.Exception"/>
     [NotNull]
     private static MethodInfo FindInternalMethod([CallerMemberName] string callerMemberName = "")
     {
@@ -46,8 +46,8 @@ namespace Contrib.System.Printing.Xps
     ///   Converts micron to device-independent pixels.
     /// </summary>
     /// <param name="micronValue"/>
-    /// <seealso cref="MS.Internal.Printing.Configuration.UnitConverter.LengthValueFromMicronToDIP"/>
-    /// <exception cref="Exception"/>
+    /// <seealso cref="M:MS.Internal.Printing.Configuration.UnitConverter.LengthValueFromMicronToDIP"/>
+    /// <exception cref="T:System.Exception"/>
     public static double LengthValueFromMicronToDIP(int micronValue)
     {
       var methodInfo = UnitConverter.FindInternalMethod();
@@ -64,8 +64,8 @@ namespace Contrib.System.Printing.Xps
     ///   Converts device-independent pixels to micron.
     /// </summary>
     /// <param name="dipValue"/>
-    /// <seealso cref="MS.Internal.Printing.Configuration.UnitConverter.LengthValueFromDIPToMicron"/>
-    /// <exception cref="Exception"/>
+    /// <seealso cref="M:MS.Internal.Printing.Configuration.UnitConverter.LengthValueFromDIPToMicron"/>
+    /// <exception cref="T:System.Exception"/>
     public static int LengthValueFromDIPToMicron(double dipValue)
     {
       var methodInfo = UnitConverter.FindInternalMethod();

@@ -10,7 +10,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   using global::JetBrains.Annotations;
 
   /// <summary>
-  ///   Provides extensions for <see cref="IXpsPrinterDefinition"/> objects.
+  ///   Provides extensions for <see cref="T:Contrib.System.Printing.Xps.IXpsPrinterDefinition"/> objects.
   /// </summary>
   [PublicAPI]
 #if CONTRIB_SYSTEM_PRINTING_XPS
@@ -21,10 +21,10 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   static partial class XpsPrinterDefinitionExtensions
   {
     /// <summary>
-    ///   Creates a <see cref="PrintTicket"/> object.
+    ///   Creates a <see cref="T:System.Printing.PrintTicket"/> object.
     /// </summary>
     /// <param name="printQueue"/>
-    /// <exception cref="ArgumentNullException"><paramref name="printQueue"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="printQueue"/> is <see langword="null"/>.</exception>
     [CanBeNull]
     public delegate PrintTicket PrintTicketFactory([NotNull] PrintQueue printQueue);
 
@@ -34,10 +34,10 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <param name="xpsPrinterDefinition"/>
     /// <param name="documentPaginatorSource"/>
     /// <param name="printTicketFactory"/>
-    /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinition"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="documentPaginatorSource"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="printTicketFactory"/> is <see langword="null"/>.</exception>
-    /// <exception cref="Exception"/>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="xpsPrinterDefinition"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="documentPaginatorSource"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="printTicketFactory"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.Exception"/>
     public static void Print([NotNull] this IXpsPrinterDefinition xpsPrinterDefinition,
                              [NotNull] IDocumentPaginatorSource documentPaginatorSource,
                              [NotNull] [InstantHandle] PrintTicketFactory printTicketFactory)

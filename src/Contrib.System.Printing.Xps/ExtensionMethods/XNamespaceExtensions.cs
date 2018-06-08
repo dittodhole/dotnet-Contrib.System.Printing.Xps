@@ -8,7 +8,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   using global::JetBrains.Annotations;
 
   /// <summary>
-  ///   Provides extensions for <see cref="XElement"/> objects.
+  ///   Provides extensions for <see cref="T:System.Linq.Xml.XElement"/> objects.
   /// </summary>
   [PublicAPI]
 #if CONTRIB_SYSTEM_PRINTING_XPS
@@ -19,12 +19,12 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   static partial class XNamespaceExtensions
   {
     /// <summary>
-    ///   Returns an <see cref="XpsName"/> object created from this <see cref="XNamespace"/> and the specified local name.
+    ///   Returns an <see cref="T:Contrib.System.Printing.Xps.XpsName"/> object created from this <see cref="XNamespace"/> and the specified local name.
     /// </summary>
     /// <param name="namespace"/>
     /// <param name="localName"/>
-    /// <exception cref="ArgumentNullException"><paramref name="namespace"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="localName"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="namespace"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="localName"/> is <see langword="null"/>.</exception>
     [Pure]
     [NotNull]
     public static XpsName GetXpsName([NotNull] this XNamespace @namespace,

@@ -21,12 +21,12 @@ namespace Contrib.System.Printing.Xps
   partial class XpsName
   {
     /// <summary>
-    ///   Initializes a new instance of the <see cref="XpsName"/> class.
+    ///   Initializes a new instance of the <see cref="T:Contrib.System.Printing.Xps.XpsName"/> class.
     /// </summary>
     /// <param name="namespace"/>
     /// <param name="localName"/>
-    /// <exception cref="ArgumentNullException"><paramref name="namespace"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="localName"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="namespace"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="localName"/> is <see langword="null"/>.</exception>
     public XpsName([NotNull] XNamespace @namespace,
                    [NotNull] string localName)
     {
@@ -43,15 +43,15 @@ namespace Contrib.System.Printing.Xps
     /// <summary>
     ///   Gets the local name of the current instance.
     /// </summary>
-    /// <remarks>The local name may start with a digit (eg "16bpcSupport" - this behavior differs from <see cref="XName"/> validation.</remarks>
+    /// <remarks>The local name may start with a digit (eg "16bpcSupport" - this behavior differs from <see cref="T:System.Xml.Linq.XName"/> validation.</remarks>
     [NotNull]
     public string LocalName { get; }
 
     /// <summary>
-    ///   Returns the prefixed <see cref="XpsName.LocalName"/>.
+    ///   Returns the prefixed <see cref="M:Contrib.System.Printing.Xps.XpsName.LocalName"/>.
     /// </summary>
     /// <param name="prefix"/>
-    /// <remarks>The string representation follows the pattern "<paramref name="prefix"/>:<see cref="XpsName.LocalName"/>"</remarks>
+    /// <remarks>The string representation follows the pattern "<paramref name="prefix"/>:<see cref="M:Contrib.System.Printing.Xps.XpsName.LocalName"/>"</remarks>
     [NotNull]
     public string ToString([CanBeNull] string prefix)
     {

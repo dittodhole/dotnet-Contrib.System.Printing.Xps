@@ -8,7 +8,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   using global::JetBrains.Annotations;
 
   /// <summary>
-  ///   Provides extensions for <see cref="PrintServer"/> objects.
+  ///   Provides extensions for <see cref="T:System.Printing.PrintServer"/> objects.
   /// </summary>
   [PublicAPI]
 #if CONTRIB_SYSTEM_PRINTING_XPS
@@ -22,8 +22,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     ///   Gets the collection of local and remote print queues that are hosted by the print server.
     /// </summary>
     /// <param name="printServer"/>
-    /// <exception cref="ArgumentNullException"><paramref name="printServer"/> is <see langword="null"/>.</exception>
-    /// <exception cref="Exception"/>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="printServer"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.Exception"/>
     [Pure]
     [NotNull]
     [ItemNotNull]

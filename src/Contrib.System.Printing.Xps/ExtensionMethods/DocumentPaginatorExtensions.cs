@@ -3,7 +3,6 @@
  */
 namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
-  using global::System;
   using global::System.IO;
   using global::System.Windows;
   using global::System.Windows.Documents;
@@ -20,19 +19,19 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   static partial class DocumentPaginatorExtensions
   {
     /// <summary>
-    ///   Creates a <see cref="BitmapEncoder"/> object.
+    ///   Creates a <see cref="T:System.Windows.Media.Imaging.BitmapEncoder"/> object.
     /// </summary>
     [NotNull]
     public delegate BitmapEncoder BitmapEncoderFactory();
 
     /// <summary>
-    ///   Renders the <paramref name="documentPaginator"/> with the supplied <see cref="BitmapEncoder"/>.
+    ///   Renders the <paramref name="documentPaginator"/> with the supplied <see cref="T:System.Windows.Media.Imaging.BitmapEncoder"/>.
     /// </summary>
     /// <param name="documentPaginator"/>
     /// <param name="bitmapEncoderFactory"/>
-    /// <exception cref="ArgumentNullException"><paramref name="documentPaginator"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="bitmapEncoderFactory"/> is <see langword="null"/>.</exception>
-    /// <exception cref="Exception"/>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="documentPaginator"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="bitmapEncoderFactory"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.Exception"/>
     /// <seealso cref="T:System.Windows.Media.Imaging.RenderTargetBitmap"/>
     /// <seealso cref="T:System.Windows.Media.Imaging.BitmapFrame"/>
     /// <seealso cref="T:System.Windows.Media.Imaging.BitmapEncoder"/>

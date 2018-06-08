@@ -22,9 +22,9 @@ namespace Contrib.System.Printing.Xps
     /// </summary>
     /// <param name="featureName"/>
     /// <param name="inputBinName"/>
-    /// <exception cref="ArgumentNullException"><paramref name="featureName"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="inputBinName"/> is <see langword="null"/>.</exception>
-    /// <exception cref="Exception"/>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="featureName"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="inputBinName"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.Exception"/>
     [PublicAPI]
     [NotNull]
     public static PrintTicket GetPrintTicket([NotNull] XpsName featureName,

@@ -11,7 +11,7 @@ namespace Contrib.System.Printing.Xps
   /// <summary>
   ///   Holds information of an input bin.
   /// </summary>
-  /// <seealso cref="XpsInputBinDefinitionFactory.XpsInputBinDefinition"/>
+  /// <seealso cref="T:Contrib.System.Printing.Xps.XpsInputBinDefinitionFactory.XpsInputBinDefinition"/>
   [PublicAPI]
 #if CONTRIB_SYSTEM_PRINTING_XPS
   public
@@ -53,9 +53,9 @@ namespace Contrib.System.Printing.Xps
   ///   Factory for <typeparamref name="TXpsInputBinDefinition"/>.
   /// </summary>
   /// <typeparam name="TXpsInputBinDefinition"/>
-  /// <seealso cref="XpsInputBinDefinitionFactory"/>
+  /// <seealso cref="T:Contrib.System.Printing.Xps.XpsInputBinDefinitionFactory"/>
   /// <example>
-  ///   This sample shows how to implement your own <see cref="IXpsInputBinDefinition"/>.
+  ///   This sample shows how to implement your own <see cref="T:Contrib.System.Printing.Xps.IXpsInputBinDefinition"/>.
   ///   <code>
   ///   using global::Contrib.System.Printing.Xps;
   ///   using global::System.Xml.Linq;
@@ -110,10 +110,10 @@ namespace Contrib.System.Printing.Xps
     /// <param name="name"/>
     /// <param name="option"/>
     /// <param name="printCapabilities"/>
-    /// <exception cref="ArgumentNullException"><paramref name="feature"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="option"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="printCapabilities"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="feature"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="option"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="printCapabilities"/> is <see langword="null"/>.</exception>
     [NotNull]
     TXpsInputBinDefinition Create([NotNull] XpsName feature,
                                   [NotNull] XpsName name,
@@ -152,7 +152,7 @@ namespace Contrib.System.Printing.Xps
     }
 
     /// <summary>
-    ///   Initializes a new instance of the <see cref="XpsInputBinDefinitionFactory"/> class.
+    ///   Initializes a new instance of the <see cref="T:Contrib.System.Printing.Xps.XpsInputBinDefinitionFactory"/> class.
     /// </summary>
     [PublicAPI]
     public XpsInputBinDefinitionFactory() { }

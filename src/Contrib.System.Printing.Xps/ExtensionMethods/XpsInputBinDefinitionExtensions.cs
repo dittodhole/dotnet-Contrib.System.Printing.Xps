@@ -10,7 +10,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   using global::JetBrains.Annotations;
 
   /// <summary>
-  ///   Provides extensions for <see cref="IXpsInputBinDefinition"/> objects.
+  ///   Provides extensions for <see cref="T:Contrib.System.Printing.Xps.IXpsInputBinDefinition"/> objects.
   /// </summary>
   [PublicAPI]
 #if CONTRIB_SYSTEM_PRINTING_XPS
@@ -24,8 +24,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     ///   Gets the print ticket for <paramref name="xpsInputBinDefinition"/>.
     /// </summary>
     /// <param name="xpsInputBinDefinition"/>
-    /// <exception cref="ArgumentNullException"><paramref name="xpsInputBinDefinition"/> is <see langword="null"/>.</exception>
-    /// <exception cref="Exception"/>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="xpsInputBinDefinition"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.Exception"/>
     [Pure]
     [NotNull]
     public static PrintTicket GetPrintTicket([NotNull] this IXpsInputBinDefinition xpsInputBinDefinition)
