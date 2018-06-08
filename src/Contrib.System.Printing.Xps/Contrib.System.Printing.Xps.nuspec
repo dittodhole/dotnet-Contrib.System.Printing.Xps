@@ -13,6 +13,7 @@
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="ReachFramework"/>
       <frameworkAssembly assemblyName="System.Printing"/>
+      <frameworkAssembly assemblyName="System.Runtime.Serialization"/>
       <frameworkAssembly assemblyName="System.Xml.Linq"/>
       <frameworkAssembly assemblyName="PresentationCore"/>
       <frameworkAssembly assemblyName="System.Drawing"/>

@@ -4,21 +4,20 @@
 namespace Contrib.System.Printing.Xps
 {
   using global::System;
+  using global::System.Runtime.Serialization;
+  using global::System.Security.Permissions;
   using global::System.Xml;
   using global::System.Xml.Linq;
   using global::JetBrains.Annotations;
 
-  /// <summary>
-  ///
-  /// </summary>
+  [KnownType(typeof(XpsNameSerializer))]
   [PublicAPI]
-  [Serializable]
 #if CONTRIB_SYSTEM_PRINTING_XPS
   public sealed
 #else
   internal
 #endif
-  partial class XpsName
+  partial class XpsName : ISerializable
   {
     /// <summary>
     ///   Initializes a new instance of the <see cref="T:Contrib.System.Printing.Xps.XpsName"/> class.
@@ -109,6 +108,21 @@ namespace Contrib.System.Printing.Xps
                                localName);
 
       return result;
+    }
+
+    /// <inheritdoc/>
+    [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+    void ISerializable.GetObjectData(SerializationInfo info,
+                                     StreamingContext context)
+    {
+      if (info == null)
+      {
+        throw new ArgumentNullException(nameof(info));
+      }
+
+      info.AddValue(nameof(XpsNameSerializer.ExpandedName),
+                    this.ToString());
+      info.SetType(typeof(XpsNameSerializer));
     }
   }
 }
