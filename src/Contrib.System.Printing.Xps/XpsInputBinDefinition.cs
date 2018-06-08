@@ -3,7 +3,6 @@
  */
 namespace Contrib.System.Printing.Xps
 {
-  using global::System;
   using global::System.Xml.Linq;
   using global::Contrib.System.Printing.Xps.ExtensionMethods;
   using global::JetBrains.Annotations;
