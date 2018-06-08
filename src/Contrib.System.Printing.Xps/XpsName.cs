@@ -60,5 +60,21 @@ namespace Contrib.System.Printing.Xps
 
       return result;
     }
+
+    /// <inheritdoc/>
+    public override string ToString()
+    {
+      string result;
+      if (string.IsNullOrEmpty(this.Namespace.NamespaceName))
+      {
+        result = this.LocalName;
+      }
+      else
+      {
+        result = $"{{{this.Namespace}}}{this.LocalName}";
+      }
+
+      return result;
+    }
   }
 }
