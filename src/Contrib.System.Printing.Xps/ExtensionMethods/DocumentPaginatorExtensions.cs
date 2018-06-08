@@ -10,6 +10,9 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   using global::System.Windows.Media.Imaging;
   using global::JetBrains.Annotations;
 
+  /// <summary>
+  ///   Provides extensions for <see cref="T:System.Windows.Documents.DocumentPaginator"/> objects.
+  /// </summary>
   [PublicAPI]
 #if CONTRIB_SYSTEM_PRINTING_XPS
   public
