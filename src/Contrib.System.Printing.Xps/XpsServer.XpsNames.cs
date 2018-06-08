@@ -110,5 +110,26 @@ namespace Contrib.System.Printing.Xps
     [PublicAPI]
     [NotNull]
     public static XpsName ResolutionYName => XpsServer.PrinterSchemaKeywordsNamespace.GetXpsName("ResolutionY");
+
+    /// <summary>
+    ///   psk:ImageableArea
+    /// </summary>
+    [PublicAPI]
+    [NotNull]
+    public static XpsName ImageableAreaName => XpsServer.PrinterSchemaKeywordsNamespace.GetXpsName("ImageableArea");
+
+    /// <summary>
+    ///   psk:OriginWidth
+    /// </summary>
+    [PublicAPI]
+    [NotNull]
+    public static XpsName OriginWidthName => XpsServer.PrinterSchemaKeywordsNamespace.GetXpsName("OriginWidth");
+
+    /// <summary>
+    ///   psk:OriginHeight
+    /// </summary>
+    [PublicAPI]
+    [NotNull]
+    public static XpsName OriginHeightName => XpsServer.PrinterSchemaKeywordsNamespace.GetXpsName("OriginHeight");
   }
 }
