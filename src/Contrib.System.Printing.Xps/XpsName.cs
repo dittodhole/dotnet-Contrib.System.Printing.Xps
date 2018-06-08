@@ -12,6 +12,7 @@ namespace Contrib.System.Printing.Xps
   ///
   /// </summary>
   [PublicAPI]
+  [Serializable]
 #if CONTRIB_SYSTEM_PRINTING_XPS
   public sealed
 #else
