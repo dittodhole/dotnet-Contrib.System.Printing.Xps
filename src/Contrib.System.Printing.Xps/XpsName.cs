@@ -27,8 +27,8 @@ namespace Contrib.System.Printing.Xps
     /// <param name="localName"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="namespace"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="localName"/> is <see langword="null"/>.</exception>
-    public XpsName([NotNull] XNamespace @namespace,
-                   [NotNull] string localName)
+    internal XpsName([NotNull] XNamespace @namespace,
+                     [NotNull] string localName)
     {
       this.Namespace = @namespace ?? throw new ArgumentNullException(nameof(@namespace));
       this.LocalName = localName ?? throw new ArgumentNullException(nameof(localName));
