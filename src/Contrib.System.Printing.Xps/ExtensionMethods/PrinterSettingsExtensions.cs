@@ -27,6 +27,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <exception cref="ArgumentNullException"><paramref name="printerSettings"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinition"/> is <see langword="null"/>.</exception>
     /// <exception cref="Exception"/>
+    [MustUseReturnValue]
     public static bool Set([NotNull] this PrinterSettings printerSettings,
                            [NotNull] IXpsPrinterDefinition xpsPrinterDefinition,
                            [CanBeNull] IXpsInputBinDefinition xpsInputBinDefinition = null)
