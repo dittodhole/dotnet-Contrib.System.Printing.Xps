@@ -21,6 +21,12 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   static partial class BitmapSourceExtensions
   {
     /// <summary>
+    ///   Creates a <see cref="T:System.Windows.Media.Imaging.BitmapEncoder"/> object.
+    /// </summary>
+    [CanBeNull]
+    public delegate BitmapEncoder BitmapEncoderFactory();
+
+    /// <summary>
     ///   Converts the <paramref name="bitmapSource"/> to <see cref="T:System.Drawing.Bitmap"/>.
     /// </summary>
     /// <param name="bitmapSource"/>
@@ -35,7 +41,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       }
 
       var bitmapEncoder = new GifBitmapEncoder();
-      var result = bitmapSource.ToBitmap(bitmapEncoder);
+      var result = bitmapSource.ToBitmap(() => new GifBitmapEncoder());
 
       return result;
     }
@@ -44,9 +50,9 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     ///   Converts the <paramref name="bitmapSource"/> to <see cref="T:System.Drawing.Bitmap"/>.
     /// </summary>
     /// <param name="bitmapSource"/>
-    /// <param name="bitmapEncoder"/>
+    /// <param name="bitmapEncoderFactory"/>
     /// <exception cref="ArgumentNullException"><paramref name="bitmapSource"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="bitmapEncoder"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="bitmapEncoderFactory"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.Exception"/>
     /// <seealso cref="T:System.Windows.Media.Imaging.BmpBitmapEncoder"/>
     /// <seealso cref="T:System.Windows.Media.Imaging.GifBitmapEncoder"/>
@@ -56,27 +62,25 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <seealso cref="T:System.Windows.Media.Imaging.WmpBitmapEncoder"/>
     [NotNull]
     public static Bitmap ToBitmap([NotNull] this BitmapSource bitmapSource,
-                                  [NotNull] BitmapEncoder bitmapEncoder)
+                                  [NotNull] BitmapEncoderFactory bitmapEncoderFactory)
     {
       if (bitmapSource == null)
       {
         throw new ArgumentNullException(nameof(bitmapSource));
       }
-      if (bitmapEncoder == null)
+      if (bitmapEncoderFactory == null)
       {
-        throw new ArgumentNullException(nameof(bitmapEncoder));
+        throw new ArgumentNullException(nameof(bitmapEncoderFactory));
       }
-
-      var bitmapFrame = BitmapFrame.Create(bitmapSource);
-      bitmapEncoder.Frames.Add(bitmapFrame);
 
       Bitmap result;
       using (var memoryStream = new MemoryStream())
       {
-        bitmapEncoder.Save(memoryStream);
+        var bitmapFrame = BitmapFrame.Create(bitmapSource);
 
-        memoryStream.Seek(0L,
-                          SeekOrigin.Begin);
+        var bitmapEncoder = bitmapEncoderFactory.Invoke();
+        bitmapEncoder.Frames.Add(bitmapFrame);
+        bitmapEncoder.Save(memoryStream);
 
         result = new Bitmap(memoryStream);
       }
