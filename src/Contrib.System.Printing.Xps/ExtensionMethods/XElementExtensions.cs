@@ -1,5 +1,5 @@
 ﻿/** @pp
- * rootnamespace: Contrib.System.Printing.Xps
+ * rootnamespace: Contrib.System
  */
 namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
@@ -11,7 +11,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   using global::JetBrains.Annotations;
 
   /// <summary>
-  ///   Provides extensions for <see cref="XElement"/> objects.
+  ///   Provides extensions for <see cref="T:System.Xml.Linq.XElement"/> objects.
   /// </summary>
   [PublicAPI]
 #if CONTRIB_SYSTEM_PRINTING_XPS
@@ -26,8 +26,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// </summary>
     /// <param name="element"/>
     /// <param name="name"/>
-    /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
     [MustUseReturnValue]
     [NotNull]
     public static string ReduceName([NotNull] this XElement element,
@@ -59,12 +59,12 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     }
 
     /// <summary>
-    ///   Ensures and gets the prefix of the namespace registration for <paramref name="name"/>.
+    ///   Ensures and gets the prefix of the registration for <paramref name="namespace"/>.
     /// </summary>
     /// <param name="element"/>
     /// <param name="namespace"/>
-    /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="namespace"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="namespace"/> is <see langword="null"/>.</exception>
     [MustUseReturnValue]
     [CanBeNull]
     public static string EnsurePrefixRegistrationOfNamespace([NotNull] this XElement element,
@@ -109,7 +109,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// </summary>
     /// <param name="element"/>
     /// <remarks>The prefix is constructed via following pattern: "ns{0000}"</remarks>
-    /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
     [Pure]
     [NotNull]
     public static string FindUnusedPrefixForNamespace([NotNull] this XElement element)
@@ -134,7 +134,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     ///   Gets the boxed value by taking "xsi:Type" attribute into account.
     /// </summary>
     /// <param name="element"/>
-    /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
     [Pure]
     [CanBeNull]
     public static object GetValue([NotNull] this XElement element)
@@ -207,8 +207,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// </summary>
     /// <param name="element"/>
     /// <param name="name"/>
-    /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
     [Pure]
     [CanBeNull]
     public static XElement FindElementByNameAttribute([NotNull] this XElement element,
@@ -235,8 +235,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// </summary>
     /// <param name="element"/>
     /// <param name="name"/>
-    /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
     [Pure]
     [CanBeNull]
     public static XElement FindElementByNameAttribute([NotNull] this XElement element,
@@ -267,12 +267,12 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     }
 
     /// <summary>
-    ///   Gets the <see cref="XName"/> from <paramref name="str"/>.
+    ///   Gets the <see cref="T:System.Xml.Linq.XName"/> from <paramref name="str"/>.
     /// </summary>
     /// <param name="element"/>
     /// <param name="str"/>
     /// <remarks><paramref name="element"/> is used to find the namespace for the prefix, contained in <paramref name="str"/>.</remarks>
-    /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
     [Pure]
     [CanBeNull]
     public static XName GetXName([NotNull] this XElement element,
@@ -362,8 +362,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// </summary>
     /// <param name="element"/>
     /// <param name="name"/>
-    /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
     [MustUseReturnValue]
     [NotNull]
     public static XElement AddElement([NotNull] this XElement element,
@@ -386,12 +386,12 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     }
 
     /// <summary>
-    ///   Gets the <see cref="XpsName"/> from <paramref name="str"/>.
+    ///   Gets the <see cref="T:Contrib.System.Printing.Xps.XpsName"/> from <paramref name="str"/>.
     /// </summary>
     /// <param name="element"/>
     /// <param name="str"/>
     /// <remarks><paramref name="element"/> is used to find the namespace for the prefix, contained in <paramref name="str"/>.</remarks>
-    /// <exception cref="ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
     [Pure]
     [CanBeNull]
     public static XpsName GetXpsName([NotNull] this XElement element,

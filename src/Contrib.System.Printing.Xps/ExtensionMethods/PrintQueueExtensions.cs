@@ -1,5 +1,5 @@
 ﻿/** @pp
- * rootnamespace: Contrib.System.Printing.Xps
+ * rootnamespace: Contrib.System
  */
 namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
@@ -10,7 +10,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   using global::JetBrains.Annotations;
 
   /// <summary>
-  ///   Provides extensions for <see cref="PrintQueue"/> objects.
+  ///   Provides extensions for <see cref="T:System.Printing.PrintQueue"/> objects.
   /// </summary>
   [PublicAPI]
 #if CONTRIB_SYSTEM_PRINTING_XPS
@@ -21,11 +21,11 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   static partial class PrintQueueExtensions
   {
     /// <summary>
-    ///   Gets an <see cref="XDocument"/> object that specifies the printer's capabilities that complies with the Print Schema (see https://msdn.microsoft.com/en-us/library/windows/desktop/ms715274).
+    ///   Gets an <see cref="T:System.Xml.Linq.XDocument"/> object that specifies the printer's capabilities that complies with the Print Schema (see https://msdn.microsoft.com/en-us/library/windows/desktop/ms715274).
     /// </summary>
     /// <param name="printQueue"/>
-    /// <seealso cref="PrintQueue.GetPrintCapabilitiesAsXml()"/>
-    /// <exception cref="ArgumentNullException"><paramref name="printQueue"/> is <see langword="null"/>.</exception>
+    /// <seealso cref="M:System.Printing.PrintQueue.GetPrintCapabilitiesAsXml()"/>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="printQueue"/> is <see langword="null"/>.</exception>
     [Pure]
     [CanBeNull]
     public static XDocument GetPrintCapabilitiesAsXDocument([NotNull] this PrintQueue printQueue)
@@ -54,13 +54,13 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     }
 
     /// <summary>
-    ///   Gets an <see cref="XDocument"/> object that specifies the printer's capabilities that complies with the Print Schema (see https://msdn.microsoft.com/en-us/library/windows/desktop/ms715274).
+    ///   Gets an <see cref="T:System.Xml.Linq.XDocument"/> object that specifies the printer's capabilities that complies with the Print Schema (see https://msdn.microsoft.com/en-us/library/windows/desktop/ms715274).
     /// </summary>
     /// <param name="printQueue"/>
     /// <param name="printTicket"/>
-    /// <seealso cref="PrintQueue.GetPrintCapabilitiesAsXml(PrintTicket)"/>
-    /// <exception cref="ArgumentNullException"><paramref name="printQueue"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="printTicket"/> is <see langword="null"/>.</exception>
+    /// <seealso cref="M:System.Printing.PrintQueue.GetPrintCapabilitiesAsXml(PrintTicket)"/>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="printQueue"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="printTicket"/> is <see langword="null"/>.</exception>
     [Pure]
     [CanBeNull]
     public static XDocument GetPrintCapabilitiesAsXDocument([NotNull] this PrintQueue printQueue,

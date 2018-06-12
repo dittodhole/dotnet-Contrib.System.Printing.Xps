@@ -1,5 +1,5 @@
 ﻿/** @pp
- * rootnamespace: Contrib.System.Printing.Xps
+ * rootnamespace: Contrib.System
  */
 namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
@@ -9,7 +9,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   using global::JetBrains.Annotations;
 
   /// <summary>
-  ///   Provides extensions for <see cref="PrintQueueCollection"/> objects.
+  ///   Provides extensions for <see cref="T:System.Printing.PrintQueueCollection"/> objects.
   /// </summary>
   [PublicAPI]
 #if CONTRIB_SYSTEM_PRINTING_XPS
@@ -24,9 +24,9 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// </summary>
     /// <param name="printQueueCollection"/>
     /// <param name="xpsPrinterDefinition"/>
-    /// <exception cref="ArgumentNullException"><paramref name="printQueueCollection"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinition"/> is <see langword="null"/>.</exception>
-    /// <exception cref="Exception"/>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="printQueueCollection"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="xpsPrinterDefinition"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.Exception"/>
     [Pure]
     [CanBeNull]
     public static PrintQueue FindPrintQueue([NotNull] this PrintQueueCollection printQueueCollection,

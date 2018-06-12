@@ -1,7 +1,7 @@
-﻿using NUnit.Framework;
-
-namespace Contrib.System.Printing.Xps.Tests
+﻿namespace Contrib.System.Printing.Xps.Tests
 {
+  using global::NUnit.Framework;
+
   [TestFixture]
   public class UnitConverterTests
   {

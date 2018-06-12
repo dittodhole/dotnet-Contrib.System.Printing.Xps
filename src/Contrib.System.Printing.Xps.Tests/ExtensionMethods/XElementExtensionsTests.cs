@@ -1,15 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Xml.Linq;
-using Contrib.System.Printing.Xps.ExtensionMethods;
-using NUnit.Framework;
-
-namespace Contrib.System.Printing.Xps.Tests.ExtensionMethods
+﻿namespace Contrib.System.Printing.Xps.Tests.ExtensionMethods
 {
+  using global::System.Collections.Generic;
+  using global::System.Xml.Linq;
+  using global::Contrib.System.Printing.Xps.ExtensionMethods;
+  using global::NUnit.Framework;
+
   [TestFixture]
   public class XElementExtensionsTests
   {
-    [TestCaseSource(nameof(XElementExtensionsTests.ReduceName_Should_Succeed_TestCases))]
-    public string ReduceName_Should_Succeed(XName name)
+    [TestCaseSource(nameof(XElementExtensionsTests.ReduceName_TestCases))]
+    public string ReduceName(XName name)
     {
       var element = new XElement("element");
       var reducedName = element.ReduceName(name);
@@ -17,7 +17,7 @@ namespace Contrib.System.Printing.Xps.Tests.ExtensionMethods
       return reducedName;
     }
 
-    private static IEnumerable<TestCaseData> ReduceName_Should_Succeed_TestCases
+    private static IEnumerable<TestCaseData> ReduceName_TestCases
     {
       get
       {
@@ -26,8 +26,8 @@ namespace Contrib.System.Printing.Xps.Tests.ExtensionMethods
       }
     }
 
-    [TestCaseSource(nameof(XElementExtensionsTests.EnsurePrefixRegistrationOfNamespace_Should_Succeed_TestCases))]
-    public string EnsurePrefixRegistrationOfNamespace_Should_Succeed(XNamespace @namespace)
+    [TestCaseSource(nameof(XElementExtensionsTests.EnsurePrefixRegistrationOfNamespace_TestCases))]
+    public string EnsurePrefixRegistrationOfNamespace(XNamespace @namespace)
     {
       var element = new XElement("element");
       var prefix = element.EnsurePrefixRegistrationOfNamespace(@namespace);
@@ -35,7 +35,7 @@ namespace Contrib.System.Printing.Xps.Tests.ExtensionMethods
       return prefix;
     }
 
-    private static IEnumerable<TestCaseData> EnsurePrefixRegistrationOfNamespace_Should_Succeed_TestCases
+    private static IEnumerable<TestCaseData> EnsurePrefixRegistrationOfNamespace_TestCases
     {
       get
       {

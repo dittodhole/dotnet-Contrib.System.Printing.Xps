@@ -5,6 +5,7 @@ var artifactsDirectory = Directory("../artifacts");
 var sourceDirectory = Directory("../src");
 var solutionFile = sourceDirectory + File("Contrib.System.Printing.Xps.sln");
 var projectFile = sourceDirectory + Directory("Contrib.System.Printing.Xps") + File("Contrib.System.Printing.Xps.csproj");
+var assemblyInfoFile = sourceDirectory + Directory("Contrib.System.Printing.Xps") +  Directory("Properties") + File("AssemblyInfo.cs");
 
 Task("Build")
   .IsDependentOn("Clean")
@@ -58,8 +59,8 @@ Task("Version")
 
   GitVersion(new GitVersionSettings
              {
-               WorkingDirectory = sourceDirectory,
                UpdateAssemblyInfo = true,
+               UpdateAssemblyInfoFilePath = assemblyInfoFile,
                OutputType = GitVersionOutput.BuildServer
              });
 });

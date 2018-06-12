@@ -1,5 +1,5 @@
 ﻿/** @pp
- * rootnamespace: Contrib.System.Printing.Xps
+ * rootnamespace: Contrib.System
  */
 namespace Contrib.System.Printing.Xps
 {
@@ -16,7 +16,7 @@ namespace Contrib.System.Printing.Xps
   /// </summary>
   /// <typeparam name="TXpsPrinterDefinition"/>
   /// <typeparam name="TXpsInputBinDefinition"/>
-  /// <seealso cref="XpsServer{TXpsPrinterDefinition,TXpsInputBinDefinition}"/>
+  /// <seealso cref="T:Contrib.System.Printing.Xps.XpsServer{TXpsPrinterDefinition,TXpsInputBinDefinition}"/>
   [PublicAPI]
 #if CONTRIB_SYSTEM_PRINTING_XPS
   public
@@ -30,7 +30,7 @@ namespace Contrib.System.Printing.Xps
     /// <summary>
     ///   Gets the collection of printers hosted by the print server.
     /// </summary>
-    /// <exception cref="Exception"/>
+    /// <exception cref="T:System.Exception"/>
     [Pure]
     [NotNull]
     [ItemNotNull]
@@ -40,8 +40,8 @@ namespace Contrib.System.Printing.Xps
     ///   Gets the collection of input bins for the specified printer hosted by the print server.
     /// </summary>
     /// <param name="xpsPrinterDefinition"/>
-    /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinition"/> is <see langword="null"/>.</exception>
-    /// <exception cref="Exception"/>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="xpsPrinterDefinition"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.Exception"/>
     [Pure]
     [NotNull]
     [ItemNotNull]
@@ -49,7 +49,7 @@ namespace Contrib.System.Printing.Xps
   }
 
   /// <inheritdoc />
-  /// <seealso cref="XpsServer"/>
+  /// <seealso cref="T:Contrib.System.Printing.Xps.XpsServer"/>
   [PublicAPI]
 #if CONTRIB_SYSTEM_PRINTING_XPS
   public
@@ -69,12 +69,12 @@ namespace Contrib.System.Printing.Xps
     where TXpsInputBinDefinition : IXpsInputBinDefinition
   {
     /// <summary>
-    ///   Initializes a new instance of the <see cref="XpsServer{TXpsPrinterDefinition,TXpsInputBinDefinition}"/> class.
+    ///   Initializes a new instance of the <see cref="T:Contrib.System.Printing.Xps.XpsServer{TXpsPrinterDefinition,TXpsInputBinDefinition}"/> class.
     /// </summary>
     /// <param name="xpsPrinterDefinitionFactory">Factory for <typeparamref name="TXpsPrinterDefinition"/>.</param>
     /// <param name="xpsInputBinDefinitionFactory">Factory for <typeparamref name="TXpsInputBinDefinition"/>.</param>
-    /// <exception cref="ArgumentNullException"><paramref name="xpsPrinterDefinitionFactory"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="xpsInputBinDefinitionFactory"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="xpsPrinterDefinitionFactory"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="xpsInputBinDefinitionFactory"/> is <see langword="null"/>.</exception>
     [PublicAPI]
     public XpsServer([NotNull] IXpsPrinterDefinitionFactory<TXpsPrinterDefinition> xpsPrinterDefinitionFactory,
                      [NotNull] IXpsInputBinDefinitionFactory<TXpsInputBinDefinition> xpsInputBinDefinitionFactory)
@@ -186,7 +186,7 @@ namespace Contrib.System.Printing.Xps
     }
   }
 
-  /// <inheritdoc cref="IXpsServer"/>
+  /// <inheritdoc cref="T:Contrib.System.Printing.Xps.IXpsServer"/>
 #if CONTRIB_SYSTEM_PRINTING_XPS
   public
 #else
@@ -196,7 +196,7 @@ namespace Contrib.System.Printing.Xps
                             IXpsServer
   {
     /// <summary>
-    ///   Initializes a new instance of the <see cref="XpsServer"/> class.
+    ///   Initializes a new instance of the <see cref="T:Contrib.System.Printing.Xps.XpsServer"/> class.
     /// </summary>
     [PublicAPI]
     public XpsServer()
@@ -205,10 +205,10 @@ namespace Contrib.System.Printing.Xps
 
 
     /// <summary>
-    ///   Initializes a new instance of the <see cref="XpsServer"/> class.
+    ///   Initializes a new instance of the <see cref="T:Contrib.System.Printing.Xps.XpsServer"/> class.
     /// </summary>
-    /// <param name="xpsPrinterDefinitionFactory">Factory for <see cref="IXpsPrinterDefinition"/>.</param>
-    /// <param name="xpsInputBinDefinitionFactory">Factory for <see cref="IXpsInputBinDefinition"/>.</param>
+    /// <param name="xpsPrinterDefinitionFactory">Factory for <see cref="T:Contrib.System.Printing.Xps.IXpsPrinterDefinition"/>.</param>
+    /// <param name="xpsInputBinDefinitionFactory">Factory for <see cref="T:Contrib.System.Printing.Xps.IXpsInputBinDefinition"/>.</param>
     [PublicAPI]
     public XpsServer([NotNull] IXpsPrinterDefinitionFactory<IXpsPrinterDefinition> xpsPrinterDefinitionFactory,
                      [NotNull] IXpsInputBinDefinitionFactory<IXpsInputBinDefinition> xpsInputBinDefinitionFactory)

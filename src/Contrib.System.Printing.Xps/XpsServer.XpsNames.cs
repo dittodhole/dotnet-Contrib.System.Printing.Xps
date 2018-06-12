@@ -1,10 +1,10 @@
 ﻿/** @pp
- * rootnamespace: Contrib.System.Printing.Xps
+ * rootnamespace: Contrib.System
  */
 namespace Contrib.System.Printing.Xps
 {
   using global::JetBrains.Annotations;
-  using Contrib.System.Printing.Xps.ExtensionMethods;
+  using global::Contrib.System.Printing.Xps.ExtensionMethods;
 
 #if CONTRIB_SYSTEM_PRINTING_XPS
   public
@@ -89,5 +89,47 @@ namespace Contrib.System.Printing.Xps
     [PublicAPI]
     [NotNull]
     public static XpsName FeedTypeName => XpsServer.PrinterSchemaKeywordsNamespace.GetXpsName("FeedType");
+
+    /// <summary>
+    ///   psk:PageResolution
+    /// </summary>
+    [PublicAPI]
+    [NotNull]
+    public static XpsName PageResolutionName => XpsServer.PrinterSchemaKeywordsNamespace.GetXpsName("PageResolution");
+
+    /// <summary>
+    ///   psk:ResolutionX
+    /// </summary>
+    [PublicAPI]
+    [NotNull]
+    public static XpsName ResolutionXName => XpsServer.PrinterSchemaKeywordsNamespace.GetXpsName("ResolutionX");
+
+    /// <summary>
+    ///   psk:ResolutionY
+    /// </summary>
+    [PublicAPI]
+    [NotNull]
+    public static XpsName ResolutionYName => XpsServer.PrinterSchemaKeywordsNamespace.GetXpsName("ResolutionY");
+
+    /// <summary>
+    ///   psk:ImageableArea
+    /// </summary>
+    [PublicAPI]
+    [NotNull]
+    public static XpsName ImageableAreaName => XpsServer.PrinterSchemaKeywordsNamespace.GetXpsName("ImageableArea");
+
+    /// <summary>
+    ///   psk:OriginWidth
+    /// </summary>
+    [PublicAPI]
+    [NotNull]
+    public static XpsName OriginWidthName => XpsServer.PrinterSchemaKeywordsNamespace.GetXpsName("OriginWidth");
+
+    /// <summary>
+    ///   psk:OriginHeight
+    /// </summary>
+    [PublicAPI]
+    [NotNull]
+    public static XpsName OriginHeightName => XpsServer.PrinterSchemaKeywordsNamespace.GetXpsName("OriginHeight");
   }
 }
