@@ -32,9 +32,9 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <seealso cref="T:System.Windows.Media.Imaging.RenderTargetBitmap"/>
     [NotNull]
     [ItemNotNull]
-    public static ImageSource[] Render([NotNull] this DocumentPaginator documentPaginator,
-                                       double dpiX,
-                                       double dpiY)
+    public static BitmapSource[] Render([NotNull] this DocumentPaginator documentPaginator,
+                                        double dpiX,
+                                        double dpiY)
     {
       if (documentPaginator == null)
       {
@@ -43,7 +43,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
 
       var pageCount = documentPaginator.PageCount;
 
-      var result = new ImageSource[pageCount];
+      var result = new BitmapSource[pageCount];
 
       for (var i = 0;
            i < pageCount;
@@ -67,7 +67,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
                                                         PixelFormats.Default);
         renderTargetBitmap.Render(visual);
 
-        result[i] = (ImageSource) renderTargetBitmap.GetAsFrozen();
+        result[i] = (BitmapSource) renderTargetBitmap.GetAsFrozen();
       }
 
       return result;
