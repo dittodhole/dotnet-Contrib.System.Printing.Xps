@@ -69,7 +69,10 @@ dotnet-Contrib.System.Printing.Xps> cd build
 dotnet-Contrib.System.Printing.Xps/build> build.bat
 ```
 
-This will create `dotnet-Contrib.System.Printing.Xps/artifacts/Contrib.System.Printing.Xps.{version}.nupkg`.
+This will create the following artifacts:
+
+- `artifacts/Contrib.System.Printing.Xps.{version}.nupkg`
+- `artifacts/Contrib.System.Printing.Xps.{version}.symbols.nupkg`
 
 ## License
 
