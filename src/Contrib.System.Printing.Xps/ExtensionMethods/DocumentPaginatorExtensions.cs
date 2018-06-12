@@ -31,8 +31,6 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <exception cref="T:System.ArgumentNullException"><paramref name="documentPaginator"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.Exception"/>
     /// <seealso cref="T:System.Windows.Media.Imaging.RenderTargetBitmap"/>
-    /// <seealso cref="T:System.Windows.Media.Imaging.BitmapFrame"/>
-    /// <seealso cref="T:System.Windows.Media.Imaging.BitmapEncoder"/>
     [NotNull]
     [ItemNotNull]
     public static ImageSource[] Render([NotNull] this DocumentPaginator documentPaginator,
