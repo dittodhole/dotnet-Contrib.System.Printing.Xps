@@ -82,7 +82,10 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         bitmapEncoder.Frames.Add(bitmapFrame);
         bitmapEncoder.Save(memoryStream);
 
-        result = new Bitmap(memoryStream);
+        using (var bitmap = new Bitmap(memoryStream))
+        {
+          result = (Bitmap) bitmap.Clone();
+        }
       }
 
       return result;
