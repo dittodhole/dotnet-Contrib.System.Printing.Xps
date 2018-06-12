@@ -75,6 +75,9 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       {
         bitmapEncoder.Save(memoryStream);
 
+        memoryStream.Seek(0L,
+                          SeekOrigin.Begin);
+
         result = new Bitmap(memoryStream);
       }
 
