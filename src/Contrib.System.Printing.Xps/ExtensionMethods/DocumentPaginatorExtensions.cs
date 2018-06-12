@@ -26,8 +26,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     ///   Renders the <paramref name="documentPaginator"/> with the supplied <see cref="T:System.Windows.Media.Imaging.BitmapEncoder"/>.
     /// </summary>
     /// <param name="documentPaginator"/>
-    /// <param name="resolutionX"/>
-    /// <param name="resolutionY"/>
+    /// <param name="dpiX"/>
+    /// <param name="dpiY"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="documentPaginator"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.Exception"/>
     /// <seealso cref="T:System.Windows.Media.Imaging.RenderTargetBitmap"/>
@@ -36,8 +36,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     [NotNull]
     [ItemNotNull]
     public static ImageSource[] Render([NotNull] this DocumentPaginator documentPaginator,
-                                       long resolutionX,
-                                       long resolutionY)
+                                       double dpiX,
+                                       double dpiY)
     {
       if (documentPaginator == null)
       {
@@ -61,12 +61,12 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         }
 
         var size = documentPage.Size;
-        var width = size.Width / 96d * resolutionX;
-        var height = size.Height / 96d * resolutionY;
+        var width = size.Width / 96d * dpiX;
+        var height = size.Height / 96d * dpiY;
         var renderTargetBitmap = new RenderTargetBitmap((int) width,
                                                         (int) height,
-                                                        resolutionX,
-                                                        resolutionY,
+                                                        dpiX,
+                                                        dpiY,
                                                         PixelFormats.Default);
         renderTargetBitmap.Render(visual);
 
