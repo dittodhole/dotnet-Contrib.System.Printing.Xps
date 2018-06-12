@@ -58,8 +58,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         }
 
         var size = documentPage.Size;
-        var width = size.Width / 96d * dpiX;
-        var height = size.Height / 96d * dpiY;
+        var width = size.Width / 96D * dpiX;
+        var height = size.Height / 96D * dpiY;
         var renderTargetBitmap = new RenderTargetBitmap((int) width,
                                                         (int) height,
                                                         dpiX,
