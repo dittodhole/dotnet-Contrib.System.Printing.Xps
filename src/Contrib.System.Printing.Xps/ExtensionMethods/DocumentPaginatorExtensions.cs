@@ -4,7 +4,6 @@
 namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
   using global::System;
-  using global::System.IO;
   using global::System.Windows;
   using global::System.Windows.Documents;
   using global::System.Windows.Media;
