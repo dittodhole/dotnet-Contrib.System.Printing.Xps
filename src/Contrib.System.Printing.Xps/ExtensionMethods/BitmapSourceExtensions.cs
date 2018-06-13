@@ -4,7 +4,6 @@
 namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
   using global::System;
-  using global::System.Drawing;
   using global::System.IO;
   using global::System.Windows.Media.Imaging;
   using global::JetBrains.Annotations;
@@ -27,27 +26,28 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     public delegate BitmapEncoder BitmapEncoderFactory();
 
     /// <summary>
-    ///   Converts the <paramref name="bitmapSource"/> to <see cref="T:System.Drawing.Bitmap"/>.
+    ///   Converts the <paramref name="bitmapSource"/> to <see cref="T:System.IO.MemoryStream"/>.
     /// </summary>
     /// <param name="bitmapSource"/>
     /// <exception cref="ArgumentNullException"><paramref name="bitmapSource"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.Exception"/>
     [NotNull]
-    public static Bitmap ToBitmap([NotNull] this BitmapSource bitmapSource)
+    public static MemoryStream ToMemoryStream([NotNull] this BitmapSource bitmapSource)
     {
       if (bitmapSource == null)
       {
         throw new ArgumentNullException(nameof(bitmapSource));
       }
 
-      var bitmapEncoder = new GifBitmapEncoder();
-      var result = bitmapSource.ToBitmap(() => new GifBitmapEncoder());
+      BitmapEncoder BitmapEncoderFactory() => new GifBitmapEncoder();
+
+      var result = bitmapSource.ToMemoryStream(BitmapEncoderFactory);
 
       return result;
     }
 
     /// <summary>
-    ///   Converts the <paramref name="bitmapSource"/> to <see cref="T:System.Drawing.Bitmap"/>.
+    ///   Converts the <paramref name="bitmapSource"/> to <see cref="T:System.IO.MemoryStream"/>.
     /// </summary>
     /// <param name="bitmapSource"/>
     /// <param name="bitmapEncoderFactory"/>
@@ -61,8 +61,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <seealso cref="T:System.Windows.Media.Imaging.TiffBitmapEncoder"/>
     /// <seealso cref="T:System.Windows.Media.Imaging.WmpBitmapEncoder"/>
     [NotNull]
-    public static Bitmap ToBitmap([NotNull] this BitmapSource bitmapSource,
-                                  [NotNull] BitmapEncoderFactory bitmapEncoderFactory)
+    public static MemoryStream ToMemoryStream([NotNull] this BitmapSource bitmapSource,
+                                              [NotNull] BitmapEncoderFactory bitmapEncoderFactory)
     {
       if (bitmapSource == null)
       {
@@ -73,20 +73,15 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         throw new ArgumentNullException(nameof(bitmapEncoderFactory));
       }
 
-      Bitmap result;
-      using (var memoryStream = new MemoryStream())
+      var bitmapEncoder = bitmapEncoderFactory.Invoke();
+
       {
         var bitmapFrame = BitmapFrame.Create(bitmapSource);
-
-        var bitmapEncoder = bitmapEncoderFactory.Invoke();
         bitmapEncoder.Frames.Add(bitmapFrame);
-        bitmapEncoder.Save(memoryStream);
-
-        using (var bitmap = new Bitmap(memoryStream))
-        {
-          result = (Bitmap) bitmap.Clone();
-        }
       }
+
+      var result = new MemoryStream();
+      bitmapEncoder.Save(result);
 
       return result;
     }
