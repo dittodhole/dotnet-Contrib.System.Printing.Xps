@@ -5,6 +5,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
   using global::System;
   using global::System.Drawing.Printing;
+  using global::System.Linq;
   using global::JetBrains.Annotations;
 
   /// <summary>
@@ -46,21 +47,26 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       bool result;
       if (printerSettings.IsValid)
       {
-        if (xpsInputBinDefinition != null)
+        if (xpsInputBinDefinition == null)
         {
-          foreach (PaperSource paperSource in printerSettings.PaperSources)
+          result = true;
+        }
+        else
+        {
+          result = false;
+
+          foreach (var paperSource in printerSettings.PaperSources.Cast<PaperSource>())
           {
-            if (string.Equals(paperSource.SourceName,
-                              xpsInputBinDefinition.DisplayName,
-                              StringComparison.Ordinal))
+            result = string.Equals(paperSource.SourceName,
+                                   xpsInputBinDefinition.DisplayName,
+                                   StringComparison.Ordinal);
+            if (result)
             {
               printerSettings.DefaultPageSettings.PaperSource = paperSource;
               break;
             }
           }
         }
-
-        result = true;
       }
       else
       {
