@@ -4,7 +4,6 @@
 namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
   using global::System;
-  using global::System.Linq;
   using global::System.Printing;
   using global::JetBrains.Annotations;
 
@@ -41,9 +40,18 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         throw new ArgumentNullException(nameof(xpsPrinterDefinition));
       }
 
-      var result = printQueueCollection.FirstOrDefault(arg => string.Equals(arg.FullName,
-                                                                            xpsPrinterDefinition.FullName,
-                                                                            StringComparison.Ordinal));
+      var result = default(PrintQueue);
+      foreach (var printQueue in printQueueCollection)
+      {
+        var success = string.Equals(printQueue.FullName,
+                                    xpsPrinterDefinition.FullName,
+                                    StringComparison.Ordinal);
+        if (success)
+        {
+          result = printQueue;
+          break;
+        }
+      }
 
       return result;
     }
