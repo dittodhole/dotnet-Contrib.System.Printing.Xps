@@ -10,6 +10,21 @@ namespace Contrib.System.Printing.Xps
   using global::System.Xml.Linq;
   using global::JetBrains.Annotations;
 
+  /// <summary>
+  ///   Represents a name of an XPS option, feature, or property, which is stored
+  ///   in the "name"-attribute.
+  /// </summary>
+  /// <remarks>
+  ///   The Print Schema (see https://msdn.microsoft.com/en-us/library/windows/desktop/ms715274)
+  ///   specifies the usage of the "name"-attribute as follows:
+  ///
+  ///   > The name attribute value MUST also be a qualified name.
+  ///
+  ///   As some vendors do not obey the rules, the verification of the local name
+  ///   must be skipped, thus introducing <see cref="XpsName"/>.
+  /// </remarks>
+  /// <seealso cref="T:System.Xml.Linq.XName"/>
+  /// <seealso cref="M:System.Xml.XmlConvert.VerifyNCName(string)"/>
   [KnownType(typeof(XpsNameSerializer))]
   [Serializable]
   [PublicAPI]
