@@ -62,7 +62,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <seealso cref="T:System.Windows.Media.Imaging.WmpBitmapEncoder"/>
     [NotNull]
     public static MemoryStream ToMemoryStream([NotNull] this BitmapSource bitmapSource,
-                                              [NotNull] BitmapEncoderFactory bitmapEncoderFactory)
+                                              [NotNull] [InstantHandle] BitmapEncoderFactory bitmapEncoderFactory)
     {
       if (bitmapSource == null)
       {
