@@ -5,7 +5,6 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
   using global::System;
   using global::System.Drawing.Printing;
-  using global::System.Linq;
   using global::JetBrains.Annotations;
 
   /// <summary>
@@ -55,7 +54,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         {
           result = false;
 
-          foreach (var paperSource in printerSettings.PaperSources.Cast<PaperSource>())
+          foreach (PaperSource paperSource in printerSettings.PaperSources)
           {
             result = string.Equals(paperSource.SourceName,
                                    xpsInputBinDefinition.DisplayName,
