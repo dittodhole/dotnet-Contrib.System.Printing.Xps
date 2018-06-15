@@ -56,6 +56,12 @@ namespace Contrib.System.Printing.Xps
 #endif
     partial class XpsInputBinDefinition : IXpsInputBinDefinition
     {
+      /// <summary>
+      ///   Initializes a new instance of the <see cref="T:Contrib.System.Printing.Xps.XpsInputBinDefinitionFactory.XpsInputBinDefinition"/> class.
+      /// </summary>
+      [PublicAPI]
+      public XpsInputBinDefinition() { }
+
       /// <inheritdoc/>
       public XpsName Feature { get; set; }
 

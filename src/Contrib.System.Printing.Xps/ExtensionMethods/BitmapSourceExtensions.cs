@@ -29,7 +29,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     ///   Converts the <paramref name="bitmapSource"/> to <see cref="T:System.IO.MemoryStream"/>.
     /// </summary>
     /// <param name="bitmapSource"/>
-    /// <exception cref="ArgumentNullException"><paramref name="bitmapSource"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="bitmapSource"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.Exception"/>
     [NotNull]
     public static MemoryStream ToMemoryStream([NotNull] this BitmapSource bitmapSource)
@@ -51,8 +51,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// </summary>
     /// <param name="bitmapSource"/>
     /// <param name="bitmapEncoderFactory"/>
-    /// <exception cref="ArgumentNullException"><paramref name="bitmapSource"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentNullException"><paramref name="bitmapEncoderFactory"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:Sytem.ArgumentNullException"><paramref name="bitmapSource"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:Sytem.ArgumentNullException"><paramref name="bitmapEncoderFactory"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.Exception"/>
     /// <seealso cref="T:System.Windows.Media.Imaging.BmpBitmapEncoder"/>
     /// <seealso cref="T:System.Windows.Media.Imaging.GifBitmapEncoder"/>

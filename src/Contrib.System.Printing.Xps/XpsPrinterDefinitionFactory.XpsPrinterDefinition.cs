@@ -56,6 +56,12 @@ namespace Contrib.System.Printing.Xps
 #endif
     partial class XpsPrinterDefinition : IXpsPrinterDefinition
     {
+      /// <summary>
+      ///   Initializes a new instance of the <see cref="T:Contrib.System.Printing.Xps.XpsPrinterDefinitionFactory.XpsPrinterDefinition"/> class.
+      /// </summary>
+      [PublicAPI]
+      public XpsPrinterDefinition() { }
+
       /// <inheritdoc/>
       public string DisplayName { get; set; }
 

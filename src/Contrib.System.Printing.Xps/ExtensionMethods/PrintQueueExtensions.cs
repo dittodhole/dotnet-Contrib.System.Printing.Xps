@@ -58,7 +58,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// </summary>
     /// <param name="printQueue"/>
     /// <param name="printTicket"/>
-    /// <seealso cref="M:System.Printing.PrintQueue.GetPrintCapabilitiesAsXml(PrintTicket)"/>
+    /// <seealso cref="M:System.Printing.PrintQueue.GetPrintCapabilitiesAsXml(System.Printing.PrintTicket)"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="printQueue"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="printTicket"/> is <see langword="null"/>.</exception>
     [Pure]

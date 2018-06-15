@@ -14,7 +14,6 @@ namespace Contrib.System.Printing.Xps
   /// <summary>
   ///   A transparent proxy for <see cref="T:MS.Internal.Printing.Configuration.UnitConverter"/>.
   /// </summary>
-  /// <seealso cref="T:MS.Internal.Printing.Configuration.UnitConverter"/>
   [PublicAPI]
 #if CONTRIB_SYSTEM_PRINTING_XPS
   public
@@ -46,7 +45,7 @@ namespace Contrib.System.Printing.Xps
     ///   Converts micron to device-independent pixels.
     /// </summary>
     /// <param name="micronValue"/>
-    /// <seealso cref="M:MS.Internal.Printing.Configuration.UnitConverter.LengthValueFromMicronToDIP"/>
+    /// <seealso cref="M:MS.Internal.Printing.Configuration.UnitConverter.LengthValueFromMicronToDIP()"/>
     /// <exception cref="T:System.Exception"/>
     public static double LengthValueFromMicronToDIP(int micronValue)
     {
@@ -64,7 +63,7 @@ namespace Contrib.System.Printing.Xps
     ///   Converts device-independent pixels to micron.
     /// </summary>
     /// <param name="dipValue"/>
-    /// <seealso cref="M:MS.Internal.Printing.Configuration.UnitConverter.LengthValueFromDIPToMicron"/>
+    /// <seealso cref="M:MS.Internal.Printing.Configuration.UnitConverter.LengthValueFromDIPToMicron()"/>
     /// <exception cref="T:System.Exception"/>
     public static int LengthValueFromDIPToMicron(double dipValue)
     {

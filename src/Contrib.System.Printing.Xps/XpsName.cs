@@ -21,7 +21,7 @@ namespace Contrib.System.Printing.Xps
   ///   > The name attribute value MUST also be a qualified name.
   ///
   ///   As some vendors do not obey the rules, the verification of the local name
-  ///   must be skipped, thus introducing <see cref="XpsName"/>.
+  ///   must be skipped, thus introducing <see cref="T:Contrib.System.Printing.Xps.XpsName"/>.
   /// </remarks>
   /// <seealso cref="T:System.Xml.Linq.XName"/>
   /// <seealso cref="M:System.Xml.XmlConvert.VerifyNCName(string)"/>
