@@ -20,28 +20,28 @@ namespace Contrib.System.Printing.Xps
   partial interface IXpsInputBinDefinition
   {
     /// <summary>
-    ///   The name of the feature.
+    ///   Gets the name of the feature.
     /// </summary>
     /// <example>{http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords}JobInputBin</example>
     [NotNull]
     XpsName Feature { get; }
 
     /// <summary>
-    ///   The name of the input bin.
+    ///   Gets the name of the input bin.
     /// </summary>
     /// <example>{http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords}AutoSelect</example>
     [NotNull]
     XpsName Name { get; }
 
     /// <summary>
-    ///   The display name of the input bin.
+    ///   Gets the display name of the input bin.
     /// </summary>
     /// <example>"Automatically Select"</example>
     [CanBeNull]
     string DisplayName { get; }
 
     /// <summary>
-    ///   The feed type of the input bin.
+    ///   Gets the feed type of the input bin.
     /// </summary>
     /// <example>{http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords}Automatic</example>
     [CanBeNull]

@@ -19,28 +19,28 @@ namespace Contrib.System.Printing.Xps
   partial interface IXpsPrinterDefinition
   {
     /// <summary>
-    ///   The display name of the printer.
+    ///   Gets the display name of the printer.
     /// </summary>
     /// <example>"Microsoft XPS Document Writer"</example>
     [NotNull]
     string DisplayName { get; }
 
     /// <summary>
-    ///   The full name of the printer.
+    ///   Gets the full name of the printer.
     /// </summary>
     /// <example>"Microsoft XPS Document Writer"</example>
     [NotNull]
     string FullName { get; }
 
     /// <summary>
-    ///   The port name of the printer.
+    ///   Gets the port name of the printer.
     /// </summary>
     /// <example>"PORTPROMPT:"</example>
     [CanBeNull]
     string PortName { get; }
 
     /// <summary>
-    ///   The driver name of the printer.
+    ///   Gets the driver name of the printer.
     /// </summary>
     /// <example>"Microsoft XPS Document Writer v4"</example>
     [CanBeNull]
