@@ -7,11 +7,6 @@ namespace Contrib.System.Printing.Xps
   using global::System.Runtime.Serialization;
   using global::JetBrains.Annotations;
 
-#if CONTRIB_SYSTEM_PRINTING_XPS
-  public sealed
-#else
-  internal
-#endif
   partial class XpsName
   {
     [Serializable]
