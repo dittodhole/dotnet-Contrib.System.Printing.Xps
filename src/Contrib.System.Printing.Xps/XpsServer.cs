@@ -142,7 +142,7 @@ namespace Contrib.System.Printing.Xps
 
             feature = printCapabilities.FindElementByNameAttribute(XpsServer.PageInputBinName)
                       ?? printCapabilities.FindElementByNameAttribute(XpsServer.DocumentInputBinName)
-                      ??  printCapabilities.FindElementByNameAttribute(XpsServer.JobInputBinName);
+                      ?? printCapabilities.FindElementByNameAttribute(XpsServer.JobInputBinName);
           }
 
           if (feature == null)
