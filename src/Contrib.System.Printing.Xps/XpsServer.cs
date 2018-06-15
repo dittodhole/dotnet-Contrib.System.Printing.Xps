@@ -203,7 +203,6 @@ namespace Contrib.System.Printing.Xps
       : base(new XpsPrinterDefinitionFactory(),
              new XpsInputBinDefinitionFactory()) { }
 
-
     /// <summary>
     ///   Initializes a new instance of the <see cref="T:Contrib.System.Printing.Xps.XpsServer"/> class.
     /// </summary>
