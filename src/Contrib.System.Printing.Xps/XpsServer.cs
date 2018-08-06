@@ -37,6 +37,17 @@ namespace Contrib.System.Printing.Xps
     TXpsPrinterDefinition[] GetXpsPrinterDefinitions();
 
     /// <summary>
+    ///   Gets the collection of available input bins for the specified printer hosted by the print server.
+    /// </summary>
+    /// <param name="xpsPrinterDefinition"/>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="xpsPrinterDefinition"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.Exception"/>
+    [Pure]
+    [NotNull]
+    [ItemNotNull]
+    TXpsInputBinDefinition[] GetAvailableXpsInputBinDefinitions([NotNull] TXpsPrinterDefinition xpsPrinterDefinition);
+
+    /// <summary>
     ///   Gets the collection of input bins for the specified printer hosted by the print server.
     /// </summary>
     /// <param name="xpsPrinterDefinition"/>
@@ -111,6 +122,21 @@ namespace Contrib.System.Printing.Xps
                                     })
                             .ToArray();
       }
+
+      return result;
+    }
+
+    /// <inheritdoc/>
+    public virtual TXpsInputBinDefinition[] GetAvailableXpsInputBinDefinitions(TXpsPrinterDefinition xpsPrinterDefinition)
+    {
+      if (xpsPrinterDefinition == null)
+      {
+        throw new ArgumentNullException(nameof(xpsPrinterDefinition));
+      }
+
+      var xpsInputBinDefinitions = this.GetXpsInputBinDefinitions(xpsPrinterDefinition);
+      var result = xpsInputBinDefinitions.Where(arg => arg.IsAvailable)
+                                         .ToArray();
 
       return result;
     }
