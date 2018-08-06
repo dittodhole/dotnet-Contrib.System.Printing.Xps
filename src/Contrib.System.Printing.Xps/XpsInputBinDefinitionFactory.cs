@@ -5,6 +5,7 @@ namespace Contrib.System.Printing.Xps
 {
   using global::System.Xml.Linq;
   using global::Contrib.System.Printing.Xps.ExtensionMethods;
+  using global::Anotar.LibLog;
   using global::JetBrains.Annotations;
 
   /// <summary>
@@ -108,12 +109,35 @@ namespace Contrib.System.Printing.Xps
                            ?.Element(XpsServer.ValueName)
                            ?.GetValue() as XpsName;
 
+      bool isAvailable;
+      var constrainedXName = option.GetXName(option.Attribute(XpsServer.ConstrainedName)
+                                                   ?.Value);
+      if (constrainedXName == null)
+      {
+        LogTo.Warn($"Could not get {nameof(XName)} from {nameof(XAttribute)} '{XpsServer.ConstrainedName}': {option}");
+        isAvailable = true;
+      }
+      else if (constrainedXName == XpsServer.DeviceSettingsName)
+      {
+        isAvailable = false;
+      }
+      else if (constrainedXName == XpsServer.NoneName)
+      {
+        isAvailable = true;
+      }
+      else
+      {
+        LogTo.Warn($"Could not get {nameof(IXpsInputBinDefinition.IsAvailable)} from '{constrainedXName}', falling back to '{true}': {option}");
+        isAvailable = true;
+      }
+
       var xpsInputBinDefinition = new XpsInputBinDefinition
                                   {
                                     Feature = feature,
                                     Name = name,
                                     DisplayName = displayName,
-                                    FeedType = feedType
+                                    FeedType = feedType,
+                                    IsAvailable = isAvailable
                                   };
 
       return xpsInputBinDefinition;

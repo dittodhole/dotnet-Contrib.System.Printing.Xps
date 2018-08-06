@@ -44,6 +44,11 @@ namespace Contrib.System.Printing.Xps
     /// <example>{http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords}Automatic</example>
     [CanBeNull]
     XpsName FeedType { get; }
+
+    /// <summary>
+    ///   Gets the active state of the input bin.
+    /// </summary>
+    bool IsAvailable { get; }
   }
 
   partial class XpsInputBinDefinitionFactory
@@ -73,6 +78,9 @@ namespace Contrib.System.Printing.Xps
 
       /// <inheritdoc/>
       public XpsName FeedType { get; set; }
+
+      /// <inheritdoc/>
+      public bool IsAvailable { get; set; }
     }
   }
 }
