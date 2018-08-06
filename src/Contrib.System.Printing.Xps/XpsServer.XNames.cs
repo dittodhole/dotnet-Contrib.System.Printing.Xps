@@ -91,5 +91,26 @@ namespace Contrib.System.Printing.Xps
     [PublicAPI]
     [NotNull]
     public static XName QNameName => XpsServer.XmlSchemaNamespace.GetName("QName");
+
+    /// <summary>
+    ///   constrained
+    /// </summary>
+    [PublicAPI]
+    [NotNull]
+    public static XName ConstrainedName => XNamespace.None.GetName("constrained");
+
+    /// <summary>
+    ///   psk:none
+    /// </summary>
+    [PublicAPI]
+    [NotNull]
+    public static XName NoneName => XpsServer.PrinterSchemaKeywordsNamespace.GetName("none");
+
+    /// <summary>
+    ///   psk:DeviceSettings
+    /// </summary>
+    [PublicAPI]
+    [NotNull]
+    public static XName DeviceSettingsName => XpsServer.PrinterSchemaKeywordsNamespace.GetName("DeviceSettings");
   }
 }
