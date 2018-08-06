@@ -45,20 +45,18 @@ namespace Contrib.System.Printing.Xps
     [Pure]
     [NotNull]
     [ItemNotNull]
-    TXpsInputBinDefinition[] GetXpsInputBinDefinitions([NotNull] TXpsPrinterDefinition xpsPrinterDefinition);
+    TXpsInputBinDefinition[] GetAvailableXpsInputBinDefinitions([NotNull] TXpsPrinterDefinition xpsPrinterDefinition);
 
     /// <summary>
     ///   Gets the collection of input bins for the specified printer hosted by the print server.
     /// </summary>
     /// <param name="xpsPrinterDefinition"/>
-    /// <param name="filterForAvailable"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="xpsPrinterDefinition"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.Exception"/>
     [Pure]
     [NotNull]
     [ItemNotNull]
-    TXpsInputBinDefinition[] GetXpsInputBinDefinitions([NotNull] TXpsPrinterDefinition xpsPrinterDefinition,
-                                                       bool filterForAvailable);
+    TXpsInputBinDefinition[] GetXpsInputBinDefinitions([NotNull] TXpsPrinterDefinition xpsPrinterDefinition);
   }
 
   /// <inheritdoc />
@@ -129,15 +127,22 @@ namespace Contrib.System.Printing.Xps
     }
 
     /// <inheritdoc/>
-    public virtual TXpsInputBinDefinition[] GetXpsInputBinDefinitions(TXpsPrinterDefinition xpsPrinterDefinition)
+    public virtual TXpsInputBinDefinition[] GetAvailableXpsInputBinDefinitions(TXpsPrinterDefinition xpsPrinterDefinition)
     {
-      return this.GetXpsInputBinDefinitions(xpsPrinterDefinition,
-                                            true);
+      if (xpsPrinterDefinition == null)
+      {
+        throw new ArgumentNullException(nameof(xpsPrinterDefinition));
+      }
+
+      var xpsInputBinDefinitions = this.GetXpsInputBinDefinitions(xpsPrinterDefinition);
+      var result = xpsInputBinDefinitions.Where(arg => arg.IsAvailable)
+                                         .ToArray();
+
+      return result;
     }
 
     /// <inheritdoc/>
-    public virtual TXpsInputBinDefinition[] GetXpsInputBinDefinitions(TXpsPrinterDefinition xpsPrinterDefinition,
-                                                                      bool filterForAvailable)
+    public virtual TXpsInputBinDefinition[] GetXpsInputBinDefinitions(TXpsPrinterDefinition xpsPrinterDefinition)
     {
       if (xpsPrinterDefinition == null)
       {
@@ -198,20 +203,6 @@ namespace Contrib.System.Printing.Xps
 
                                       return xpsInputBinDefinition;
                                     })
-                            .Where(arg =>
-                                   {
-                                     bool include;
-                                     if (filterForAvailable)
-                                     {
-                                       include = arg.IsAvailable;
-                                     }
-                                     else
-                                     {
-                                       include = true;
-                                     }
-
-                                     return include;
-                                   })
                             .ToArray();
           }
         }
