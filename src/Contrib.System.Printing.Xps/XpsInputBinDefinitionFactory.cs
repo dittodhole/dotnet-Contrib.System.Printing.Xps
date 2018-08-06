@@ -29,6 +29,7 @@ namespace Contrib.System.Printing.Xps
   ///       public string DisplayName { get; set; }
   ///       public XName Name { get; set; }
   ///       public XName FeedType { get; set; }
+  ///       public bool IsAvailable { get; set; }
   ///     }
   ///
   ///     private IXpsInputBinDefinitionFactory XpsInputBinDefinitionFactory { get; } = new XpsInputBinDefinitionFactory();
@@ -43,7 +44,8 @@ namespace Contrib.System.Printing.Xps
   ///                                          Feature = xpsInputBinDefinition.Feature,
   ///                                          DisplayName = xpsInputBinDefinition.DisplayName,
   ///                                          Name = xpsInputBinDefinition.Name,
-  ///                                          FeedType = xpsInputBinDefinition.FeedType
+  ///                                          FeedType = xpsInputBinDefinition.FeedType,
+  ///                                          IsAvailable = xpsInputBinDefinition.IsAvailable,
   ///                                        };
   ///
   ///       // TODO use printCapabilities with Contrib.System.Printing.Xps.ExtensionMethods.XElementExtensions to extract needed values
