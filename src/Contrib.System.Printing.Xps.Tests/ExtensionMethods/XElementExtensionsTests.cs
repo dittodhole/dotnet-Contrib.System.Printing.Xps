@@ -1,4 +1,4 @@
-﻿namespace Contrib.System.Printing.Xps.Tests.ExtensionMethods
+namespace Contrib.System.Printing.Xps.Tests.ExtensionMethods
 {
   using global::System.Collections.Generic;
   using global::System.Xml.Linq;
@@ -116,5 +116,51 @@
                                       "foo:");
       }
     }
+
+    [TestCaseSource(nameof(XElementExtensionsTests.GetXName_TestCases))]
+    public void GetXName(string str,
+                         string expectedNamespace,
+                         string expectedLocalName)
+    {
+      var document = XDocument.Parse(XElementExtensionsTests.DefaultXmlContent);
+      var root = document.Root;
+
+      var name = root.GetXName(str);
+      if (name == null)
+      {
+        Assert.IsNull(expectedNamespace);
+        Assert.IsNull(expectedLocalName);
+      }
+      else
+      {
+        var actualNamespace = name.Namespace.NamespaceName;
+        var actualLocalName = name.LocalName;
+
+        Assert.AreEqual(expectedNamespace,
+                        actualNamespace);
+        Assert.AreEqual(expectedLocalName,
+                        actualLocalName);
+      }
+    }
+
+    private static IEnumerable<TestCaseData> GetXName_TestCases
+    {
+      get
+      {
+        yield return new TestCaseData("ns0000:foo",
+                                      "http://my.scheme.com",
+                                      "foo");
+        yield return new TestCaseData("foo",
+                                      string.Empty,
+                                      "foo");
+        yield return new TestCaseData("ns0001:foo",
+                                      null,
+                                      null);
+        yield return new TestCaseData("ns0000:foo:",
+                                      null,
+                                      null);
+      }
+    }
+
   }
 }

@@ -1,4 +1,4 @@
-/** @pp
+﻿/** @pp
  * rootnamespace: Contrib.System
  */
 namespace Contrib.System.Printing.Xps.ExtensionMethods
@@ -292,11 +292,13 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       {
         string prefix;
         string localName;
-        if (str.Contains(':'))
+
+        int index;
+        if ((index = str.IndexOf(':')) >= 0)
         {
-          var parts = str.Split(':');
-          prefix = parts.ElementAtOrDefault(0);
-          localName = parts.ElementAtOrDefault(1);
+          prefix = str.Substring(0,
+                                 index);
+          localName = str.Substring(index + 1);
         }
         else
         {
@@ -332,8 +334,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         }
         else
         {
-          var xnamespace = element.GetNamespaceOfPrefix(prefix);
-          if (xnamespace == null)
+          var @namespace = element.GetNamespaceOfPrefix(prefix);
+          if (@namespace == null)
           {
             LogTo.Warn($"Could not get {nameof(XNamespace)} from '{str}': {element}");
             result = null;
@@ -342,7 +344,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
           {
             try
             {
-              result = xnamespace.GetName(localName);
+              result = @namespace.GetName(localName);
             }
             catch (Exception exception)
             {
