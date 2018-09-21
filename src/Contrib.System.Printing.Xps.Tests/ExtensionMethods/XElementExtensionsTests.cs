@@ -8,6 +8,13 @@
   [TestFixture]
   public class XElementExtensionsTests
   {
+    private static string DefaultXmlContent => @"
+<root xmlns:ns0000=""http://my.scheme.com"">
+  <child1 name=""child1""/>
+  <child2 name=""16bpcSupport""/>
+  <child3 name=""ns0000:foo""/>
+</root>";
+
     [TestCaseSource(nameof(XElementExtensionsTests.ReduceName_TestCases))]
     public string ReduceName(XName name)
     {
@@ -47,14 +54,7 @@
     [TestCaseSource(nameof(XElementExtensionsTests.FindElementByNameAttribute_Should_Succeed_TestCases))]
     public void FindElementByNameAttribute_Should_Succeed(XpsName name)
     {
-      const string content = @"
-<root xmlns:ns0000=""http://my.scheme.com"">
-  <child1 name=""child1""/>
-  <child2 name=""16bpcSupport""/>
-  <child3 name=""ns0000:foo""/>
-</root>";
-
-      var document = XDocument.Parse(content);
+      var document = XDocument.Parse(XElementExtensionsTests.DefaultXmlContent);
       var root = document.Root;
 
       var result = root.FindElementByNameAttribute(name);
@@ -69,6 +69,51 @@
         yield return new TestCaseData(XNamespace.None.GetXpsName("child1"));
         yield return new TestCaseData(XNamespace.None.GetXpsName("16bpcSupport"));
         yield return new TestCaseData(XNamespace.Get("http://my.scheme.com").GetXpsName("foo"));
+      }
+    }
+
+    [TestCaseSource(nameof(XElementExtensionsTests.GetXpsName_TestCases))]
+    public void GetXpsName(string str,
+                           string expectedNamespace,
+                           string expectedLocalName)
+    {
+      var document = XDocument.Parse(XElementExtensionsTests.DefaultXmlContent);
+      var root = document.Root;
+      var xpsName = root.GetXpsName(str);
+
+      if (xpsName == null)
+      {
+        Assert.IsNull(expectedNamespace);
+        Assert.IsNull(expectedLocalName);
+      }
+      else
+      {
+        var actualNamespace = xpsName.Namespace.NamespaceName;
+        var actualLocalName = xpsName.LocalName;
+
+        Assert.AreEqual(expectedNamespace,
+                        actualNamespace);
+        Assert.AreEqual(expectedLocalName,
+                        actualLocalName);
+      }
+    }
+
+    private static IEnumerable<TestCaseData> GetXpsName_TestCases
+    {
+      get
+      {
+        yield return new TestCaseData("ns0000:foo",
+                                      "http://my.scheme.com",
+                                      "foo");
+        yield return new TestCaseData("foo",
+                                      string.Empty,
+                                      "foo");
+        yield return new TestCaseData("ns0001:foo",
+                                      null,
+                                      null);
+        yield return new TestCaseData("ns0000:foo:",
+                                      "http://my.scheme.com",
+                                      "foo:");
       }
     }
   }
