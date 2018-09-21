@@ -1,4 +1,4 @@
-namespace Contrib.System.Printing.Xps.Tests.ExtensionMethods
+﻿namespace Contrib.System.Printing.Xps.Tests.ExtensionMethods
 {
   using global::System.Collections.Generic;
   using global::System.Xml.Linq;
@@ -79,8 +79,8 @@ namespace Contrib.System.Printing.Xps.Tests.ExtensionMethods
     {
       var document = XDocument.Parse(XElementExtensionsTests.DefaultXmlContent);
       var root = document.Root;
-      var xpsName = root.GetXpsName(str);
 
+      var xpsName = root.GetXpsName(str);
       if (xpsName == null)
       {
         Assert.IsNull(expectedNamespace);
