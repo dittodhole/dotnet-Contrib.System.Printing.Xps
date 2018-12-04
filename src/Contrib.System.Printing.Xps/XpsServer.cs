@@ -282,13 +282,19 @@ namespace Contrib.System.Printing.Xps
     }
 
     /// <summary>
-    ///   Gets the print ticket for printing with a print queue.
+    ///   Gets the print ticket for printing with a printer.
     /// </summary>
     /// <param name="xpsPrinterDefinition"/>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="xpsPrinterDefinition"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.Exception"/>
     [NotNull]
-    protected virtual PrintTicket GetPrintTicketForPrintingWithPrintQueue([NotNull] TXpsPrinterDefinition xpsPrinterDefinition)
+    public virtual PrintTicket GetPrintTicketForPrinting([NotNull] TXpsPrinterDefinition xpsPrinterDefinition)
     {
+      if (xpsPrinterDefinition == null)
+      {
+        throw new ArgumentNullException(nameof(xpsPrinterDefinition));
+      }
+
       return new PrintTicket();
     }
 
@@ -297,11 +303,22 @@ namespace Contrib.System.Printing.Xps
     /// </summary>
     /// <param name="xpsPrinterDefinition"/>
     /// <param name="xpsInputBinDefinition"/>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="xpsPrinterDefinition"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="xpsInputBinDefinition"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.Exception"/>
     [NotNull]
-    protected virtual PrintTicket GetPrintTicketForPrintingWithInputBin([NotNull] TXpsPrinterDefinition xpsPrinterDefinition,
-                                                                        [NotNull] TXpsInputBinDefinition xpsInputBinDefinition)
+    public virtual PrintTicket GetPrintTicketForPrinting([NotNull] TXpsPrinterDefinition xpsPrinterDefinition,
+                                                         [NotNull] TXpsInputBinDefinition xpsInputBinDefinition)
     {
+      if (xpsPrinterDefinition == null)
+      {
+        throw new ArgumentNullException(nameof(xpsPrinterDefinition));
+      }
+      if (xpsInputBinDefinition == null)
+      {
+        throw new ArgumentNullException(nameof(xpsInputBinDefinition));
+      }
+
       // === result ===
       // <?xml version="1.0" encoding="UTF-8"?>
       // <psf:PrintTicket xmlns:psf="http://schemas.microsoft.com/windows/2003/08/printing/printschemaframework"
@@ -325,7 +342,7 @@ namespace Contrib.System.Printing.Xps
       // === === === === ===
 
       XDocument document;
-      using (var memoryStream = this.GetPrintTicketForPrintingWithPrintQueue(xpsPrinterDefinition)
+      using (var memoryStream = this.GetPrintTicketForPrinting(xpsPrinterDefinition)
                                     .GetXmlStream())
       {
         document = XDocument.Load(memoryStream);

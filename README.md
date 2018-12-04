@@ -43,7 +43,7 @@ foreach (var xpsPrinterDefinition in xpsPrinterDefinitions)
   xpsPrinterDefinition.Print(documentPaginatorSource,
                              printQueue =>
                              {
-                               var printTicket = new PrintTicket();
+                               var printTicket = xpsServer.GetPrintTicketForPrinting(xpsPrinterDefinition);
 
                                return printTicket;
                              });
@@ -54,7 +54,8 @@ foreach (var xpsPrinterDefinition in xpsPrinterDefinitions)
     xpsPrinterDefinition.Print(documentPaginatorSource,
                                printQueue =>
                                {
-                                 var printTicket = xpsInputBinDefinition.GetPrintTicket();
+                                 var printTicket = xpsServer.GetPrintTicketForPrinting(xpsPrinterDefinition,
+                                                                                       xpsInputBinDefinition);
 
                                  return printTicket;
                                });
