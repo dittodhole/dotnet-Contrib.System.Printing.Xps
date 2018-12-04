@@ -25,7 +25,6 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <param name="localName"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="namespace"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="localName"/> is <see langword="null"/>.</exception>
-    [Pure]
     [NotNull]
     public static XpsName GetXpsName([NotNull] this XNamespace @namespace,
                                      [NotNull] string localName)

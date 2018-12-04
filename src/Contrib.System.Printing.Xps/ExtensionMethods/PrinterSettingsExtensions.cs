@@ -46,21 +46,26 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       bool result;
       if (printerSettings.IsValid)
       {
-        if (xpsInputBinDefinition != null)
+        if (xpsInputBinDefinition == null)
         {
+          result = true;
+        }
+        else
+        {
+          result = false;
+
           foreach (PaperSource paperSource in printerSettings.PaperSources)
           {
-            if (string.Equals(paperSource.SourceName,
-                              xpsInputBinDefinition.DisplayName,
-                              StringComparison.Ordinal))
+            result = string.Equals(paperSource.SourceName,
+                                   xpsInputBinDefinition.DisplayName,
+                                   StringComparison.Ordinal);
+            if (result)
             {
               printerSettings.DefaultPageSettings.PaperSource = paperSource;
               break;
             }
           }
         }
-
-        result = true;
       }
       else
       {

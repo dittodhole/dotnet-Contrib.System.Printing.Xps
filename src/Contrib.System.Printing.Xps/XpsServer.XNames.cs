@@ -6,11 +6,6 @@ namespace Contrib.System.Printing.Xps
   using global::System.Xml.Linq;
   using global::JetBrains.Annotations;
 
-#if CONTRIB_SYSTEM_PRINTING_XPS
-  public
-#else
-  internal
-#endif
   partial class XpsServer
   {
     /// <summary>
@@ -96,5 +91,26 @@ namespace Contrib.System.Printing.Xps
     [PublicAPI]
     [NotNull]
     public static XName QNameName => XpsServer.XmlSchemaNamespace.GetName("QName");
+
+    /// <summary>
+    ///   constrained
+    /// </summary>
+    [PublicAPI]
+    [NotNull]
+    public static XName ConstrainedName => XNamespace.None.GetName("constrained");
+
+    /// <summary>
+    ///   psk:none
+    /// </summary>
+    [PublicAPI]
+    [NotNull]
+    public static XName NoneName => XpsServer.PrinterSchemaKeywordsNamespace.GetName("none");
+
+    /// <summary>
+    ///   psk:DeviceSettings
+    /// </summary>
+    [PublicAPI]
+    [NotNull]
+    public static XName DeviceSettingsName => XpsServer.PrinterSchemaKeywordsNamespace.GetName("DeviceSettings");
   }
 }

@@ -6,11 +6,6 @@ namespace Contrib.System.Printing.Xps
   using global::JetBrains.Annotations;
   using global::Contrib.System.Printing.Xps.ExtensionMethods;
 
-#if CONTRIB_SYSTEM_PRINTING_XPS
-  public
-#else
-  internal
-#endif
   partial class XpsServer
   {
     /// <summary>

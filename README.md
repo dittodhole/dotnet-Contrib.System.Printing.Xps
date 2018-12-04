@@ -29,6 +29,8 @@ PM> Install-Package -Id Contrib.System.Printing.Xps
 
 ```csharp
 using global::Contrib.System.Printing.Xps;
+using global::Contrib.System.Printing.Xps.ExtensionMethods;
+using global::System.Printing;
 using global::System.Windows.Documents;
 
 IDocumentPaginatorSource documentPaginatorSource;
