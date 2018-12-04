@@ -4,7 +4,6 @@
 namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
   using global::System;
-  using global::System.Linq;
   using global::System.Xml;
   using global::System.Xml.Linq;
   using global::Anotar.LibLog;
