@@ -1,4 +1,4 @@
-﻿/** @pp
+/** @pp
  * rootnamespace: Contrib.System
  */
 namespace Contrib.System.Printing.Xps
@@ -32,7 +32,6 @@ namespace Contrib.System.Printing.Xps
     ///   Gets the collection of printers hosted by the print server.
     /// </summary>
     /// <exception cref="T:System.Exception"/>
-    [Pure]
     [NotNull]
     [ItemNotNull]
     TXpsPrinterDefinition[] GetXpsPrinterDefinitions();
@@ -43,7 +42,6 @@ namespace Contrib.System.Printing.Xps
     /// <param name="xpsPrinterDefinition"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="xpsPrinterDefinition"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.Exception"/>
-    [Pure]
     [NotNull]
     [ItemNotNull]
     TXpsInputBinDefinition[] GetAvailableXpsInputBinDefinitions([NotNull] TXpsPrinterDefinition xpsPrinterDefinition);
@@ -54,7 +52,6 @@ namespace Contrib.System.Printing.Xps
     /// <param name="xpsPrinterDefinition"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="xpsPrinterDefinition"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.Exception"/>
-    [Pure]
     [NotNull]
     [ItemNotNull]
     TXpsInputBinDefinition[] GetXpsInputBinDefinitions([NotNull] TXpsPrinterDefinition xpsPrinterDefinition);
@@ -299,7 +296,6 @@ namespace Contrib.System.Printing.Xps
     /// </summary>
     /// <param name="xpsPrinterDefinition"/>
     /// <exception cref="T:System.Exception"/>
-    [Pure]
     [NotNull]
     protected virtual PrintTicket GetPrintTicketForPrintingWithPrintQueue([NotNull] TXpsPrinterDefinition xpsPrinterDefinition)
     {
@@ -312,7 +308,6 @@ namespace Contrib.System.Printing.Xps
     /// <param name="xpsPrinterDefinition"/>
     /// <param name="xpsInputBinDefinition"/>
     /// <exception cref="T:System.Exception"/>
-    [Pure]
     [NotNull]
     protected virtual PrintTicket GetPrintTicketForPrintingWithInputBin([NotNull] TXpsPrinterDefinition xpsPrinterDefinition,
                                                                         [NotNull] TXpsInputBinDefinition xpsInputBinDefinition)

@@ -26,7 +26,6 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <exception cref="T:System.ArgumentNullException"><paramref name="printQueueCollection"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="xpsPrinterDefinition"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.Exception"/>
-    [Pure]
     [CanBeNull]
     public static PrintQueue FindPrintQueue([NotNull] this PrintQueueCollection printQueueCollection,
                                             [NotNull] IXpsPrinterDefinition xpsPrinterDefinition)

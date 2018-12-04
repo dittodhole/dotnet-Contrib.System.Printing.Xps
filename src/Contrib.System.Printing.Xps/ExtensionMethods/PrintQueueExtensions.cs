@@ -28,7 +28,6 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <param name="printTicket"/>
     /// <seealso cref="M:System.Printing.PrintQueue.GetPrintCapabilitiesAsXml(System.Printing.PrintTicket)"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="printQueue"/> is <see langword="null"/>.</exception>
-    [Pure]
     [CanBeNull]
     public static XDocument GetPrintCapabilitiesAsXDocument([NotNull] this PrintQueue printQueue,
                                                             [CanBeNull] PrintTicket printTicket)
