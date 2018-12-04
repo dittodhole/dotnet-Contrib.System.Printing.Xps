@@ -1,4 +1,4 @@
-/** @pp
+﻿/** @pp
  * rootnamespace: Contrib.System
  */
 namespace Contrib.System.Printing.Xps
@@ -291,7 +291,7 @@ namespace Contrib.System.Printing.Xps
       return result;
     }
 
-        /// <summary>
+    /// <summary>
     ///   Gets the print ticket for printing with a print queue.
     /// </summary>
     /// <param name="xpsPrinterDefinition"/>
