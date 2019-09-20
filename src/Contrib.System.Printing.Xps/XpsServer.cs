@@ -37,6 +37,15 @@ namespace Contrib.System.Printing.Xps
     TXpsPrinterDefinition[] GetXpsPrinterDefinitions();
 
     /// <summary>
+    ///   Gets the named printer hosted by the print server.
+    /// </summary>
+    /// <param name="fullName"/>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="fullName"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.Exception"/>
+    [CanBeNull]
+    TXpsPrinterDefinition GetXpsPrinterDefinition([NotNull] string fullName);
+
+    /// <summary>
     ///   Gets the collection of available input bins for the specified printer hosted by the print server.
     /// </summary>
     /// <param name="xpsPrinterDefinition"/>
@@ -105,21 +114,33 @@ namespace Contrib.System.Printing.Xps
       using (var printServer = new PrintServer())
       using (var printQueues = printServer.GetLocalAndRemotePrintQueues())
       {
-        result = printQueues.Select(printQueue =>
-                                    {
-                                      var printTicket = this.GetPrintTicketForQueryingPrintCapabilitiesOfPrintQueue(printQueue);
-                                      var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(printTicket)
-                                                                        ?.Root ?? XpsServer.PrintCapabilitiesElement;
-
-                                      var xpsPrinterDefinition = this.XpsPrinterDefinitionFactory.Create(printQueue.Name,
-                                                                                                         printQueue.FullName,
-                                                                                                         printQueue.QueuePort?.Name,
-                                                                                                         printQueue.QueueDriver?.Name,
-                                                                                                         printCapabilities);
-
-                                      return xpsPrinterDefinition;
-                                    })
+        result = printQueues.Select(this.CreateXpsPrinterDefinition)
                             .ToArray();
+      }
+
+      return result;
+    }
+
+    /// <inheritdoc/>
+    public virtual TXpsPrinterDefinition GetXpsPrinterDefinition(string fullName)
+    {
+      if (fullName == null)
+      {
+        throw new ArgumentNullException(nameof(fullName));
+      }
+
+      TXpsPrinterDefinition result;
+      using (var printServer = new PrintServer())
+      using (var printQueue = printServer.GetPrintQueue(fullName))
+      {
+        if (printQueue == null)
+        {
+          result = default;
+        }
+        else
+        {
+          result = this.CreateXpsPrinterDefinition(printQueue);
+        }
       }
 
       return result;
@@ -208,6 +229,27 @@ namespace Contrib.System.Printing.Xps
           }
         }
       }
+
+      return result;
+    }
+
+    /// <summary>
+    ///   Converts a print queue to a printer.
+    /// </summary>
+    /// <param name="printQueue"/>
+    /// <exception cref="T:System.Exception"/>
+    [NotNull]
+    protected virtual TXpsPrinterDefinition CreateXpsPrinterDefinition([NotNull] PrintQueue printQueue)
+    {
+      var printTicket = this.GetPrintTicketForQueryingPrintCapabilitiesOfPrintQueue(printQueue);
+      var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(printTicket)
+                                        ?.Root ?? XpsServer.PrintCapabilitiesElement;
+
+      var result = this.XpsPrinterDefinitionFactory.Create(printQueue.Name,
+                                                           printQueue.FullName,
+                                                           printQueue.QueuePort?.Name,
+                                                           printQueue.QueueDriver?.Name,
+                                                           printCapabilities);
 
       return result;
     }
