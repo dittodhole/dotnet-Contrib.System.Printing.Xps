@@ -13,7 +13,7 @@ deploy:
 - provider: NuGet
   name: NuGet
   api_key:
-    secure: bP+3+r6NPoiV1kVeM/5x4OPM2p7p0zJXeV9E1wKoEAMtIhhi7+HRVycNsa8v1Ujc
+    secure: jU6eiKe511roWazckf8LcZDEw6JPkgZdKiI3x0AXJsAM+VrwH5CHjOEk6T4JuVmE
   artifact: nupkg
   on:
     branch: master
