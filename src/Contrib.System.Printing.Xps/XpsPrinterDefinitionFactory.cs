@@ -25,29 +25,21 @@ namespace Contrib.System.Printing.Xps
   ///     {
   ///       public string DisplayName { get; set; }
   ///       public string FullName { get; set; }
-  ///       public string PortName { get; set; }
-  ///       public string DriverName { get; set; }
   ///     }
   ///
   ///     private IXpsPrinterDefinitionFactory XpsPrinterDefinitionFactory { get; } = new XpsPrinterDefinitionFactory();
   ///
   ///     public ICustomXpsPrinterDefinition Create(string displayName,
   ///                                               string fullName,
-  ///                                               string portName,
-  ///                                               string driverName,
   ///                                               XElement printCapabilities)
   ///     {
   ///       var xpsPrinterDefinition = this.XpsPrinterDefinitionFactory.Create(displayName,
   ///                                                                          fullName,
-  ///                                                                          portName,
-  ///                                                                          driverName,
   ///                                                                          printCapabilities);
   ///       var customXpsPrinterDefinition = new CustomXpsPrinterDefinition
   ///                                        {
   ///                                          DisplayName = xpsPrinterDefinition.DisplayName,
-  ///                                          FullName = xpsPrinterDefinition.FullName,
-  ///                                          PortName = xpsPrinterDefinition.PortName,
-  ///                                          DriverName = xpsPrinterDefinition.DriverName
+  ///                                          FullName = xpsPrinterDefinition.FullName
   ///                                        };
   ///
   ///       // TODO use printCapabilities with Contrib.System.Printing.Xps.ExtensionMethods.XElementExtensions to extract needed values
@@ -71,14 +63,10 @@ namespace Contrib.System.Printing.Xps
     /// </summary>
     /// <param name="displayName">The display name of the printer.</param>
     /// <param name="fullName">The full name of the printer.</param>
-    /// <param name="portName">The port name of the printer.</param>
-    /// <param name="driverName">The driver name of the printer.</param>
     /// <param name="printCapabilities"/>
     [NotNull]
     TXpsPrinterDefinition Create([NotNull] string displayName,
                                  [NotNull] string fullName,
-                                 [CanBeNull] string portName,
-                                 [CanBeNull] string driverName,
                                  [NotNull] XElement printCapabilities);
   }
 
@@ -100,16 +88,12 @@ namespace Contrib.System.Printing.Xps
     /// <inheritdoc/>
     public IXpsPrinterDefinition Create(string displayName,
                                         string fullName,
-                                        string portName,
-                                        string driverName,
                                         XElement printCapabilities)
     {
       var xpsPrinterDefinition = new XpsPrinterDefinition
                                  {
                                    DisplayName = displayName,
-                                   FullName = fullName,
-                                   PortName = portName,
-                                   DriverName = driverName
+                                   FullName = fullName
                                  };
 
       return xpsPrinterDefinition;
