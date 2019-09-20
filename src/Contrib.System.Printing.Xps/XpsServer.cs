@@ -247,8 +247,6 @@ namespace Contrib.System.Printing.Xps
 
       var result = this.XpsPrinterDefinitionFactory.Create(printQueue.Name,
                                                            printQueue.FullName,
-                                                           printQueue.QueuePort?.Name,
-                                                           printQueue.QueueDriver?.Name,
                                                            printCapabilities);
 
       return result;
