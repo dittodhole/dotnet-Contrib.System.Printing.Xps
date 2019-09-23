@@ -4,10 +4,10 @@
 namespace Contrib.System.Printing.Xps
 {
   using global::System;
+  using global::System.Collections.Generic;
   using global::System.IO;
   using global::System.Linq;
   using global::System.Printing;
-  using global::System.Xml.Linq;
   using global::Contrib.System.Printing.Xps.ExtensionMethods;
   using global::JetBrains.Annotations;
 
@@ -52,6 +52,7 @@ namespace Contrib.System.Printing.Xps
     /// </summary>
     /// <param name="xpsPrinterDefinition"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="xpsPrinterDefinition"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.InvalidOperationException"/>
     /// <exception cref="T:System.Exception"/>
     [Pure]
     [NotNull]
@@ -101,7 +102,7 @@ namespace Contrib.System.Printing.Xps
     /// <inheritdoc/>
     public virtual TXpsPrinterDefinition[] GetXpsPrinterDefinitions()
     {
-      TXpsPrinterDefinition[] result;
+      var xpsPrinterDefinitions = new List<TXpsPrinterDefinition>();
       using (var localPrintServer = new LocalPrintServer())
       {
         PrintQueueCollection printQueueCollection;
@@ -117,12 +118,23 @@ namespace Contrib.System.Printing.Xps
 
         using (printQueueCollection)
         {
-          result = printQueueCollection.Select(this.XpsPrinterDefinitionFactory.Create)
-                                       .ToArray();
+          foreach (PrintQueue printQueue in printQueueCollection)
+          {
+            try
+            {
+              var xpsPrinterDefinition = this.XpsPrinterDefinitionFactory.Create(printQueue);
+
+              xpsPrinterDefinitions.Add(xpsPrinterDefinition);
+            }
+            catch (InvalidOperationException)
+            {
+              continue;
+            }
+          }
         }
       }
 
-      return result;
+      return xpsPrinterDefinitions.ToArray();
     }
 
     /// <inheritdoc/>
