@@ -12,7 +12,6 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   /// <summary>
   ///   Provides extensions for <see cref="T:Contrib.System.Printing.Xps.IXpsPrinterDefinition"/> objects.
   /// </summary>
-  [PublicAPI]
 #if CONTRIB_SYSTEM_PRINTING_XPS
   public
 #else
@@ -55,56 +54,50 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         throw new ArgumentNullException(nameof(printTicketFactory));
       }
 
-      using (var printServer = new PrintServer())
-      using (var printQueues = printServer.GetLocalAndRemotePrintQueues())
+      using (var printServer = new PrintServer(xpsPrinterDefinition.ServerName))
+      using (var printQueue = printServer.GetPrintQueue(xpsPrinterDefinition.Name))
       {
-        var printQueue = printQueues.FindPrintQueue(xpsPrinterDefinition);
-        if (printQueue == null)
-        {
-          LogTo.Error($"Could not get {nameof(PrintQueue)} '{xpsPrinterDefinition.FullName}'.");
-        }
-        else
-        {
-          var xpsDocumentWriter = PrintQueue.CreateXpsDocumentWriter(printQueue);
-          var printTicket = printTicketFactory.Invoke(printQueue);
+        var xpsDocumentWriter = PrintQueue.CreateXpsDocumentWriter(printQueue);
+        var printTicket = printTicketFactory.Invoke(printQueue);
 
-          if (documentPaginatorSource is FixedDocumentSequence fixedDocumentSequence)
+        if (documentPaginatorSource is FixedDocumentSequence fixedDocumentSequence)
+        {
+          if (printTicket == null)
           {
-            if (printTicket == null)
-            {
-              xpsDocumentWriter.Write(fixedDocumentSequence);
-            }
-            else
-            {
-              fixedDocumentSequence.PrintTicket = printTicket;
-              xpsDocumentWriter.Write(fixedDocumentSequence,
-                                      printTicket);
-            }
-          }
-          else if (documentPaginatorSource is FixedDocument fixedDocument)
-          {
-            if (printTicket == null)
-            {
-              xpsDocumentWriter.Write(fixedDocument);
-            }
-            else
-            {
-              fixedDocument.PrintTicket = printTicket;
-              xpsDocumentWriter.Write(fixedDocument,
-                                      printTicket);
-            }
+            xpsDocumentWriter.Write(fixedDocumentSequence);
           }
           else
           {
-            if (printTicket == null)
-            {
-              xpsDocumentWriter.Write(documentPaginatorSource.DocumentPaginator);
-            }
-            else
-            {
-              xpsDocumentWriter.Write(documentPaginatorSource.DocumentPaginator,
-                                      printTicket);
-            }
+            fixedDocumentSequence.PrintTicket = printTicket;
+
+            xpsDocumentWriter.Write(fixedDocumentSequence,
+                                    printTicket);
+          }
+        }
+        else if (documentPaginatorSource is FixedDocument fixedDocument)
+        {
+          if (printTicket == null)
+          {
+            xpsDocumentWriter.Write(fixedDocument);
+          }
+          else
+          {
+            fixedDocument.PrintTicket = printTicket;
+
+            xpsDocumentWriter.Write(fixedDocument,
+                                    printTicket);
+          }
+        }
+        else
+        {
+          if (printTicket == null)
+          {
+            xpsDocumentWriter.Write(documentPaginatorSource.DocumentPaginator);
+          }
+          else
+          {
+            xpsDocumentWriter.Write(documentPaginatorSource.DocumentPaginator,
+                                    printTicket);
           }
         }
       }

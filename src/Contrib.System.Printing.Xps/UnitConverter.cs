@@ -9,8 +9,6 @@ namespace Contrib.System.Printing.Xps
   using global::System.Runtime.CompilerServices;
   using global::JetBrains.Annotations;
 
-  // ReSharper disable InconsistentNaming
-
   /// <summary>
   ///   A transparent proxy for <see cref="T:MS.Internal.Printing.Configuration.UnitConverter"/>.
   /// </summary>
@@ -23,6 +21,7 @@ namespace Contrib.System.Printing.Xps
   static partial class UnitConverter
   {
     /// <exception cref="T:System.Exception"/>
+    [Pure]
     [NotNull]
     private static Type FindInternalType()
     {
@@ -32,6 +31,7 @@ namespace Contrib.System.Printing.Xps
     }
 
     /// <exception cref="T:System.Exception"/>
+    [Pure]
     [NotNull]
     private static MethodInfo FindInternalMethod([CallerMemberName] string callerMemberName = "")
     {
@@ -47,6 +47,7 @@ namespace Contrib.System.Printing.Xps
     /// <param name="micronValue"/>
     /// <seealso cref="M:MS.Internal.Printing.Configuration.UnitConverter.LengthValueFromMicronToDIP(int)"/>
     /// <exception cref="T:System.Exception"/>
+    [Pure]
     public static double LengthValueFromMicronToDIP(int micronValue)
     {
       var methodInfo = UnitConverter.FindInternalMethod();
@@ -65,6 +66,7 @@ namespace Contrib.System.Printing.Xps
     /// <param name="dipValue"/>
     /// <seealso cref="M:MS.Internal.Printing.Configuration.UnitConverter.LengthValueFromDIPToMicron(double)"/>
     /// <exception cref="T:System.Exception"/>
+    [Pure]
     public static int LengthValueFromDIPToMicron(double dipValue)
     {
       var methodInfo = UnitConverter.FindInternalMethod();

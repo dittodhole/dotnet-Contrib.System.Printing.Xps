@@ -13,7 +13,6 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   /// <summary>
   ///   Provides extensions for <see cref="T:System.Printing.PrintQueue"/> objects.
   /// </summary>
-  [PublicAPI]
 #if CONTRIB_SYSTEM_PRINTING_XPS
   public
 #else
@@ -28,6 +27,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <param name="printTicket"/>
     /// <seealso cref="M:System.Printing.PrintQueue.GetPrintCapabilitiesAsXml(System.Printing.PrintTicket)"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="printQueue"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.Exception"/>
+    [Pure]
     [CanBeNull]
     public static XDocument GetPrintCapabilitiesAsXDocument([NotNull] this PrintQueue printQueue,
                                                             [CanBeNull] PrintTicket printTicket)

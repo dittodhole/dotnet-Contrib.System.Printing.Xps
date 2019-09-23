@@ -10,7 +10,6 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   /// <summary>
   ///   Provides extensions for <see cref="T:System.Printing.PrintServer"/> objects.
   /// </summary>
-  [PublicAPI]
 #if CONTRIB_SYSTEM_PRINTING_XPS
   public
 #else
@@ -24,6 +23,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <param name="printServer"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="printServer"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.Exception"/>
+    [Pure]
     [NotNull]
     [ItemNotNull]
     public static PrintQueueCollection GetLocalAndRemotePrintQueues([NotNull] this PrintServer printServer)
