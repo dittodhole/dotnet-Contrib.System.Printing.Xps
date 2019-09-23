@@ -44,12 +44,6 @@ namespace Contrib.System.Printing.Xps
   partial interface IXpsPrinterDefinition
   {
     /// <summary>
-    ///   Gets the display name of the printer.
-    /// </summary>
-    [NotNull]
-    string DisplayName { get; }
-
-    /// <summary>
     ///   Gets the name of the printer.
     /// </summary>
     [NotNull]
@@ -90,7 +84,6 @@ namespace Contrib.System.Printing.Xps
 
       var result = new XpsPrinterDefinition
                    {
-                     DisplayName = printQueue.Name,
                      Name = printQueue.Name,
                      ServerName = printQueue.HostingPrintServer.Name
                    };
@@ -110,9 +103,6 @@ namespace Contrib.System.Printing.Xps
       ///   Initializes a new instance of the <see cref="T:Contrib.System.Printing.Xps.XpsPrinterDefinitionFactory.XpsPrinterDefinition"/> class.
       /// </summary>
       public XpsPrinterDefinition() { }
-
-      /// <inheritdoc/>
-      public string DisplayName { get; set; }
 
       /// <inheritdoc/>
       public string Name { get; set; }
