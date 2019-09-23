@@ -18,31 +18,6 @@ namespace Contrib.System.Printing.Xps
   static partial class XpsServerEx
   {
     /// <summary>
-    ///   Gets the print ticket for printing with a printer.
-    /// </summary>
-    /// <param name="xpsPrinterDefinition"/>
-    /// <exception cref="T:System.ArgumentNullException"><paramref name="xpsPrinterDefinition"/> is <see langword="null"/>.</exception>
-    /// <exception cref="T:System.Exception"/>
-    [Pure]
-    [NotNull]
-    public static PrintTicket GetPrintTicketForPrinting([NotNull] IXpsPrinterDefinition xpsPrinterDefinition)
-    {
-      if (xpsPrinterDefinition == null)
-      {
-        throw new ArgumentNullException(nameof(xpsPrinterDefinition));
-      }
-
-      PrintTicket result;
-      using (var printServer = new PrintServer(xpsPrinterDefinition.Host))
-      using (var printQueue = printServer.GetPrintQueue(xpsPrinterDefinition.Name))
-      {
-        result = printQueue.UserPrintTicket;
-      }
-
-      return result;
-    }
-
-    /// <summary>
     ///   Gets the print ticket for printing with an input bin.
     /// </summary>
     /// <param name="xpsPrinterDefinition"/>
@@ -86,13 +61,16 @@ namespace Contrib.System.Printing.Xps
       // </psf:PrintTicket>
       // === === === === ===
 
-      XDocument document;
-      using (var memoryStream = XpsServerEx.GetPrintTicketForPrinting(xpsPrinterDefinition).GetXmlStream())
+
+
+      XDocument printTicket;
+      using (var printServer = new PrintServer(xpsPrinterDefinition.Host))
+      using (var printQueue = printServer.GetPrintQueue(xpsPrinterDefinition.Name))
       {
-        document = XDocument.Load(memoryStream);
+        printTicket = printQueue.GetPrintTicketAsXDocument();
       }
 
-      var feature = document.Root.AddElement(XpsServer.FeatureName);
+      var feature = printTicket.Root.AddElement(XpsServer.FeatureName);
       var prefix = feature.EnsurePrefixRegistrationOfNamespace(xpsInputBinDefinition.Feature.Namespace);
       feature.SetAttributeValue(XpsServer.NameName,
                                 xpsInputBinDefinition.Feature.ToString(prefix));
@@ -120,7 +98,8 @@ namespace Contrib.System.Printing.Xps
       PrintTicket result;
       using (var memoryStream = new MemoryStream())
       {
-        document.Save(memoryStream);
+        printTicket.Save(memoryStream);
+
         memoryStream.Seek(0L,
                           SeekOrigin.Begin);
 

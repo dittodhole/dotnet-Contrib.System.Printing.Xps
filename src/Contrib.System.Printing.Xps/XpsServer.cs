@@ -103,7 +103,16 @@ namespace Contrib.System.Printing.Xps
       using (var localPrintServer = new LocalPrintServer())
       using (var printQueues = localPrintServer.GetLocalAndRemotePrintQueues())
       {
-        result = printQueues.Select(this.CreateXpsPrinterDefinition)
+        result = printQueues.Select(printQueue =>
+                                    {
+                                      var printTicket = printQueue.UserPrintTicket;
+                                      var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(printTicket);
+                                    
+                                      var xpsPrinterDefinition = this.XpsPrinterDefinitionFactory.Create(printQueue,
+                                                                                                         printCapabilities);
+                                    
+                                      return xpsPrinterDefinition;
+                                    })
                             .ToArray();
       }
 
@@ -146,7 +155,11 @@ namespace Contrib.System.Printing.Xps
       using (printServer)
       using (var printQueue = printServer.GetPrintQueue(name))
       {
-        result = this.CreateXpsPrinterDefinition(printQueue);
+        var printTicket = printQueue.UserPrintTicket;
+        var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(printTicket);
+
+        result = this.XpsPrinterDefinitionFactory.Create(printQueue,
+                                                         printCapabilities);
       }
 
       return result;
@@ -194,23 +207,6 @@ namespace Contrib.System.Printing.Xps
                           .ToArray();
         }
       }
-
-      return result;
-    }
-
-    /// <summary>
-    ///   Converts a print queue to a printer.
-    /// </summary>
-    /// <param name="printQueue"/>
-    /// <exception cref="T:System.Exception"/>
-    [Pure]
-    [NotNull]
-    protected virtual TXpsPrinterDefinition CreateXpsPrinterDefinition([NotNull] PrintQueue printQueue)
-    {
-      var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(printQueue.DefaultPrintTicket);
-
-      var result = this.XpsPrinterDefinitionFactory.Create(printQueue,
-                                                           printCapabilities);
 
       return result;
     }
