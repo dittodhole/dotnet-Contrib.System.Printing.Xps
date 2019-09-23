@@ -101,7 +101,8 @@ namespace Contrib.System.Printing.Xps
     /// <inheritdoc/>
     public virtual TXpsPrinterDefinition[] GetXpsPrinterDefinitions()
     {
-      var xpsPrinterDefinitions = new List<TXpsPrinterDefinition>();
+      var result = new List<TXpsPrinterDefinition>();
+
       using (var localPrintServer = new LocalPrintServer())
       {
         PrintQueueCollection printQueueCollection;
@@ -123,7 +124,7 @@ namespace Contrib.System.Printing.Xps
             {
               var xpsPrinterDefinition = this.XpsPrinterDefinitionFactory.Create(printQueue);
 
-              xpsPrinterDefinitions.Add(xpsPrinterDefinition);
+              result.Add(xpsPrinterDefinition);
             }
             catch (InvalidOperationException)
             {
@@ -133,7 +134,7 @@ namespace Contrib.System.Printing.Xps
         }
       }
 
-      return xpsPrinterDefinitions.ToArray();
+      return result.ToArray();
     }
 
     /// <inheritdoc/>
@@ -199,7 +200,7 @@ namespace Contrib.System.Printing.Xps
         throw new ArgumentNullException(nameof(xpsPrinterDefinition));
       }
 
-      var xpsInputBinDefinitions = new List<TXpsInputBinDefinition>();
+      var result = new List<TXpsInputBinDefinition>();
 
       var printCapabilities = xpsPrinterDefinition.PrintCapabilities;
 
@@ -218,7 +219,7 @@ namespace Contrib.System.Printing.Xps
                                                                                  option,
                                                                                  printCapabilities);
 
-            xpsInputBinDefinitions.Add(xpsInputBinDefinition);
+            result.Add(xpsInputBinDefinition);
           }
           catch (InvalidOperationException)
           {
@@ -227,7 +228,7 @@ namespace Contrib.System.Printing.Xps
         }
       }
 
-      return xpsInputBinDefinitions.ToArray();
+      return result.ToArray();
     }
   }
 
