@@ -61,8 +61,6 @@ namespace Contrib.System.Printing.Xps
       // </psf:PrintTicket>
       // === === === === ===
 
-
-
       XDocument printTicket;
       using (var printServer = new PrintServer(xpsPrinterDefinition.Host))
       using (var printQueue = printServer.GetPrintQueue(xpsPrinterDefinition.Name))
