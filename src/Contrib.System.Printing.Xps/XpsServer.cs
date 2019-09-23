@@ -210,20 +210,22 @@ namespace Contrib.System.Printing.Xps
       if (feature != null)
       {
         var featureName = printCapabilities.Root.GetXpsName(feature.Attribute(XpsServer.NameName)?.Value);
-
-        foreach (var option in feature.Elements(XpsServer.OptionName))
+        if (featureName != null)
         {
-          try
+          foreach (var option in feature.Elements(XpsServer.OptionName))
           {
-            var xpsInputBinDefinition = this.XpsInputBinDefinitionFactory.Create(featureName,
-                                                                                 option,
-                                                                                 printCapabilities);
+            try
+            {
+              var xpsInputBinDefinition = this.XpsInputBinDefinitionFactory.Create(featureName,
+                                                                                   option,
+                                                                                   printCapabilities);
 
-            result.Add(xpsInputBinDefinition);
-          }
-          catch (InvalidOperationException)
-          {
-            continue;
+              result.Add(xpsInputBinDefinition);
+            }
+            catch (InvalidOperationException)
+            {
+              continue;
+            }
           }
         }
       }
