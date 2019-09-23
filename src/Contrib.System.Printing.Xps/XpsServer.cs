@@ -118,20 +118,35 @@ namespace Contrib.System.Printing.Xps
         throw new ArgumentNullException(nameof(fullName));
       }
 
-      // TODO split fullName
+      PrintServer printServer;
+      string name;
 
-      TXpsPrinterDefinition result;
-      using (var printServer = new PrintServer())
-      using (var printQueue = printServer.GetPrintQueue(fullName))
+      if (Uri.TryCreate(fullName,
+                        UriKind.Absolute,
+                        out var uri))
       {
-        if (printQueue == null)
+        if (uri.IsUnc)
         {
-          result = default;
+          printServer = new PrintServer(uri.Host);
+          name = uri.AbsolutePath;
         }
         else
         {
-          result = this.CreateXpsPrinterDefinition(printQueue);
+          printServer = new LocalPrintServer();
+          name = fullName;
         }
+      }
+      else
+      {
+        printServer = new LocalPrintServer();
+        name = fullName;
+      }
+
+      TXpsPrinterDefinition result;
+      using (printServer)
+      using (var printQueue = printServer.GetPrintQueue(name))
+      {
+        result = this.CreateXpsPrinterDefinition(printQueue);
       }
 
       return result;
