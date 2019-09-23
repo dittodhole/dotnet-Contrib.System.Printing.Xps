@@ -4,10 +4,8 @@
 namespace Contrib.System.Printing.Xps.ExtensionMethods
 {
   using global::System;
-  using global::System.IO;
   using global::System.Printing;
   using global::System.Xml.Linq;
-  using global::Anotar.LibLog;
   using global::JetBrains.Annotations;
 
   /// <summary>
@@ -26,9 +24,10 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <param name="printQueue"/>
     /// <seealso cref="M:System.Printing.PrintQueue.GetPrintCapabilitiesAsXml()"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="printQueue"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.InvalidOperationException"/>
     /// <exception cref="T:System.Exception"/>
     [Pure]
-    [CanBeNull]
+    [NotNull]
     public static XDocument GetPrintCapabilitiesAsXDocument([NotNull] this PrintQueue printQueue)
     {
       if (printQueue == null)
@@ -44,45 +43,10 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
           result = XDocument.Load(memoryStream);
         }
       }
-      catch (Exception exception)
+      catch (PrintQueueException printQueueException)
       {
-        LogTo.WarnException($"Could not query {nameof(PrintQueue)} '{printQueue.FullName}' for {nameof(PrintCapabilities)}.",
-                            exception);
-        result = null;
-      }
-
-      return result;
-    }
-
-    /// <summary>
-    ///   Gets an <see cref="T:System.Xml.Linq.XDocument"/> object that represent the default print ticket.
-    /// </summary>
-    /// <param name="printQueue"/>
-    /// <seealso cref="M:System.Printing.PrintQueue.UserPrintTicket"/>
-    /// <exception cref="T:System.ArgumentNullException"><paramref name="printQueue"/> is <see langword="null"/>.</exception>
-    /// <exception cref="T:System.Exception"/>
-    [Pure]
-    [CanBeNull]
-    public static XDocument GetPrintTicketAsXDocument([NotNull] this PrintQueue printQueue)
-    {
-      if (printQueue == null)
-      {
-        throw new ArgumentNullException(nameof(printQueue));
-      }
-
-      XDocument result;
-      try
-      {
-        using (var memoryStream = printQueue.UserPrintTicket.GetXmlStream())
-        {
-          result = XDocument.Load(memoryStream);
-        }
-      }
-      catch (Exception exception)
-      {
-        LogTo.WarnException($"Could not query {nameof(PrintQueue)} '{printQueue.FullName}' for {nameof(PrintTicket)}.",
-                            exception);
-        result = null;
+        throw new InvalidOperationException("Failed to get print capabilities",
+                                            printQueueException);
       }
 
       return result;

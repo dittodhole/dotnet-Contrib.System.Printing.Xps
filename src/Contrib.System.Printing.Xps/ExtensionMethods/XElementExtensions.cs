@@ -6,7 +6,6 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   using global::System;
   using global::System.Xml;
   using global::System.Xml.Linq;
-  using global::Anotar.LibLog;
   using global::JetBrains.Annotations;
 
   /// <summary>
@@ -152,7 +151,6 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       var type = element.GetXName(element.Attribute(XpsServer.TypeName)?.Value);
       if (type == null)
       {
-        LogTo.Warn($"Could not get {nameof(XName)} from {nameof(XAttribute)} '{XpsServer.TypeName}': {element}");
         result = null;
       }
       else if (type.Equals(XpsServer.StringName))
@@ -176,7 +174,6 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         var xpsNameValue = element.GetXpsName(rawValue);
         if (xpsNameValue == null)
         {
-          LogTo.Warn($"Could not get {nameof(XpsName)} from {nameof(XElement)}: {element}");
           result = null;
         }
         else
@@ -301,10 +298,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
           {
             result = XName.Get(str);
           }
-          catch (Exception exception)
+          catch
           {
-            LogTo.WarnException($"Could not get {nameof(XName)} from '{str}': {element}",
-                                exception);
             result = null;
           }
         }
@@ -314,10 +309,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
           {
             result = XName.Get(str);
           }
-          catch (Exception exception)
+          catch
           {
-            LogTo.WarnException($"Could not get {nameof(XName)} from '{str}': {element}",
-                                exception);
             result = null;
           }
         }
@@ -326,7 +319,6 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
           var @namespace = element.GetNamespaceOfPrefix(prefix);
           if (@namespace == null)
           {
-            LogTo.Warn($"Could not get {nameof(XNamespace)} from '{str}': {element}");
             result = null;
           }
           else
@@ -335,10 +327,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
             {
               result = @namespace.GetName(localName);
             }
-            catch (Exception exception)
+            catch
             {
-              LogTo.WarnException($"Could not get {nameof(XName)} from '{str}': {element}",
-                                  exception);
               result = null;
             }
           }
@@ -428,7 +418,6 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
           var @namespace = element.GetNamespaceOfPrefix(prefix);
           if (@namespace == null)
           {
-            LogTo.Warn($"Could not get {nameof(XNamespace)} from '{str}': {element}");
             result = null;
           }
           else

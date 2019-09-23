@@ -29,6 +29,7 @@ namespace Contrib.System.Printing.Xps
     /// <summary>
     ///   Gets the collection of printers hosted by the print server.
     /// </summary>
+    /// <exception cref="T:System.InvalidOperationException"/>
     /// <exception cref="T:System.Exception"/>
     [Pure]
     [NotNull]
@@ -40,9 +41,10 @@ namespace Contrib.System.Printing.Xps
     /// </summary>
     /// <param name="fullName"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="fullName"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.InvalidOperationException"/>
     /// <exception cref="T:System.Exception"/>
     [Pure]
-    [CanBeNull]
+    [NotNull]
     TXpsPrinterDefinition GetXpsPrinterDefinition([NotNull] string fullName);
 
     /// <summary>
@@ -101,10 +103,23 @@ namespace Contrib.System.Printing.Xps
     {
       TXpsPrinterDefinition[] result;
       using (var localPrintServer = new LocalPrintServer())
-      using (var printQueues = localPrintServer.GetLocalAndRemotePrintQueues())
       {
-        result = printQueues.Select(this.XpsPrinterDefinitionFactory.Create)
-                            .ToArray();
+        PrintQueueCollection printQueueCollection;
+        try
+        {
+          printQueueCollection = localPrintServer.GetLocalAndRemotePrintQueues();
+        }
+        catch (PrintQueueException printQueueException)
+        {
+          throw new InvalidOperationException("Failed to get print queues",
+                                              printQueueException);
+        }
+
+        using (printQueueCollection)
+        {
+          result = printQueueCollection.Select(this.XpsPrinterDefinitionFactory.Create)
+                                       .ToArray();
+        }
       }
 
       return result;
@@ -144,9 +159,22 @@ namespace Contrib.System.Printing.Xps
 
       TXpsPrinterDefinition result;
       using (printServer)
-      using (var printQueue = printServer.GetPrintQueue(name))
       {
-        result = this.XpsPrinterDefinitionFactory.Create(printQueue);
+        PrintQueue printQueue;
+        try
+        {
+          printQueue = printServer.GetPrintQueue(name);
+        }
+        catch (PrintQueueException printQueueException)
+        {
+          throw new InvalidOperationException($"Failed to get print queue '{fullName}'",
+                                              printQueueException);
+        }
+
+        using (printQueue)
+        {
+          result = this.XpsPrinterDefinitionFactory.Create(printQueue);
+        }
       }
 
       return result;

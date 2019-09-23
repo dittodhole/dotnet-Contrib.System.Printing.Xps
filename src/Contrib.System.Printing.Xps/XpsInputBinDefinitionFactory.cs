@@ -5,7 +5,6 @@ namespace Contrib.System.Printing.Xps
 {
   using global::System;
   using global::System.Xml.Linq;
-  using global::Anotar.LibLog;
   using global::Contrib.System.Printing.Xps.ExtensionMethods;
   using global::JetBrains.Annotations;
 
@@ -135,7 +134,6 @@ namespace Contrib.System.Printing.Xps
       var constrained = printCapabilities.Root.GetXName(option.Attribute(XpsServer.ConstrainedName)?.Value);
       if (constrained == null)
       {
-        LogTo.Warn($"Could not get {nameof(XName)} from {nameof(XAttribute)} '{XpsServer.ConstrainedName}': {option}");
         isAvailable = true;
       }
       else if (constrained.Equals(XpsServer.DeviceSettingsName))
@@ -148,7 +146,6 @@ namespace Contrib.System.Printing.Xps
       }
       else
       {
-        LogTo.Warn($"Could not get {nameof(IXpsInputBinDefinition.IsAvailable)} from '{constrained}', falling back to '{true}': {option}");
         isAvailable = true;
       }
 

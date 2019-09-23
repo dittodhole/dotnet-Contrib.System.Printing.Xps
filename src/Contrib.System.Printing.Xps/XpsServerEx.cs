@@ -24,6 +24,7 @@ namespace Contrib.System.Printing.Xps
     /// <param name="xpsInputBinDefinition"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="xpsPrinterDefinition"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="xpsInputBinDefinition"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.InvalidOperationException"/>
     /// <exception cref="T:System.Exception"/>
     [Pure]
     [NotNull]
@@ -61,14 +62,9 @@ namespace Contrib.System.Printing.Xps
       // </psf:PrintTicket>
       // === === === === ===
 
-      XDocument printTicket;
-      using (var printServer = new PrintServer(xpsPrinterDefinition.Host))
-      using (var printQueue = printServer.GetPrintQueue(xpsPrinterDefinition.Name))
-      {
-        printTicket = printQueue.GetPrintTicketAsXDocument();
-      }
+      var deltaPrintTicket = new PrintTicket().GetXDocument();
 
-      var feature = printTicket.Root.AddElement(XpsServer.FeatureName);
+      var feature = deltaPrintTicket.Root.AddElement(XpsServer.FeatureName);
       var prefix = feature.EnsurePrefixRegistrationOfNamespace(xpsInputBinDefinition.Feature.Namespace);
       feature.SetAttributeValue(XpsServer.NameName,
                                 xpsInputBinDefinition.Feature.ToString(prefix));
@@ -94,14 +90,26 @@ namespace Contrib.System.Printing.Xps
       }
 
       PrintTicket result;
+      using (var printServer = new PrintServer(xpsPrinterDefinition.Host))
+      using (var printQueue = printServer.GetPrintQueue(xpsPrinterDefinition.Name))
       using (var memoryStream = new MemoryStream())
       {
-        printTicket.Save(memoryStream);
+        deltaPrintTicket.Save(memoryStream);
 
         memoryStream.Seek(0L,
                           SeekOrigin.Begin);
 
-        result = new PrintTicket(memoryStream);
+        try
+        {
+          result = printQueue.MergeAndValidatePrintTicket(printQueue.UserPrintTicket,
+                                                          new PrintTicket(memoryStream))
+                             .ValidatedPrintTicket;
+        }
+        catch (PrintQueueException printQueueException)
+        {
+          throw new InvalidOperationException("Failed to merge print ticket",
+                                              printQueueException);
+        }
       }
 
       return result;

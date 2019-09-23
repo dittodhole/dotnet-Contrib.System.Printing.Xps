@@ -27,6 +27,7 @@ namespace Contrib.System.Printing.Xps
     /// </summary>
     /// <param name="printQueue"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="printQueue"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.InvalidOperationException"/>
     /// <exception cref="T:System.Exception"/>
     [Pure]
     [NotNull]
