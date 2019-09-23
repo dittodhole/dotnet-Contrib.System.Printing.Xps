@@ -6,6 +6,7 @@ namespace Contrib.System.Printing.Xps
   using global::System;
   using global::System.Printing;
   using global::System.Xml.Linq;
+  using global::Contrib.System.Printing.Xps.ExtensionMethods;
   using global::JetBrains.Annotations;
 
   /// <summary>
@@ -25,14 +26,11 @@ namespace Contrib.System.Printing.Xps
     ///   Factory method for <typeparamref name="TXpsPrinterDefinition"/>.
     /// </summary>
     /// <param name="printQueue"/>
-    /// <param name="printCapabilities"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="printQueue"/> is <see langword="null"/>.</exception>
-    /// <exception cref="T:System.ArgumentNullException"><paramref name="printCapabilities"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.Exception"/>
     [Pure]
     [NotNull]
-    TXpsPrinterDefinition Create([NotNull] PrintQueue printQueue,
-                                 [NotNull] XDocument printCapabilities);
+    TXpsPrinterDefinition Create([NotNull] PrintQueue printQueue);
   }
 
   /// <seealso cref="T:Contrib.System.Printing.Xps.XpsPrinterDefinitionFactory.XpsPrinterDefinition"/>
@@ -54,6 +52,12 @@ namespace Contrib.System.Printing.Xps
     /// </summary>
     [NotNull]
     string Host { get; }
+
+    /// <summary>
+    ///   Gets an <see cref="T:System.Xml.Linq.XDocument"/> object that specifies the printer's capabilities that complies with the Print Schema (see https://msdn.microsoft.com/en-us/library/windows/desktop/ms715274).
+    /// </summary>
+    [NotNull]
+    XDocument PrintCapabilities { get; }
   }
 
   /// <inheritdoc/>
@@ -70,22 +74,18 @@ namespace Contrib.System.Printing.Xps
     public XpsPrinterDefinitionFactory() { }
 
     /// <inheritdoc/>
-    public IXpsPrinterDefinition Create(PrintQueue printQueue,
-                                        XDocument printCapabilities)
+    public IXpsPrinterDefinition Create(PrintQueue printQueue)
     {
       if (printQueue == null)
       {
         throw new ArgumentNullException(nameof(printQueue));
       }
-      if (printCapabilities == null)
-      {
-        throw new ArgumentNullException(nameof(printCapabilities));
-      }
 
       var result = new XpsPrinterDefinition
                    {
                      Name = printQueue.Name,
-                     Host = printQueue.HostingPrintServer.Name
+                     Host = printQueue.HostingPrintServer.Name,
+                     PrintCapabilities = printQueue.GetPrintCapabilitiesAsXDocument()
                    };
 
       return result;
@@ -109,6 +109,9 @@ namespace Contrib.System.Printing.Xps
 
       /// <inheritdoc/>
       public string Host { get; set; }
+
+      /// <inheritdoc/>
+      public XDocument PrintCapabilities { get; set; }
     }
   }
 }

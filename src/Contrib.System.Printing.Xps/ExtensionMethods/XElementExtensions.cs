@@ -77,24 +77,21 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       }
 
       string result;
-
-      if (@namespace == XNamespace.None)
+      if (@namespace.Equals(XNamespace.None))
       {
         result = null;
       }
       else
       {
         var document = element.Document;
-        var root = document?.Root ?? element;
 
-        result = root.GetPrefixOfNamespace(@namespace);
-
+        result = document.Root.GetPrefixOfNamespace(@namespace);
         if (result == null)
         {
-          result = root.FindUnusedPrefixForNamespace();
+          result = document.Root.FindUnusedPrefixForNamespace();
 
-          root.SetAttributeValue(XNamespace.Xmlns + result,
-                                 @namespace);
+          document.Root.SetAttributeValue(XNamespace.Xmlns + result,
+                                          @namespace);
         }
       }
 
@@ -166,11 +163,11 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
           LogTo.Warn($"Could not get {nameof(XName)} from {nameof(XAttribute)} '{XpsServer.TypeName}': {element}");
           result = null;
         }
-        else if (typeXName == XpsServer.StringName)
+        else if (typeXName.Equals(XpsServer.StringName))
         {
           result = rawValue;
         }
-        else if (typeXName == XpsServer.IntegerName)
+        else if (typeXName.Equals(XpsServer.IntegerName))
         {
           if (long.TryParse(rawValue,
                             out var longValue))
@@ -182,7 +179,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
             result = null;
           }
         }
-        else if (typeXName == XpsServer.QNameName)
+        else if (typeXName.Equals(XpsServer.QNameName))
         {
           var xpsNameValue = element.GetXpsName(rawValue);
           if (xpsNameValue == null)

@@ -103,16 +103,7 @@ namespace Contrib.System.Printing.Xps
       using (var localPrintServer = new LocalPrintServer())
       using (var printQueues = localPrintServer.GetLocalAndRemotePrintQueues())
       {
-        result = printQueues.Select(printQueue =>
-                                    {
-                                      var printTicket = printQueue.UserPrintTicket;
-                                      var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(printTicket);
-                                    
-                                      var xpsPrinterDefinition = this.XpsPrinterDefinitionFactory.Create(printQueue,
-                                                                                                         printCapabilities);
-                                    
-                                      return xpsPrinterDefinition;
-                                    })
+        result = printQueues.Select(this.XpsPrinterDefinitionFactory.Create)
                             .ToArray();
       }
 
@@ -155,11 +146,7 @@ namespace Contrib.System.Printing.Xps
       using (printServer)
       using (var printQueue = printServer.GetPrintQueue(name))
       {
-        var printTicket = printQueue.UserPrintTicket;
-        var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(printTicket);
-
-        result = this.XpsPrinterDefinitionFactory.Create(printQueue,
-                                                         printCapabilities);
+        result = this.XpsPrinterDefinitionFactory.Create(printQueue);
       }
 
       return result;
@@ -174,38 +161,25 @@ namespace Contrib.System.Printing.Xps
       }
 
       TXpsInputBinDefinition[] result;
-      using (var printServer = new PrintServer(xpsPrinterDefinition.Host))
-      using (var printQueue = printServer.GetPrintQueue(xpsPrinterDefinition.Name))
-      {
-        var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(printQueue.DefaultPrintTicket);
 
-        var feature = printCapabilities.Root.FindElementByNameAttribute(XpsServer.PageInputBinName)
-                      ?? printCapabilities.Root.FindElementByNameAttribute(XpsServer.DocumentInputBinName)
-                      ?? printCapabilities.Root.FindElementByNameAttribute(XpsServer.JobInputBinName);
-        if (feature == null)
-        {
-          result = new TXpsInputBinDefinition[0];
-        }
-        else
-        {
-          result = feature.Elements(XpsServer.OptionName)
-                          .Select(option => new
-                                            {
-                                              Option = option,
-                                              InputBinName = option.GetXpsName(option.Attribute(XpsServer.NameName)
-                                                                                     ?.Value),
-                                              Feature = feature,
-                                              FeatureName = feature.GetXpsName(feature.Attribute(XpsServer.NameName)
-                                                                                      ?.Value)
-                                            })
-                          .Where(arg => arg.InputBinName != null)
-                          .Where(arg => arg.FeatureName != null)
-                          .Select(arg => this.XpsInputBinDefinitionFactory.Create(arg.FeatureName,
-                                                                                  arg.InputBinName,
-                                                                                  arg.Option,
-                                                                                  printCapabilities))
-                          .ToArray();
-        }
+      var printCapabilities = xpsPrinterDefinition.PrintCapabilities;
+
+      var feature = printCapabilities.Root.FindElementByNameAttribute(XpsServer.PageInputBinName)
+                    ?? printCapabilities.Root.FindElementByNameAttribute(XpsServer.DocumentInputBinName)
+                    ?? printCapabilities.Root.FindElementByNameAttribute(XpsServer.JobInputBinName);
+      if (feature == null)
+      {
+        result = new TXpsInputBinDefinition[0];
+      }
+      else
+      {
+        var featureName = printCapabilities.Root.GetXpsName(feature.Attribute(XpsServer.NameName)?.Value);
+
+        result = feature.Elements(XpsServer.OptionName)
+                        .Select(option => this.XpsInputBinDefinitionFactory.Create(featureName,
+                                                                                   option,
+                                                                                   printCapabilities))
+                        .ToArray();
       }
 
       return result;

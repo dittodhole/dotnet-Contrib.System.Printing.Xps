@@ -75,7 +75,6 @@
     <Compile Include="ExtensionMethods\XpsPrinterDefinitionExtensions.cs" />
     <Compile Include="UnitConverter.cs" />
     <Compile Include="XpsName.cs" />
-    <Compile Include="XpsName.XpsNameSerializer.cs" />
     <Compile Include="XpsServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XpsInputBinDefinitionFactory.cs" />

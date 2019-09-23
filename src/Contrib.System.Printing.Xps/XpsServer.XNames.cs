@@ -90,7 +90,7 @@ namespace Contrib.System.Printing.Xps
     ///   psk:none
     /// </summary>
     [NotNull]
-    public static XName NoneName => XpsServer.PrinterSchemaKeywordsNamespace.GetName("none");
+    public static XName NoneName => XpsServer.PrinterSchemaKeywordsNamespace.GetName("None");
 
     /// <summary>
     ///   psk:DeviceSettings

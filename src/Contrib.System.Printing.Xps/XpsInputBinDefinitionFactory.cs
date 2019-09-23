@@ -25,18 +25,15 @@ namespace Contrib.System.Printing.Xps
     ///   Factory method for <typeparamref name="TXpsInputBinDefinition"/>.
     /// </summary>
     /// <param name="feature"/>
-    /// <param name="name"/>
     /// <param name="option"/>
     /// <param name="printCapabilities"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="feature"/> is <see langword="null"/>.</exception>
-    /// <exception cref="T:System.ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="option"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="printCapabilities"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.Exception"/>
     [Pure]
     [NotNull]
     TXpsInputBinDefinition Create([NotNull] XpsName feature,
-                                  [NotNull] XpsName name,
                                   [NotNull] XElement option,
                                   [NotNull] XDocument printCapabilities);
   }
@@ -101,10 +98,11 @@ namespace Contrib.System.Printing.Xps
 
     /// <inheritdoc/>
     public IXpsInputBinDefinition Create(XpsName feature,
-                                         XpsName name,
                                          XElement option,
                                          XDocument printCapabilities)
     {
+      var name = printCapabilities.Root.GetXpsName(option.Attribute(XpsServer.NameName)?.Value);
+
       var displayName = option.FindElementByNameAttribute(XpsServer.DisplayNameName)
                               ?.Element(XpsServer.ValueName)
                               ?.GetValue() as string;
@@ -121,11 +119,11 @@ namespace Contrib.System.Printing.Xps
         LogTo.Warn($"Could not get {nameof(XName)} from {nameof(XAttribute)} '{XpsServer.ConstrainedName}': {option}");
         isAvailable = true;
       }
-      else if (constrainedXName == XpsServer.DeviceSettingsName)
+      else if (constrainedXName.Equals(XpsServer.DeviceSettingsName))
       {
         isAvailable = false;
       }
-      else if (constrainedXName == XpsServer.NoneName)
+      else if (constrainedXName.Equals(XpsServer.NoneName))
       {
         isAvailable = true;
       }
