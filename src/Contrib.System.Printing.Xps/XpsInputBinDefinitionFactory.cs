@@ -3,6 +3,7 @@
  */
 namespace Contrib.System.Printing.Xps
 {
+  using global::System;
   using global::System.Xml.Linq;
   using global::Anotar.LibLog;
   using global::Contrib.System.Printing.Xps.ExtensionMethods;
@@ -30,6 +31,7 @@ namespace Contrib.System.Printing.Xps
     /// <exception cref="T:System.ArgumentNullException"><paramref name="feature"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="option"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="printCapabilities"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.InvalidOperationException"/>
     /// <exception cref="T:System.Exception"/>
     [Pure]
     [NotNull]
@@ -101,7 +103,24 @@ namespace Contrib.System.Printing.Xps
                                          XElement option,
                                          XDocument printCapabilities)
     {
+      if (feature == null)
+      {
+        throw new ArgumentNullException(nameof(feature));
+      }
+      if (option == null)
+      {
+        throw new ArgumentNullException(nameof(option));
+      }
+      if (printCapabilities == null)
+      {
+        throw new ArgumentNullException(nameof(printCapabilities));
+      }
+
       var name = printCapabilities.Root.GetXpsName(option.Attribute(XpsServer.NameName)?.Value);
+      if (name == null)
+      {
+        throw new InvalidOperationException();
+      }
 
       var displayName = option.FindElementByNameAttribute(XpsServer.DisplayNameName)
                               ?.Element(XpsServer.ValueName)
@@ -113,7 +132,7 @@ namespace Contrib.System.Printing.Xps
 
       bool isAvailable;
 
-      var constrained = option.GetXName(option.Attribute(XpsServer.ConstrainedName)?.Value);
+      var constrained = printCapabilities.Root.GetXName(option.Attribute(XpsServer.ConstrainedName)?.Value);
       if (constrained == null)
       {
         LogTo.Warn($"Could not get {nameof(XName)} from {nameof(XAttribute)} '{XpsServer.ConstrainedName}': {option}");
@@ -133,16 +152,16 @@ namespace Contrib.System.Printing.Xps
         isAvailable = true;
       }
 
-      var xpsInputBinDefinition = new XpsInputBinDefinition
-                                  {
-                                    Feature = feature,
-                                    Name = name,
-                                    DisplayName = displayName,
-                                    FeedType = feedType,
-                                    IsAvailable = isAvailable
-                                  };
+      var result = new XpsInputBinDefinition
+                   {
+                     Feature = feature,
+                     Name = name,
+                     DisplayName = displayName,
+                     FeedType = feedType,
+                     IsAvailable = isAvailable
+                   };
 
-      return xpsInputBinDefinition;
+      return result;
     }
 
     /// <inheritdoc/>

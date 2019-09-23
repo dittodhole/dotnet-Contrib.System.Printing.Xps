@@ -149,53 +149,45 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
 
       var rawValue = element.Value;
 
-      var typeAttribute = element.Attribute(XpsServer.TypeName);
-      if (typeAttribute == null)
+      var type = element.GetXName(element.Attribute(XpsServer.TypeName)?.Value);
+      if (type == null)
+      {
+        LogTo.Warn($"Could not get {nameof(XName)} from {nameof(XAttribute)} '{XpsServer.TypeName}': {element}");
+        result = null;
+      }
+      else if (type.Equals(XpsServer.StringName))
       {
         result = rawValue;
       }
-      else
+      else if (type.Equals(XpsServer.IntegerName))
       {
-        var type = element.GetXName(typeAttribute.Value);
-        if (type == null)
+        if (long.TryParse(rawValue,
+                          out var longValue))
         {
-          LogTo.Warn($"Could not get {nameof(XName)} from {nameof(XAttribute)} '{XpsServer.TypeName}': {element}");
-          result = null;
-        }
-        else if (type.Equals(XpsServer.StringName))
-        {
-          result = rawValue;
-        }
-        else if (type.Equals(XpsServer.IntegerName))
-        {
-          if (long.TryParse(rawValue,
-                            out var longValue))
-          {
-            result = longValue;
-          }
-          else
-          {
-            result = null;
-          }
-        }
-        else if (type.Equals(XpsServer.QNameName))
-        {
-          var xpsNameValue = element.GetXpsName(rawValue);
-          if (xpsNameValue == null)
-          {
-            LogTo.Warn($"Could not get {nameof(XpsName)} from {nameof(XElement)}: {element}");
-            result = null;
-          }
-          else
-          {
-            result = xpsNameValue;
-          }
+          result = longValue;
         }
         else
         {
-          // TODO support more types :beers:
-          result = rawValue;
+          result = null;
         }
+      }
+      else if (type.Equals(XpsServer.QNameName))
+      {
+        var xpsNameValue = element.GetXpsName(rawValue);
+        if (xpsNameValue == null)
+        {
+          LogTo.Warn($"Could not get {nameof(XpsName)} from {nameof(XElement)}: {element}");
+          result = null;
+        }
+        else
+        {
+          result = xpsNameValue;
+        }
+      }
+      else
+      {
+        // TODO support more types :beers:
+        result = rawValue;
       }
 
       return result;
@@ -252,10 +244,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
 
       foreach (var child in element.Elements())
       {
-        var childName = child.Attribute(XpsServer.NameName)
-                             ?.Value;
         if (string.Equals(name,
-                          childName,
+                          child.Attribute(XpsServer.NameName)?.Value,
                           StringComparison.Ordinal))
         {
           return child;
