@@ -136,17 +136,19 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         memoryStream.Seek(0L,
                           SeekOrigin.Begin);
 
-        try
-        {
-          result = printQueue.MergeAndValidatePrintTicket(printTicket,
-                                                          new PrintTicket(memoryStream))
-                             .ValidatedPrintTicket;
-        }
-        catch (PrintQueueException printQueueException)
-        {
-          throw new InvalidOperationException("Failed to merge print ticket",
-                                              printQueueException);
-        }
+        result = new PrintTicket(memoryStream);
+      }
+
+      try
+      {
+        result = printQueue.MergeAndValidatePrintTicket(printTicket,
+                                                        result)
+                           .ValidatedPrintTicket;
+      }
+      catch (PrintQueueException printQueueException)
+      {
+        throw new InvalidOperationException("Failed to merge print ticket",
+                                            printQueueException);
       }
 
       return result;
