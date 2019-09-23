@@ -23,6 +23,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// </summary>
     /// <param name="printQueue"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="printQueue"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.InvalidOperationException"/>
     [NotNull]
     public delegate PrintTicket PrintTicketFactory([NotNull] PrintQueue printQueue);
 
