@@ -34,6 +34,9 @@
     <DefineConstants>TRACE;$(DefineConstants)</DefineConstants>
     <DocumentationFile>bin\Release\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
+  <PropertyGroup>
+    <BclBuildImported>Ignore</BclBuildImported>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
