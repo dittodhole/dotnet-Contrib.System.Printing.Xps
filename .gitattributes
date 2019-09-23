@@ -6,7 +6,6 @@
 .gitconfig      text eol=lf
 
 # other Files
-.editorconfig   text eol=lf
 appveyor.yml    text eol=lf
 gitversion      text eol=lf
 
