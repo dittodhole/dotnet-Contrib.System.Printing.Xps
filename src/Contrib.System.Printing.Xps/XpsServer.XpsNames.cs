@@ -3,8 +3,8 @@
  */
 namespace Contrib.System.Printing.Xps
 {
-  using global::JetBrains.Annotations;
   using global::Contrib.System.Printing.Xps.ExtensionMethods;
+  using global::JetBrains.Annotations;
 
   partial class XpsServer
   {

@@ -41,24 +41,14 @@ var xpsPrinterDefinitions = xpsServer.GetXpsPrinterDefinitions();
 foreach (var xpsPrinterDefinition in xpsPrinterDefinitions)
 {
   xpsPrinterDefinition.Print(documentPaginatorSource,
-                             printQueue =>
-                             {
-                               var printTicket = xpsServer.GetPrintTicketForPrinting(xpsPrinterDefinition);
-
-                               return printTicket;
-                             });
+                             printQueue => printQueue.DefaultPrintTicket);
 
   var xpsInputBinDefinitions = xpsServer.GetXpsInputBinDefinitions(xpsPrinterDefinition);
   foreach (var xpsInputBinDefinition in xpsInputBinDefinitions)
   {
     xpsPrinterDefinition.Print(documentPaginatorSource,
-                               printQueue =>
-                               {
-                                 var printTicket = xpsServer.GetPrintTicketForPrinting(xpsPrinterDefinition,
-                                                                                       xpsInputBinDefinition);
-
-                                 return printTicket;
-                               });
+                               printQueue => printQueue.ApplyXpsInputBinDefinition(printQueue.DefaultPrintTicket,
+                                                                                   xpsInputBinDefinition));
   }
 }
 ```

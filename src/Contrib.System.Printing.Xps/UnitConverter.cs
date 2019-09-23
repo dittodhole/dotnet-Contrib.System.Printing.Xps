@@ -12,7 +12,6 @@ namespace Contrib.System.Printing.Xps
   /// <summary>
   ///   A transparent proxy for <see cref="T:MS.Internal.Printing.Configuration.UnitConverter"/>.
   /// </summary>
-  [PublicAPI]
 #if CONTRIB_SYSTEM_PRINTING_XPS
   public
 #else

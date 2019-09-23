@@ -3,8 +3,8 @@
  */
 namespace Contrib.System.Printing.Xps
 {
+  using global::System;
   using global::System.Xml.Linq;
-  using global::Anotar.LibLog;
   using global::Contrib.System.Printing.Xps.ExtensionMethods;
   using global::JetBrains.Annotations;
 
@@ -24,21 +24,19 @@ namespace Contrib.System.Printing.Xps
     /// <summary>
     ///   Factory method for <typeparamref name="TXpsInputBinDefinition"/>.
     /// </summary>
-    /// <param name="feature"/>
-    /// <param name="name"/>
+    /// <param name="featureName"/>
     /// <param name="option"/>
     /// <param name="printCapabilities"/>
-    /// <exception cref="T:System.ArgumentNullException"><paramref name="feature"/> is <see langword="null"/>.</exception>
-    /// <exception cref="T:System.ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="featureName"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="option"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="printCapabilities"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.InvalidOperationException"/>
     /// <exception cref="T:System.Exception"/>
     [Pure]
     [NotNull]
-    TXpsInputBinDefinition Create([NotNull] XpsName feature,
-                                  [NotNull] XpsName name,
+    TXpsInputBinDefinition Create([NotNull] XpsName featureName,
                                   [NotNull] XElement option,
-                                  [NotNull] XElement printCapabilities);
+                                  [NotNull] XDocument printCapabilities);
   }
 
   /// <summary>
@@ -57,7 +55,7 @@ namespace Contrib.System.Printing.Xps
     /// </summary>
     /// <example>{http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords}JobInputBin</example>
     [NotNull]
-    XpsName Feature { get; }
+    XpsName FeatureName { get; }
 
     /// <summary>
     ///   Gets the name of the input bin.
@@ -100,11 +98,29 @@ namespace Contrib.System.Printing.Xps
     public XpsInputBinDefinitionFactory() { }
 
     /// <inheritdoc/>
-    public IXpsInputBinDefinition Create(XpsName feature,
-                                         XpsName name,
+    public IXpsInputBinDefinition Create(XpsName featureName,
                                          XElement option,
-                                         XElement printCapabilities)
+                                         XDocument printCapabilities)
     {
+      if (featureName == null)
+      {
+        throw new ArgumentNullException(nameof(featureName));
+      }
+      if (option == null)
+      {
+        throw new ArgumentNullException(nameof(option));
+      }
+      if (printCapabilities == null)
+      {
+        throw new ArgumentNullException(nameof(printCapabilities));
+      }
+
+      var name = printCapabilities.Root.GetXpsName(option.Attribute(XpsServer.NameName)?.Value);
+      if (name == null)
+      {
+        throw new InvalidOperationException();
+      }
+
       var displayName = option.FindElementByNameAttribute(XpsServer.DisplayNameName)
                               ?.Element(XpsServer.ValueName)
                               ?.GetValue() as string;
@@ -114,37 +130,35 @@ namespace Contrib.System.Printing.Xps
                            ?.GetValue() as XpsName;
 
       bool isAvailable;
-      var constrainedXName = option.GetXName(option.Attribute(XpsServer.ConstrainedName)
-                                                   ?.Value);
-      if (constrainedXName == null)
+
+      var constrained = printCapabilities.Root.GetXName(option.Attribute(XpsServer.ConstrainedName)?.Value);
+      if (constrained == null)
       {
-        LogTo.Warn($"Could not get {nameof(XName)} from {nameof(XAttribute)} '{XpsServer.ConstrainedName}': {option}");
         isAvailable = true;
       }
-      else if (constrainedXName == XpsServer.DeviceSettingsName)
+      else if (constrained.Equals(XpsServer.DeviceSettingsName))
       {
         isAvailable = false;
       }
-      else if (constrainedXName == XpsServer.NoneName)
+      else if (constrained.Equals(XpsServer.NoneName))
       {
         isAvailable = true;
       }
       else
       {
-        LogTo.Warn($"Could not get {nameof(IXpsInputBinDefinition.IsAvailable)} from '{constrainedXName}', falling back to '{true}': {option}");
         isAvailable = true;
       }
 
-      var xpsInputBinDefinition = new XpsInputBinDefinition
-                                  {
-                                    Feature = feature,
-                                    Name = name,
-                                    DisplayName = displayName,
-                                    FeedType = feedType,
-                                    IsAvailable = isAvailable
-                                  };
+      var result = new XpsInputBinDefinition
+                   {
+                     FeatureName = featureName,
+                     Name = name,
+                     DisplayName = displayName,
+                     FeedType = feedType,
+                     IsAvailable = isAvailable
+                   };
 
-      return xpsInputBinDefinition;
+      return result;
     }
 
     /// <inheritdoc/>
@@ -161,7 +175,7 @@ namespace Contrib.System.Printing.Xps
       public XpsInputBinDefinition() { }
 
       /// <inheritdoc/>
-      public XpsName Feature { get; set; }
+      public XpsName FeatureName { get; set; }
 
       /// <inheritdoc/>
       public XpsName Name { get; set; }

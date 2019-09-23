@@ -4,10 +4,9 @@
 namespace Contrib.System.Printing.Xps
 {
   using global::System;
+  using global::System.Collections.Generic;
   using global::System.IO;
-  using global::System.Linq;
   using global::System.Printing;
-  using global::System.Xml.Linq;
   using global::Contrib.System.Printing.Xps.ExtensionMethods;
   using global::JetBrains.Annotations;
 
@@ -29,6 +28,7 @@ namespace Contrib.System.Printing.Xps
     /// <summary>
     ///   Gets the collection of printers hosted by the print server.
     /// </summary>
+    /// <exception cref="T:System.InvalidOperationException"/>
     /// <exception cref="T:System.Exception"/>
     [Pure]
     [NotNull]
@@ -40,9 +40,10 @@ namespace Contrib.System.Printing.Xps
     /// </summary>
     /// <param name="fullName"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="fullName"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.InvalidOperationException"/>
     /// <exception cref="T:System.Exception"/>
     [Pure]
-    [CanBeNull]
+    [NotNull]
     TXpsPrinterDefinition GetXpsPrinterDefinition([NotNull] string fullName);
 
     /// <summary>
@@ -50,6 +51,7 @@ namespace Contrib.System.Printing.Xps
     /// </summary>
     /// <param name="xpsPrinterDefinition"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="xpsPrinterDefinition"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.InvalidOperationException"/>
     /// <exception cref="T:System.Exception"/>
     [Pure]
     [NotNull]
@@ -99,15 +101,39 @@ namespace Contrib.System.Printing.Xps
     /// <inheritdoc/>
     public virtual TXpsPrinterDefinition[] GetXpsPrinterDefinitions()
     {
-      TXpsPrinterDefinition[] result;
+      var xpsPrinterDefinitions = new List<TXpsPrinterDefinition>();
       using (var localPrintServer = new LocalPrintServer())
-      using (var printQueues = localPrintServer.GetLocalAndRemotePrintQueues())
       {
-        result = printQueues.Select(this.CreateXpsPrinterDefinition)
-                            .ToArray();
+        PrintQueueCollection printQueueCollection;
+        try
+        {
+          printQueueCollection = localPrintServer.GetLocalAndRemotePrintQueues();
+        }
+        catch (PrintQueueException printQueueException)
+        {
+          throw new InvalidOperationException("Failed to get print queues",
+                                              printQueueException);
+        }
+
+        using (printQueueCollection)
+        {
+          foreach (PrintQueue printQueue in printQueueCollection)
+          {
+            try
+            {
+              var xpsPrinterDefinition = this.XpsPrinterDefinitionFactory.Create(printQueue);
+
+              xpsPrinterDefinitions.Add(xpsPrinterDefinition);
+            }
+            catch (InvalidOperationException)
+            {
+              continue;
+            }
+          }
+        }
       }
 
-      return result;
+      return xpsPrinterDefinitions.ToArray();
     }
 
     /// <inheritdoc/>
@@ -144,9 +170,22 @@ namespace Contrib.System.Printing.Xps
 
       TXpsPrinterDefinition result;
       using (printServer)
-      using (var printQueue = printServer.GetPrintQueue(name))
       {
-        result = this.CreateXpsPrinterDefinition(printQueue);
+        PrintQueue printQueue;
+        try
+        {
+          printQueue = printServer.GetPrintQueue(name);
+        }
+        catch (PrintQueueException printQueueException)
+        {
+          throw new InvalidOperationException($"Failed to get print queue '{fullName}'",
+                                              printQueueException);
+        }
+
+        using (printQueue)
+        {
+          result = this.XpsPrinterDefinitionFactory.Create(printQueue);
+        }
       }
 
       return result;
@@ -160,259 +199,35 @@ namespace Contrib.System.Printing.Xps
         throw new ArgumentNullException(nameof(xpsPrinterDefinition));
       }
 
-      TXpsInputBinDefinition[] result;
-      using (var printServer = new PrintServer(xpsPrinterDefinition.Host))
-      using (var printQueue = printServer.GetPrintQueue(xpsPrinterDefinition.Name))
+      var xpsInputBinDefinitions = new List<TXpsInputBinDefinition>();
+
+      var printCapabilities = xpsPrinterDefinition.PrintCapabilities;
+
+      var feature = printCapabilities.Root.FindElementByNameAttribute(XpsServer.PageInputBinName)
+                    ?? printCapabilities.Root.FindElementByNameAttribute(XpsServer.DocumentInputBinName)
+                    ?? printCapabilities.Root.FindElementByNameAttribute(XpsServer.JobInputBinName);
+      if (feature != null)
       {
-        XElement feature;
+        var featureName = printCapabilities.Root.GetXpsName(feature.Attribute(XpsServer.NameName)?.Value);
+
+        foreach (var option in feature.Elements(XpsServer.OptionName))
         {
-          var printTicket = this.GetPrintTicketForQueryingPrintCapabilitiesOfPrintQueue(printQueue);
-          var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(printTicket)
-                                            ?.Root ?? XpsServer.PrintCapabilitiesElement;
+          try
+          {
+            var xpsInputBinDefinition = this.XpsInputBinDefinitionFactory.Create(featureName,
+                                                                                 option,
+                                                                                 printCapabilities);
 
-          feature = printCapabilities.FindElementByNameAttribute(XpsServer.PageInputBinName)
-                    ?? printCapabilities.FindElementByNameAttribute(XpsServer.DocumentInputBinName)
-                    ?? printCapabilities.FindElementByNameAttribute(XpsServer.JobInputBinName);
-        }
-
-        if (feature == null)
-        {
-          result = new TXpsInputBinDefinition[0];
-        }
-        else
-        {
-          result = feature.Elements(XpsServer.OptionName)
-                          .Select(option => new
-                                            {
-                                              Option = option,
-                                              InputBinName = option.GetXpsName(option.Attribute(XpsServer.NameName)
-                                                                                     ?.Value),
-                                              Feature = feature,
-                                              FeatureName = feature.GetXpsName(feature.Attribute(XpsServer.NameName)
-                                                                                      ?.Value)
-                                            })
-                          .Where(arg => arg.InputBinName != null)
-                          .Where(arg => arg.FeatureName != null)
-                          .Select(arg =>
-                                  {
-                                    var printTicket = this.GetPrintTicketForQueryingPrintCapabilitiesOfInputBin(printQueue,
-                                                                                                                arg.FeatureName,
-                                                                                                                arg.InputBinName);
-                                    var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(printTicket)
-                                                                      ?.Root ?? XpsServer.PrintCapabilitiesElement;
-
-                                    var xpsInputBinDefinition = this.XpsInputBinDefinitionFactory.Create(arg.FeatureName,
-                                                                                                         arg.InputBinName,
-                                                                                                         arg.Option,
-                                                                                                         printCapabilities);
-
-                                    return xpsInputBinDefinition;
-                                  })
-                          .ToArray();
+            xpsInputBinDefinitions.Add(xpsInputBinDefinition);
+          }
+          catch (InvalidOperationException)
+          {
+            continue;
+          }
         }
       }
 
-      return result;
-    }
-
-    /// <summary>
-    ///   Converts a print queue to a printer.
-    /// </summary>
-    /// <param name="printQueue"/>
-    /// <exception cref="T:System.Exception"/>
-    [Pure]
-    [NotNull]
-    protected virtual TXpsPrinterDefinition CreateXpsPrinterDefinition([NotNull] PrintQueue printQueue)
-    {
-      var printTicket = this.GetPrintTicketForQueryingPrintCapabilitiesOfPrintQueue(printQueue);
-      var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(printTicket)
-                                        ?.Root ?? XpsServer.PrintCapabilitiesElement;
-
-      var result = this.XpsPrinterDefinitionFactory.Create(printQueue,
-                                                           printCapabilities);
-
-      return result;
-    }
-
-    /// <summary>
-    ///   Gets the print ticket for querying the print capabilities of a print queue.
-    /// </summary>
-    /// <param name="printQueue"/>
-    /// <exception cref="T:System.Exception"/>
-    [Pure]
-    [CanBeNull]
-    protected virtual PrintTicket GetPrintTicketForQueryingPrintCapabilitiesOfPrintQueue([NotNull] PrintQueue printQueue)
-    {
-      return null;
-    }
-
-    /// <summary>
-    ///   Gets the print ticket for querying the print capabilities of an input bin.
-    /// </summary>
-    /// <param name="printQueue"/>
-    /// <param name="featureName"/>
-    /// <param name="inputBinName"/>
-    /// <exception cref="T:System.Exception"/>
-    [Pure]
-    [NotNull]
-    protected virtual PrintTicket GetPrintTicketForQueryingPrintCapabilitiesOfInputBin([NotNull] PrintQueue printQueue,
-                                                                                       [NotNull] XpsName featureName,
-                                                                                       [NotNull] XpsName inputBinName)
-    {
-      // === result ===
-      // <?xml version="1.0" encoding="UTF-8"?>
-      // <psf:PrintTicket xmlns:psf="http://schemas.microsoft.com/windows/2003/08/printing/printschemaframework"
-      //                  xmlns:psk="http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords"
-      //                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      //                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-      //                  xmlns:{prefix0}="{featureName.NamespaceName}"
-      //                  xmlns:{prefix1}="{inputBinName.NamespaceName}"
-      //                  version="1">
-      //   <psf:Feature name="{prefix0}:{featureName.LocalName}">
-      //     <psf:Option name="{prefix1}:{inputBinName.LocalName}"/>
-      //   </psf:Feature>
-      // </psf:PrintTicket>
-      // === === === === ===
-
-      XDocument document;
-      using (var memoryStream = (this.GetPrintTicketForQueryingPrintCapabilitiesOfPrintQueue(printQueue) ?? new PrintTicket()).GetXmlStream())
-      {
-        document = XDocument.Load(memoryStream);
-      }
-
-      var printTicket = document.Root ?? XpsServer.PrintTicketElement;
-
-      var feature = printTicket.AddElement(XpsServer.FeatureName);
-      var prefix = feature.GetPrefixOfNamespace(featureName.Namespace);
-      feature.SetAttributeValue(XpsServer.NameName,
-                                featureName.ToString(prefix));
-
-      var option = feature.AddElement(XpsServer.OptionName);
-      prefix = option.GetPrefixOfNamespace(inputBinName.Namespace);
-      option.SetAttributeValue(XpsServer.NameName,
-                               inputBinName.ToString(prefix));
-
-      PrintTicket result;
-      using (var memoryStream = new MemoryStream())
-      {
-        document.Save(memoryStream);
-
-        memoryStream.Seek(0L,
-                          SeekOrigin.Begin);
-
-        result = new PrintTicket(memoryStream);
-      }
-
-      return result;
-    }
-
-    /// <summary>
-    ///   Gets the print ticket for printing with a printer.
-    /// </summary>
-    /// <param name="xpsPrinterDefinition"/>
-    /// <exception cref="T:System.ArgumentNullException"><paramref name="xpsPrinterDefinition"/> is <see langword="null"/>.</exception>
-    /// <exception cref="T:System.Exception"/>
-    [Pure]
-    [NotNull]
-    public virtual PrintTicket GetPrintTicketForPrinting([NotNull] TXpsPrinterDefinition xpsPrinterDefinition)
-    {
-      if (xpsPrinterDefinition == null)
-      {
-        throw new ArgumentNullException(nameof(xpsPrinterDefinition));
-      }
-
-      return new PrintTicket();
-    }
-
-    /// <summary>
-    ///   Gets the print ticket for printing with an input bin.
-    /// </summary>
-    /// <param name="xpsPrinterDefinition"/>
-    /// <param name="xpsInputBinDefinition"/>
-    /// <exception cref="T:System.ArgumentNullException"><paramref name="xpsPrinterDefinition"/> is <see langword="null"/>.</exception>
-    /// <exception cref="T:System.ArgumentNullException"><paramref name="xpsInputBinDefinition"/> is <see langword="null"/>.</exception>
-    /// <exception cref="T:System.Exception"/>
-    [Pure]
-    [NotNull]
-    public virtual PrintTicket GetPrintTicketForPrinting([NotNull] TXpsPrinterDefinition xpsPrinterDefinition,
-                                                         [NotNull] TXpsInputBinDefinition xpsInputBinDefinition)
-    {
-      if (xpsPrinterDefinition == null)
-      {
-        throw new ArgumentNullException(nameof(xpsPrinterDefinition));
-      }
-      if (xpsInputBinDefinition == null)
-      {
-        throw new ArgumentNullException(nameof(xpsInputBinDefinition));
-      }
-
-      // === result ===
-      // <?xml version="1.0" encoding="UTF-8"?>
-      // <psf:PrintTicket xmlns:psf="http://schemas.microsoft.com/windows/2003/08/printing/printschemaframework"
-      //                  xmlns:psk="http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords"
-      //                  xmlns:{xsi}="http://www.w3.org/2001/XMLSchema-instance"
-      //                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-      //                  xmlns:{prefix0}="{featureXName.NamespaceName}"
-      //                  xmlns:{prefix1}="{inputBinXName.NamespaceName}"
-      //                  xmlns:{prefix2}="{XpsServer.FeedTypeName.NamespaceName}"
-      //                  xmlns:{prefix3}="{feedTypeXName.NamespaceName}"
-      //                  xmlns:{prefix4}="{XpsServer.QNameName.NamespaceName}"
-      //                  version="1">
-      //   <psf:Feature name="{prefix0}:{featureXName.LocalName}">
-      //     <psf:Option name="{prefix1}:{inputBinXName.LocalName}">
-      //       <psf:ScoredProperty name="{prefix2}:{XpsServer.FeedTypeName.LocalName}">
-      //         <psf:Value {xsi}:{XpsServer.TypeName.LocalName}="{prefix4}:{XpsServer.QNameName.LocalName}">{prefix3}:{feedTypeXName.LocalName}</psf:Value>
-      //       </psf:ScoredProperty>
-      //     </psf:Option>
-      //   </psf:Feature>
-      // </psf:PrintTicket>
-      // === === === === ===
-
-      XDocument document;
-      using (var memoryStream = this.GetPrintTicketForPrinting(xpsPrinterDefinition)
-                                    .GetXmlStream())
-      {
-        document = XDocument.Load(memoryStream);
-      }
-
-      var printTicket = document.Root ?? XpsServer.PrintTicketElement;
-
-      var feature = printTicket.AddElement(XpsServer.FeatureName);
-      var prefix = feature.EnsurePrefixRegistrationOfNamespace(xpsInputBinDefinition.Feature.Namespace);
-      feature.SetAttributeValue(XpsServer.NameName,
-                                xpsInputBinDefinition.Feature.ToString(prefix));
-
-      var option = feature.AddElement(XpsServer.OptionName);
-      prefix = option.EnsurePrefixRegistrationOfNamespace(xpsInputBinDefinition.Name.Namespace);
-      option.SetAttributeValue(XpsServer.NameName,
-                               xpsInputBinDefinition.Name.ToString(prefix));
-
-      var feedType = xpsInputBinDefinition.FeedType;
-      if (feedType != null)
-      {
-        var scoredProperty = option.AddElement(XpsServer.ScoredPropertyName);
-        prefix = scoredProperty.EnsurePrefixRegistrationOfNamespace(XpsServer.FeedTypeName.Namespace);
-        scoredProperty.SetAttributeValue(XpsServer.NameName,
-                                         XpsServer.FeedTypeName.ToString(prefix));
-
-        var value = scoredProperty.AddElement(XpsServer.ValueName);
-        prefix = value.EnsurePrefixRegistrationOfNamespace(feedType.Namespace);
-        value.SetValue(feedType.ToString(prefix));
-        value.SetAttributeValue(XpsServer.TypeName,
-                                value.ReduceName(XpsServer.QNameName));
-      }
-
-      PrintTicket result;
-      using (var memoryStream = new MemoryStream())
-      {
-        document.Save(memoryStream);
-        memoryStream.Seek(0L,
-                          SeekOrigin.Begin);
-
-        result = new PrintTicket(memoryStream);
-      }
-
-      return result;
+      return xpsInputBinDefinitions.ToArray();
     }
   }
 
