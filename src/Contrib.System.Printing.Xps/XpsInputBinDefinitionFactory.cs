@@ -38,7 +38,7 @@ namespace Contrib.System.Printing.Xps
     TXpsInputBinDefinition Create([NotNull] XpsName feature,
                                   [NotNull] XpsName name,
                                   [NotNull] XElement option,
-                                  [NotNull] XElement printCapabilities);
+                                  [NotNull] XDocument printCapabilities);
   }
 
   /// <summary>
@@ -103,7 +103,7 @@ namespace Contrib.System.Printing.Xps
     public IXpsInputBinDefinition Create(XpsName feature,
                                          XpsName name,
                                          XElement option,
-                                         XElement printCapabilities)
+                                         XDocument printCapabilities)
     {
       var displayName = option.FindElementByNameAttribute(XpsServer.DisplayNameName)
                               ?.Element(XpsServer.ValueName)

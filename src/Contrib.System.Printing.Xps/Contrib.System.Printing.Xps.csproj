@@ -80,7 +80,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XpsInputBinDefinitionFactory.cs" />
     <Compile Include="XpsPrinterDefinitionFactory.cs" />
-    <Compile Include="XpsServer.XElements.cs" />
     <Compile Include="XpsServer.XNames.cs" />
     <Compile Include="XpsServer.XNamespaces.cs" />
     <Compile Include="XpsServer.XpsNames.cs" />

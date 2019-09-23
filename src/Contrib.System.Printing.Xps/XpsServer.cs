@@ -166,13 +166,12 @@ namespace Contrib.System.Printing.Xps
       {
         XElement feature;
         {
-          var printTicket = this.GetPrintTicketForQueryingPrintCapabilitiesOfPrintQueue(printQueue);
-          var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(printTicket)
-                                            ?.Root ?? XpsServer.PrintCapabilitiesElement;
+          var printTicket = printQueue.DefaultPrintTicket;
+          var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(printTicket);
 
-          feature = printCapabilities.FindElementByNameAttribute(XpsServer.PageInputBinName)
-                    ?? printCapabilities.FindElementByNameAttribute(XpsServer.DocumentInputBinName)
-                    ?? printCapabilities.FindElementByNameAttribute(XpsServer.JobInputBinName);
+          feature = printCapabilities.Root.FindElementByNameAttribute(XpsServer.PageInputBinName)
+                    ?? printCapabilities.Root.FindElementByNameAttribute(XpsServer.DocumentInputBinName)
+                    ?? printCapabilities.Root.FindElementByNameAttribute(XpsServer.JobInputBinName);
         }
 
         if (feature == null)
@@ -198,8 +197,7 @@ namespace Contrib.System.Printing.Xps
                                     var printTicket = this.GetPrintTicketForQueryingPrintCapabilitiesOfInputBin(printQueue,
                                                                                                                 arg.FeatureName,
                                                                                                                 arg.InputBinName);
-                                    var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(printTicket)
-                                                                      ?.Root ?? XpsServer.PrintCapabilitiesElement;
+                                    var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(printTicket);
 
                                     var xpsInputBinDefinition = this.XpsInputBinDefinitionFactory.Create(arg.FeatureName,
                                                                                                          arg.InputBinName,
@@ -224,26 +222,13 @@ namespace Contrib.System.Printing.Xps
     [NotNull]
     protected virtual TXpsPrinterDefinition CreateXpsPrinterDefinition([NotNull] PrintQueue printQueue)
     {
-      var printTicket = this.GetPrintTicketForQueryingPrintCapabilitiesOfPrintQueue(printQueue);
-      var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(printTicket)
-                                        ?.Root ?? XpsServer.PrintCapabilitiesElement;
+      var printTicket = printQueue.UserPrintTicket;
+      var printCapabilities = printQueue.GetPrintCapabilitiesAsXDocument(printTicket);
 
       var result = this.XpsPrinterDefinitionFactory.Create(printQueue,
                                                            printCapabilities);
 
       return result;
-    }
-
-    /// <summary>
-    ///   Gets the print ticket for querying the print capabilities of a print queue.
-    /// </summary>
-    /// <param name="printQueue"/>
-    /// <exception cref="T:System.Exception"/>
-    [Pure]
-    [CanBeNull]
-    protected virtual PrintTicket GetPrintTicketForQueryingPrintCapabilitiesOfPrintQueue([NotNull] PrintQueue printQueue)
-    {
-      return null;
     }
 
     /// <summary>
@@ -275,14 +260,12 @@ namespace Contrib.System.Printing.Xps
       // === === === === ===
 
       XDocument document;
-      using (var memoryStream = (this.GetPrintTicketForQueryingPrintCapabilitiesOfPrintQueue(printQueue) ?? new PrintTicket()).GetXmlStream())
+      using (var memoryStream = printQueue.UserPrintTicket.GetXmlStream())
       {
         document = XDocument.Load(memoryStream);
       }
 
-      var printTicket = document.Root ?? XpsServer.PrintTicketElement;
-
-      var feature = printTicket.AddElement(XpsServer.FeatureName);
+      var feature = document.Root.AddElement(XpsServer.FeatureName);
       var prefix = feature.GetPrefixOfNamespace(featureName.Namespace);
       feature.SetAttributeValue(XpsServer.NameName,
                                 featureName.ToString(prefix));
@@ -321,7 +304,14 @@ namespace Contrib.System.Printing.Xps
         throw new ArgumentNullException(nameof(xpsPrinterDefinition));
       }
 
-      return new PrintTicket();
+      PrintTicket result;
+      using (var printServer = new PrintServer(xpsPrinterDefinition.Host))
+      using (var printQueue = printServer.GetPrintQueue(xpsPrinterDefinition.Name))
+      {
+        result = printQueue.UserPrintTicket;
+      }
+
+      return result;
     }
 
     /// <summary>
@@ -375,9 +365,7 @@ namespace Contrib.System.Printing.Xps
         document = XDocument.Load(memoryStream);
       }
 
-      var printTicket = document.Root ?? XpsServer.PrintTicketElement;
-
-      var feature = printTicket.AddElement(XpsServer.FeatureName);
+      var feature = document.Root.AddElement(XpsServer.FeatureName);
       var prefix = feature.EnsurePrefixRegistrationOfNamespace(xpsInputBinDefinition.Feature.Namespace);
       feature.SetAttributeValue(XpsServer.NameName,
                                 xpsInputBinDefinition.Feature.ToString(prefix));

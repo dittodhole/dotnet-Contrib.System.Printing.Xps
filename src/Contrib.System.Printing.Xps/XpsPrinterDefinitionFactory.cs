@@ -32,7 +32,7 @@ namespace Contrib.System.Printing.Xps
     [Pure]
     [NotNull]
     TXpsPrinterDefinition Create([NotNull] PrintQueue printQueue,
-                                 [NotNull] XElement printCapabilities);
+                                 [NotNull] XDocument printCapabilities);
   }
 
   /// <seealso cref="T:Contrib.System.Printing.Xps.XpsPrinterDefinitionFactory.XpsPrinterDefinition"/>
@@ -71,7 +71,7 @@ namespace Contrib.System.Printing.Xps
 
     /// <inheritdoc/>
     public IXpsPrinterDefinition Create(PrintQueue printQueue,
-                                        XElement printCapabilities)
+                                        XDocument printCapabilities)
     {
       if (printQueue == null)
       {
