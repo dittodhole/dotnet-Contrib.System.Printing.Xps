@@ -83,6 +83,7 @@
     <Compile Include="XpsServer.XNames.cs" />
     <Compile Include="XpsServer.XNamespaces.cs" />
     <Compile Include="XpsServer.XpsNames.cs" />
+    <Compile Include="XpsServerEx.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Contrib.System.Printing.Xps.nuspec" />
