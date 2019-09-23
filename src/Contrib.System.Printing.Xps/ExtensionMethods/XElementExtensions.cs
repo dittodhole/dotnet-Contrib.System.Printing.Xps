@@ -156,18 +156,17 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       }
       else
       {
-        var type = typeAttribute.Value;
-        var typeXName = element.GetXName(type);
-        if (typeXName == null)
+        var type = element.GetXName(typeAttribute.Value);
+        if (type == null)
         {
           LogTo.Warn($"Could not get {nameof(XName)} from {nameof(XAttribute)} '{XpsServer.TypeName}': {element}");
           result = null;
         }
-        else if (typeXName.Equals(XpsServer.StringName))
+        else if (type.Equals(XpsServer.StringName))
         {
           result = rawValue;
         }
-        else if (typeXName.Equals(XpsServer.IntegerName))
+        else if (type.Equals(XpsServer.IntegerName))
         {
           if (long.TryParse(rawValue,
                             out var longValue))
@@ -179,7 +178,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
             result = null;
           }
         }
-        else if (typeXName.Equals(XpsServer.QNameName))
+        else if (type.Equals(XpsServer.QNameName))
         {
           var xpsNameValue = element.GetXpsName(rawValue);
           if (xpsNameValue == null)

@@ -87,7 +87,7 @@ namespace Contrib.System.Printing.Xps
     public static XName ConstrainedName => XNamespace.None.GetName("constrained");
 
     /// <summary>
-    ///   psk:none
+    ///   psk:None
     /// </summary>
     [NotNull]
     public static XName NoneName => XpsServer.PrinterSchemaKeywordsNamespace.GetName("None");

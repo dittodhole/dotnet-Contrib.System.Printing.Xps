@@ -112,24 +112,24 @@ namespace Contrib.System.Printing.Xps
                            ?.GetValue() as XpsName;
 
       bool isAvailable;
-      var constrainedXName = option.GetXName(option.Attribute(XpsServer.ConstrainedName)
-                                                   ?.Value);
-      if (constrainedXName == null)
+
+      var constrained = option.GetXName(option.Attribute(XpsServer.ConstrainedName)?.Value);
+      if (constrained == null)
       {
         LogTo.Warn($"Could not get {nameof(XName)} from {nameof(XAttribute)} '{XpsServer.ConstrainedName}': {option}");
         isAvailable = true;
       }
-      else if (constrainedXName.Equals(XpsServer.DeviceSettingsName))
+      else if (constrained.Equals(XpsServer.DeviceSettingsName))
       {
         isAvailable = false;
       }
-      else if (constrainedXName.Equals(XpsServer.NoneName))
+      else if (constrained.Equals(XpsServer.NoneName))
       {
         isAvailable = true;
       }
       else
       {
-        LogTo.Warn($"Could not get {nameof(IXpsInputBinDefinition.IsAvailable)} from '{constrainedXName}', falling back to '{true}': {option}");
+        LogTo.Warn($"Could not get {nameof(IXpsInputBinDefinition.IsAvailable)} from '{constrained}', falling back to '{true}': {option}");
         isAvailable = true;
       }
 
