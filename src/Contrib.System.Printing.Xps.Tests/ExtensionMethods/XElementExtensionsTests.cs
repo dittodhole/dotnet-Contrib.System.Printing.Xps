@@ -18,7 +18,10 @@
     [TestCaseSource(nameof(XElementExtensionsTests.ReduceName_TestCases))]
     public string ReduceName(XName name)
     {
-      var element = new XElement("element");
+      var document = new XDocument();
+      document.Add(new XElement("root"));
+
+      var element = document.Root.AddElement("element");
       var reducedName = element.ReduceName(name);
 
       return reducedName;
@@ -36,7 +39,10 @@
     [TestCaseSource(nameof(XElementExtensionsTests.EnsurePrefixRegistrationOfNamespace_TestCases))]
     public string EnsurePrefixRegistrationOfNamespace(XNamespace @namespace)
     {
-      var element = new XElement("element");
+      var document = new XDocument();
+      document.Add(new XElement("root"));
+
+      var element = document.Root.AddElement("element");
       var prefix = element.EnsurePrefixRegistrationOfNamespace(@namespace);
 
       return prefix;
