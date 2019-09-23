@@ -122,7 +122,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       var counter = 0;
       do
       {
-        if (++counter > 9999)
+        if (counter >= 10000)
         {
           throw new InvalidOperationException();
         }
