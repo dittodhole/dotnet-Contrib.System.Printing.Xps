@@ -24,17 +24,17 @@ namespace Contrib.System.Printing.Xps
     /// <summary>
     ///   Factory method for <typeparamref name="TXpsInputBinDefinition"/>.
     /// </summary>
-    /// <param name="feature"/>
+    /// <param name="featureName"/>
     /// <param name="option"/>
     /// <param name="printCapabilities"/>
-    /// <exception cref="T:System.ArgumentNullException"><paramref name="feature"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.ArgumentNullException"><paramref name="featureName"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="option"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="printCapabilities"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.InvalidOperationException"/>
     /// <exception cref="T:System.Exception"/>
     [Pure]
     [NotNull]
-    TXpsInputBinDefinition Create([NotNull] XpsName feature,
+    TXpsInputBinDefinition Create([NotNull] XpsName featureName,
                                   [NotNull] XElement option,
                                   [NotNull] XDocument printCapabilities);
   }
@@ -55,7 +55,7 @@ namespace Contrib.System.Printing.Xps
     /// </summary>
     /// <example>{http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords}JobInputBin</example>
     [NotNull]
-    XpsName Feature { get; }
+    XpsName FeatureName { get; }
 
     /// <summary>
     ///   Gets the name of the input bin.
@@ -98,13 +98,13 @@ namespace Contrib.System.Printing.Xps
     public XpsInputBinDefinitionFactory() { }
 
     /// <inheritdoc/>
-    public IXpsInputBinDefinition Create(XpsName feature,
+    public IXpsInputBinDefinition Create(XpsName featureName,
                                          XElement option,
                                          XDocument printCapabilities)
     {
-      if (feature == null)
+      if (featureName == null)
       {
-        throw new ArgumentNullException(nameof(feature));
+        throw new ArgumentNullException(nameof(featureName));
       }
       if (option == null)
       {
@@ -151,7 +151,7 @@ namespace Contrib.System.Printing.Xps
 
       var result = new XpsInputBinDefinition
                    {
-                     Feature = feature,
+                     FeatureName = featureName,
                      Name = name,
                      DisplayName = displayName,
                      FeedType = feedType,
@@ -175,7 +175,7 @@ namespace Contrib.System.Printing.Xps
       public XpsInputBinDefinition() { }
 
       /// <inheritdoc/>
-      public XpsName Feature { get; set; }
+      public XpsName FeatureName { get; set; }
 
       /// <inheritdoc/>
       public XpsName Name { get; set; }

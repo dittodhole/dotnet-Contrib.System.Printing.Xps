@@ -23,7 +23,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// </summary>
     /// <param name="printQueue"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="printQueue"/> is <see langword="null"/>.</exception>
-    [CanBeNull]
+    [NotNull]
     public delegate PrintTicket PrintTicketFactory([NotNull] PrintQueue printQueue);
 
     /// <summary>
@@ -61,43 +61,22 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
 
         if (documentPaginatorSource is FixedDocumentSequence fixedDocumentSequence)
         {
-          if (printTicket == null)
-          {
-            xpsDocumentWriter.Write(fixedDocumentSequence);
-          }
-          else
-          {
-            fixedDocumentSequence.PrintTicket = printTicket;
+          fixedDocumentSequence.PrintTicket = printTicket;
 
-            xpsDocumentWriter.Write(fixedDocumentSequence,
-                                    printTicket);
-          }
+          xpsDocumentWriter.Write(fixedDocumentSequence,
+                                  printTicket);
         }
         else if (documentPaginatorSource is FixedDocument fixedDocument)
         {
-          if (printTicket == null)
-          {
-            xpsDocumentWriter.Write(fixedDocument);
-          }
-          else
-          {
-            fixedDocument.PrintTicket = printTicket;
+          fixedDocument.PrintTicket = printTicket;
 
-            xpsDocumentWriter.Write(fixedDocument,
-                                    printTicket);
-          }
+          xpsDocumentWriter.Write(fixedDocument,
+                                  printTicket);
         }
         else
         {
-          if (printTicket == null)
-          {
-            xpsDocumentWriter.Write(documentPaginatorSource.DocumentPaginator);
-          }
-          else
-          {
-            xpsDocumentWriter.Write(documentPaginatorSource.DocumentPaginator,
-                                    printTicket);
-          }
+          xpsDocumentWriter.Write(documentPaginatorSource.DocumentPaginator,
+                                  printTicket);
         }
       }
     }

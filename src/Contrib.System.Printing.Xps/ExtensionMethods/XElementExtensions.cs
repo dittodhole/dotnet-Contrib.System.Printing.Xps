@@ -25,6 +25,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <param name="name"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.InvalidOperationException"/>
     [Pure]
     [NotNull]
     public static string ReduceName([NotNull] this XElement element,
@@ -62,6 +63,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <param name="namespace"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="namespace"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.InvalidOperationException"/>
     [CanBeNull]
     public static string EnsurePrefixRegistrationOfNamespace([NotNull] this XElement element,
                                                              [NotNull] XNamespace @namespace)

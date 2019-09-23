@@ -6,7 +6,6 @@ namespace Contrib.System.Printing.Xps
   using global::System;
   using global::System.IO;
   using global::System.Printing;
-  using global::System.Xml.Linq;
   using global::Contrib.System.Printing.Xps.ExtensionMethods;
   using global::JetBrains.Annotations;
 
@@ -65,9 +64,9 @@ namespace Contrib.System.Printing.Xps
       var deltaPrintTicket = new PrintTicket().GetXDocument();
 
       var feature = deltaPrintTicket.Root.AddElement(XpsServer.FeatureName);
-      var prefix = feature.EnsurePrefixRegistrationOfNamespace(xpsInputBinDefinition.Feature.Namespace);
+      var prefix = feature.EnsurePrefixRegistrationOfNamespace(xpsInputBinDefinition.FeatureName.Namespace);
       feature.SetAttributeValue(XpsServer.NameName,
-                                xpsInputBinDefinition.Feature.ToString(prefix));
+                                xpsInputBinDefinition.FeatureName.ToString(prefix));
 
       var option = feature.AddElement(XpsServer.OptionName);
       prefix = option.EnsurePrefixRegistrationOfNamespace(xpsInputBinDefinition.Name.Namespace);

@@ -6,7 +6,6 @@ namespace Contrib.System.Printing.Xps
   using global::System;
   using global::System.Collections.Generic;
   using global::System.IO;
-  using global::System.Linq;
   using global::System.Printing;
   using global::Contrib.System.Printing.Xps.ExtensionMethods;
   using global::JetBrains.Annotations;
@@ -200,29 +199,35 @@ namespace Contrib.System.Printing.Xps
         throw new ArgumentNullException(nameof(xpsPrinterDefinition));
       }
 
-      TXpsInputBinDefinition[] result;
+      var xpsInputBinDefinitions = new List<TXpsInputBinDefinition>();
 
       var printCapabilities = xpsPrinterDefinition.PrintCapabilities;
 
       var feature = printCapabilities.Root.FindElementByNameAttribute(XpsServer.PageInputBinName)
                     ?? printCapabilities.Root.FindElementByNameAttribute(XpsServer.DocumentInputBinName)
                     ?? printCapabilities.Root.FindElementByNameAttribute(XpsServer.JobInputBinName);
-      if (feature == null)
-      {
-        result = new TXpsInputBinDefinition[0];
-      }
-      else
+      if (feature != null)
       {
         var featureName = printCapabilities.Root.GetXpsName(feature.Attribute(XpsServer.NameName)?.Value);
 
-        result = feature.Elements(XpsServer.OptionName)
-                        .Select(option => this.XpsInputBinDefinitionFactory.Create(featureName,
-                                                                                   option,
-                                                                                   printCapabilities))
-                        .ToArray();
+        foreach (var option in feature.Elements(XpsServer.OptionName))
+        {
+          try
+          {
+            var xpsInputBinDefinition = this.XpsInputBinDefinitionFactory.Create(featureName,
+                                                                                 option,
+                                                                                 printCapabilities);
+
+            xpsInputBinDefinitions.Add(xpsInputBinDefinition);
+          }
+          catch (InvalidOperationException)
+          {
+            continue;
+          }
+        }
       }
 
-      return result;
+      return xpsInputBinDefinitions.ToArray();
     }
   }
 
