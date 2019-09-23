@@ -54,7 +54,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
         throw new ArgumentNullException(nameof(printTicketFactory));
       }
 
-      using (var printServer = new PrintServer(xpsPrinterDefinition.ServerName))
+      using (var printServer = new PrintServer(xpsPrinterDefinition.Host))
       using (var printQueue = printServer.GetPrintQueue(xpsPrinterDefinition.Name))
       {
         var xpsDocumentWriter = PrintQueue.CreateXpsDocumentWriter(printQueue);

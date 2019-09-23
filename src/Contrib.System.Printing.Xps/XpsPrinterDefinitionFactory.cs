@@ -53,7 +53,7 @@ namespace Contrib.System.Printing.Xps
     ///   Gets the hosting server name of the printer.
     /// </summary>
     [NotNull]
-    string ServerName { get; }
+    string Host { get; }
   }
 
   /// <inheritdoc/>
@@ -85,7 +85,7 @@ namespace Contrib.System.Printing.Xps
       var result = new XpsPrinterDefinition
                    {
                      Name = printQueue.Name,
-                     ServerName = printQueue.HostingPrintServer.Name
+                     Host = printQueue.HostingPrintServer.Name
                    };
 
       return result;
@@ -108,7 +108,7 @@ namespace Contrib.System.Printing.Xps
       public string Name { get; set; }
 
       /// <inheritdoc/>
-      public string ServerName { get; set; }
+      public string Host { get; set; }
     }
   }
 }

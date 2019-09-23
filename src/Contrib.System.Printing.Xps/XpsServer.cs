@@ -127,8 +127,8 @@ namespace Contrib.System.Printing.Xps
       {
         if (uri.IsUnc)
         {
-          printServer = new PrintServer(uri.Host);
-          name = uri.AbsolutePath;
+          printServer = new PrintServer(@"\\" + uri.Host);
+          name = Path.GetFileName(uri.LocalPath);
         }
         else
         {
@@ -161,7 +161,7 @@ namespace Contrib.System.Printing.Xps
       }
 
       TXpsInputBinDefinition[] result;
-      using (var printServer = new PrintServer(xpsPrinterDefinition.ServerName))
+      using (var printServer = new PrintServer(xpsPrinterDefinition.Host))
       using (var printQueue = printServer.GetPrintQueue(xpsPrinterDefinition.Name))
       {
         XElement feature;
