@@ -5,13 +5,11 @@ namespace Contrib.System.Printing.Xps
 {
   using global::System;
   using global::System.IO;
-  using global::System.Linq;
   using global::System.Printing;
   using global::System.Xml.Linq;
   using global::Contrib.System.Printing.Xps.ExtensionMethods;
   using global::JetBrains.Annotations;
 
-  /// <inheritdoc/>
 #if CONTRIB_SYSTEM_PRINTING_XPS
   public
 #else
