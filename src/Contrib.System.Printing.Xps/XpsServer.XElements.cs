@@ -11,14 +11,12 @@ namespace Contrib.System.Printing.Xps
     /// <summary>
     ///   &lt;psf:PrintCapabilities/&gt;
     /// </summary>
-    [PublicAPI]
     [NotNull]
     public static XElement PrintCapabilitiesElement => new XElement(XpsServer.PrintCapabilitiesName);
 
     /// <summary>
     ///   &lt;psf:PrintTicket/&gt;
     /// </summary>
-    [PublicAPI]
     [NotNull]
     public static XElement PrintTicketElement => new XElement(XpsServer.PrintTicketName);
   }

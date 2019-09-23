@@ -13,7 +13,6 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   /// <summary>
   ///   Provides extensions for <see cref="T:System.Windows.Documents.DocumentPage"/> objects.
   /// </summary>
-  [PublicAPI]
 #if CONTRIB_SYSTEM_PRINTING_XPS
   public
 #else
@@ -30,6 +29,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <exception cref="T:System.ArgumentNullException"><paramref name="documentPage"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.Exception"/>
     /// <seealso cref="T:System.Windows.Media.Imaging.RenderTargetBitmap"/>
+    [Pure]
     [NotNull]
     public static BitmapSource Render([NotNull] this DocumentPage documentPage,
                                       double dpiX,
@@ -41,8 +41,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       }
 
       var size = documentPage.Size;
-      var width = size.Width / 96D * dpiX;
-      var height = size.Height / 96D * dpiY;
+      var width = size.Width / 96d * dpiX;
+      var height = size.Height / 96d * dpiY;
 
       var result = new RenderTargetBitmap((int) width,
                                           (int) height,

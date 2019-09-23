@@ -27,7 +27,6 @@ namespace Contrib.System.Printing.Xps
   /// <seealso cref="M:System.Xml.XmlConvert.VerifyNCName(string)"/>
   [KnownType(typeof(XpsNameSerializer))]
   [Serializable]
-  [PublicAPI]
 #if CONTRIB_SYSTEM_PRINTING_XPS
   public sealed
 #else
@@ -67,6 +66,7 @@ namespace Contrib.System.Printing.Xps
     /// </summary>
     /// <param name="prefix"/>
     /// <remarks>The string representation follows the pattern "<paramref name="prefix"/>:<see cref="M:Contrib.System.Printing.Xps.XpsName.LocalName"/>"</remarks>
+    [Pure]
     [NotNull]
     public string ToString([CanBeNull] string prefix)
     {
@@ -95,6 +95,7 @@ namespace Contrib.System.Printing.Xps
     /// <param name="expandedName"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="expandedName"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.Exception"/>
+    [Pure]
     [NotNull]
     public static XpsName Get([NotNull] string expandedName)
     {

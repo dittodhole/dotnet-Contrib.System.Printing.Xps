@@ -11,7 +11,6 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   /// <summary>
   ///   Provides extensions for <see cref="T:System.Windows.Media.ImageSource"/> objects.
   /// </summary>
-  [PublicAPI]
 #if CONTRIB_SYSTEM_PRINTING_XPS
   public
 #else
@@ -31,6 +30,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <param name="bitmapSource"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="bitmapSource"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.Exception"/>
+    [Pure]
     [NotNull]
     public static MemoryStream ToMemoryStream([NotNull] this BitmapSource bitmapSource)
     {
@@ -60,6 +60,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <seealso cref="T:System.Windows.Media.Imaging.PngBitmapEncoder"/>
     /// <seealso cref="T:System.Windows.Media.Imaging.TiffBitmapEncoder"/>
     /// <seealso cref="T:System.Windows.Media.Imaging.WmpBitmapEncoder"/>
+    [Pure]
     [NotNull]
     public static MemoryStream ToMemoryStream([NotNull] this BitmapSource bitmapSource,
                                               [NotNull] [InstantHandle] BitmapEncoderFactory bitmapEncoderFactory)
@@ -82,6 +83,9 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
 
       var result = new MemoryStream();
       bitmapEncoder.Save(result);
+
+      result.Seek(0L,
+                  SeekOrigin.Begin);
 
       return result;
     }

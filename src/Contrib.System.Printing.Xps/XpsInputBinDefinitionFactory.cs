@@ -4,8 +4,8 @@
 namespace Contrib.System.Printing.Xps
 {
   using global::System.Xml.Linq;
-  using global::Contrib.System.Printing.Xps.ExtensionMethods;
   using global::Anotar.LibLog;
+  using global::Contrib.System.Printing.Xps.ExtensionMethods;
   using global::JetBrains.Annotations;
 
   /// <summary>
@@ -13,49 +13,6 @@ namespace Contrib.System.Printing.Xps
   /// </summary>
   /// <typeparam name="TXpsInputBinDefinition"/>
   /// <seealso cref="T:Contrib.System.Printing.Xps.XpsInputBinDefinitionFactory"/>
-  /// <example>
-  ///   This sample shows how to implement your own <see cref="T:Contrib.System.Printing.Xps.IXpsInputBinDefinition"/>.
-  ///   <code>
-  ///   using global::Contrib.System.Printing.Xps;
-  ///   using global::System.Xml.Linq;
-  ///
-  ///   public interface ICustomXpsInputBinDefinition : IXpsInputBinDefinition { }
-  ///
-  ///   public class CustomXpsInputBinDefinitionFactory : IXpsInputBinDefinitionFactoryEx&lt;ICustomXpsInputBinDefinition&gt;
-  ///   {
-  ///     private class CustomXpsInputBinDefinition : ICustomXpsInputBinDefinition
-  ///     {
-  ///       public XName Feature { get; set; }
-  ///       public string DisplayName { get; set; }
-  ///       public XName Name { get; set; }
-  ///       public XName FeedType { get; set; }
-  ///       public bool IsAvailable { get; set; }
-  ///     }
-  ///
-  ///     private IXpsInputBinDefinitionFactory XpsInputBinDefinitionFactory { get; } = new XpsInputBinDefinitionFactory();
-  ///
-  ///     public ICustomXpsInputBinDefinition Create(XElement option,
-  ///                                                XElement printCapabilities)
-  ///     {
-  ///       var xpsInputBinDefinition = this.XpsInputBinDefinitionFactory.Create(option,
-  ///                                                                            printCapabilities);
-  ///       var customXpsInputBinDefinition = new CustomXpsInputBinDefinition
-  ///                                        {
-  ///                                          Feature = xpsInputBinDefinition.Feature,
-  ///                                          DisplayName = xpsInputBinDefinition.DisplayName,
-  ///                                          Name = xpsInputBinDefinition.Name,
-  ///                                          FeedType = xpsInputBinDefinition.FeedType,
-  ///                                          IsAvailable = xpsInputBinDefinition.IsAvailable,
-  ///                                        };
-  ///
-  ///       // TODO use printCapabilities with Contrib.System.Printing.Xps.ExtensionMethods.XElementExtensions to extract needed values
-  ///
-  ///       return customXpsInputBinDefinition;
-  ///     }
-  ///   }
-  ///   </code>
-  /// </example>
-  [PublicAPI]
 #if CONTRIB_SYSTEM_PRINTING_XPS
   public
 #else
@@ -75,6 +32,8 @@ namespace Contrib.System.Printing.Xps
     /// <exception cref="T:System.ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="option"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="printCapabilities"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.Exception"/>
+    [Pure]
     [NotNull]
     TXpsInputBinDefinition Create([NotNull] XpsName feature,
                                   [NotNull] XpsName name,
@@ -82,8 +41,52 @@ namespace Contrib.System.Printing.Xps
                                   [NotNull] XElement printCapabilities);
   }
 
+  /// <summary>
+  ///   Holds information of an input bin.
+  /// </summary>
+  /// <seealso cref="T:Contrib.System.Printing.Xps.XpsInputBinDefinitionFactory.XpsInputBinDefinition"/>
+#if CONTRIB_SYSTEM_PRINTING_XPS
+  public
+#else
+  internal
+#endif
+  partial interface IXpsInputBinDefinition
+  {
+    /// <summary>
+    ///   Gets the name of the feature.
+    /// </summary>
+    /// <example>{http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords}JobInputBin</example>
+    [NotNull]
+    XpsName Feature { get; }
+
+    /// <summary>
+    ///   Gets the name of the input bin.
+    /// </summary>
+    /// <example>{http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords}AutoSelect</example>
+    [NotNull]
+    XpsName Name { get; }
+
+    /// <summary>
+    ///   Gets the display name of the input bin.
+    /// </summary>
+    /// <example>"Automatically Select"</example>
+    [CanBeNull]
+    string DisplayName { get; }
+
+    /// <summary>
+    ///   Gets the feed type of the input bin.
+    /// </summary>
+    /// <example>{http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords}Automatic</example>
+    [CanBeNull]
+    XpsName FeedType { get; }
+
+    /// <summary>
+    ///   Gets the active state of the input bin.
+    /// </summary>
+    bool IsAvailable { get; }
+  }
+
   /// <inheritdoc/>
-  [PublicAPI]
 #if CONTRIB_SYSTEM_PRINTING_XPS
   public sealed
 #else
@@ -94,7 +97,6 @@ namespace Contrib.System.Printing.Xps
     /// <summary>
     ///   Initializes a new instance of the <see cref="T:Contrib.System.Printing.Xps.XpsInputBinDefinitionFactory"/> class.
     /// </summary>
-    [PublicAPI]
     public XpsInputBinDefinitionFactory() { }
 
     /// <inheritdoc/>
@@ -143,6 +145,35 @@ namespace Contrib.System.Printing.Xps
                                   };
 
       return xpsInputBinDefinition;
+    }
+
+    /// <inheritdoc/>
+#if CONTRIB_SYSTEM_PRINTING_XPS
+    private sealed
+#else
+    internal
+#endif
+    partial class XpsInputBinDefinition : IXpsInputBinDefinition
+    {
+      /// <summary>
+      ///   Initializes a new instance of the <see cref="T:Contrib.System.Printing.Xps.XpsInputBinDefinitionFactory.XpsInputBinDefinition"/> class.
+      /// </summary>
+      public XpsInputBinDefinition() { }
+
+      /// <inheritdoc/>
+      public XpsName Feature { get; set; }
+
+      /// <inheritdoc/>
+      public XpsName Name { get; set; }
+
+      /// <inheritdoc/>
+      public string DisplayName { get; set; }
+
+      /// <inheritdoc/>
+      public XpsName FeedType { get; set; }
+
+      /// <inheritdoc/>
+      public bool IsAvailable { get; set; }
     }
   }
 }

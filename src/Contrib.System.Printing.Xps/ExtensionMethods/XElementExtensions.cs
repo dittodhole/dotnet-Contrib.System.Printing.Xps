@@ -12,7 +12,6 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
   /// <summary>
   ///   Provides extensions for <see cref="T:System.Xml.Linq.XElement"/> objects.
   /// </summary>
-  [PublicAPI]
 #if CONTRIB_SYSTEM_PRINTING_XPS
   public
 #else
@@ -27,7 +26,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <param name="name"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
-    [MustUseReturnValue]
+    [Pure]
     [NotNull]
     public static string ReduceName([NotNull] this XElement element,
                                     [NotNull] XName name)
@@ -64,7 +63,6 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <param name="namespace"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="namespace"/> is <see langword="null"/>.</exception>
-    [MustUseReturnValue]
     [CanBeNull]
     public static string EnsurePrefixRegistrationOfNamespace([NotNull] this XElement element,
                                                              [NotNull] XNamespace @namespace)
@@ -109,6 +107,8 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <param name="element"/>
     /// <remarks>The prefix is constructed via following pattern: "ns{0000}"</remarks>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
+    /// <exception cref="T:System.InvalidOperationException"/>
+    [Pure]
     [NotNull]
     public static string FindUnusedPrefixForNamespace([NotNull] this XElement element)
     {
@@ -122,6 +122,11 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
       var counter = 0;
       do
       {
+        if (++counter > 9999)
+        {
+          throw new InvalidOperationException();
+        }
+
         result = $"ns{counter++:0000}";
       } while (element.GetNamespaceOfPrefix(result) != null);
 
@@ -133,6 +138,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// </summary>
     /// <param name="element"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
+    [Pure]
     [CanBeNull]
     public static object GetValue([NotNull] this XElement element)
     {
@@ -206,6 +212,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <param name="name"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
+    [Pure]
     [CanBeNull]
     public static XElement FindElementByNameAttribute([NotNull] this XElement element,
                                                       [NotNull] XpsName name)
@@ -233,6 +240,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <param name="name"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
+    [Pure]
     [CanBeNull]
     public static XElement FindElementByNameAttribute([NotNull] this XElement element,
                                                       [NotNull] string name)
@@ -268,6 +276,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <param name="str"/>
     /// <remarks><paramref name="element"/> is used to find the namespace for the prefix, contained in <paramref name="str"/>.</remarks>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
+    [Pure]
     [CanBeNull]
     public static XName GetXName([NotNull] this XElement element,
                                  [CanBeNull] string str)
@@ -360,7 +369,6 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <param name="name"/>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
-    [MustUseReturnValue]
     [NotNull]
     public static XElement AddElement([NotNull] this XElement element,
                                       [NotNull] XName name)
@@ -388,6 +396,7 @@ namespace Contrib.System.Printing.Xps.ExtensionMethods
     /// <param name="str"/>
     /// <remarks><paramref name="element"/> is used to find the namespace for the prefix, contained in <paramref name="str"/>.</remarks>
     /// <exception cref="T:System.ArgumentNullException"><paramref name="element"/> is <see langword="null"/>.</exception>
+    [Pure]
     [CanBeNull]
     public static XpsName GetXpsName([NotNull] this XElement element,
                                      [CanBeNull] string str)
